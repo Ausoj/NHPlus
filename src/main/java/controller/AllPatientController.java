@@ -11,6 +11,7 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import model.Patient;
 import utils.DateConverter;
 import datastorage.DAOFactory;
+
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
@@ -84,50 +85,55 @@ public class AllPatientController {
 
     /**
      * handles new firstname value
+     *
      * @param event event including the value that a user entered into the cell
      */
     @FXML
-    public void handleOnEditFirstname(TableColumn.CellEditEvent<Patient, String> event){
+    public void handleOnEditFirstname(TableColumn.CellEditEvent<Patient, String> event) {
         event.getRowValue().setFirstName(event.getNewValue());
         doUpdate(event);
     }
 
     /**
      * handles new surname value
+     *
      * @param event event including the value that a user entered into the cell
      */
     @FXML
-    public void handleOnEditSurname(TableColumn.CellEditEvent<Patient, String> event){
+    public void handleOnEditSurname(TableColumn.CellEditEvent<Patient, String> event) {
         event.getRowValue().setSurname(event.getNewValue());
         doUpdate(event);
     }
 
     /**
      * handles new birthdate value
+     *
      * @param event event including the value that a user entered into the cell
      */
     @FXML
-    public void handleOnEditDateOfBirth(TableColumn.CellEditEvent<Patient, String> event){
+    public void handleOnEditDateOfBirth(TableColumn.CellEditEvent<Patient, String> event) {
         event.getRowValue().setDateOfBirth(event.getNewValue());
         doUpdate(event);
     }
 
     /**
      * handles new carelevel value
+     *
      * @param event event including the value that a user entered into the cell
      */
     @FXML
-    public void handleOnEditCareLevel(TableColumn.CellEditEvent<Patient, String> event){
+    public void handleOnEditCareLevel(TableColumn.CellEditEvent<Patient, String> event) {
         event.getRowValue().setCareLevel(event.getNewValue());
         doUpdate(event);
     }
 
     /**
      * handles new roomnumber value
+     *
      * @param event event including the value that a user entered into the cell
      */
     @FXML
-    public void handleOnEditRoomnumber(TableColumn.CellEditEvent<Patient, String> event){
+    public void handleOnEditRoomnumber(TableColumn.CellEditEvent<Patient, String> event) {
         event.getRowValue().setRoomnumber(event.getNewValue());
         doUpdate(event);
     }
@@ -135,6 +141,7 @@ public class AllPatientController {
 
     /**
      * updates a patient by calling the update-Method in the {@link PatientDAO}
+     *
      * @param t row to be updated by the user (includes the patient)
      */
     private void doUpdate(TableColumn.CellEditEvent<Patient, String> t) {
