@@ -66,7 +66,9 @@ public class TreatmentController {
         this.treatment.setDate(this.datepicker.getValue().toString());
         this.treatment.setBegin(txtBegin.getText());
         this.treatment.setEnd(txtEnd.getText());
-        this.treatment.setDescription(txtDescription.getText());
+//      TODO: When editing a treatment type that is only used by the currently edited treatment, the old treatment type isn't deleted.
+//            Delete the old one, when its not used anymore, just trigger an SQLIntegrityConstraintViolationException and catch it with ignore
+        this.treatment.setType(new TreatmentType(txtDescription.getText()));
         this.treatment.setRemarks(taRemarks.getText());
         doUpdate();
         controller.readAllAndShowInTableView();
