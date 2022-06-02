@@ -10,6 +10,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.Patient;
 import model.Treatment;
+import model.TreatmentType;
 import utils.DateConverter;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -53,10 +54,10 @@ public class NewTreatmentController {
         String s_begin = txtBegin.getText();
         LocalTime begin = DateConverter.convertStringToLocalTime(txtBegin.getText());
         LocalTime end = DateConverter.convertStringToLocalTime(txtEnd.getText());
-        String description = txtDescription.getText();
+        TreatmentType type = new TreatmentType(txtDescription.getText());
         String remarks = taRemarks.getText();
         Treatment treatment = new Treatment(patient.getPid(), date,
-                begin, end, description, remarks);
+                begin, end, type, remarks);
         createTreatment(treatment);
         controller.readAllAndShowInTableView();
         stage.close();

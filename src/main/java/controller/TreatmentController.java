@@ -8,6 +8,7 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 import model.Patient;
 import model.Treatment;
+import model.TreatmentType;
 import utils.DateConverter;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -57,7 +58,7 @@ public class TreatmentController {
         this.datepicker.setValue(date);
         this.txtBegin.setText(this.treatment.getBegin());
         this.txtEnd.setText(this.treatment.getEnd());
-        this.txtDescription.setText(this.treatment.getDescription());
+        this.txtDescription.setText(this.treatment.getType().getDescription());
         this.taRemarks.setText(this.treatment.getRemarks());
     }
 
