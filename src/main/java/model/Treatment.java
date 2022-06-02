@@ -1,6 +1,7 @@
 package model;
 
 import utils.DateConverter;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -10,27 +11,27 @@ public class Treatment {
     private LocalDate date;
     private LocalTime begin;
     private LocalTime end;
-    private String description;
+    private TreatmentType type;
     private String remarks;
 
     public Treatment(long pid, LocalDate date, LocalTime begin,
-                     LocalTime end, String description, String remarks) {
+                     LocalTime end, TreatmentType type, String remarks) {
         this.pid = pid;
         this.date = date;
         this.begin = begin;
         this.end = end;
-        this.description = description;
+        this.type = type;
         this.remarks = remarks;
     }
 
     public Treatment(long tid, long pid, LocalDate date, LocalTime begin,
-                     LocalTime end, String description, String remarks) {
+                     LocalTime end, TreatmentType type, String remarks) {
         this.tid = tid;
         this.pid = pid;
         this.date = date;
         this.begin = begin;
         this.end = end;
-        this.description = description;
+        this.type = type;
         this.remarks = remarks;
     }
 
@@ -69,12 +70,12 @@ public class Treatment {
         this.end = time;
     }
 
-    public String getDescription() {
-        return description;
+    public TreatmentType getType() {
+        return type;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setType(TreatmentType type) {
+        this.type = type;
     }
 
     public String getRemarks() {
@@ -91,7 +92,7 @@ public class Treatment {
                 "\nDate: " + this.date +
                 "\nBegin: " + this.begin +
                 "\nEnd: " + this.end +
-                "\nDescription: " + this.description +
+                "\nType: " + this.type +
                 "\nRemarks: " + this.remarks + "\n";
     }
 }
