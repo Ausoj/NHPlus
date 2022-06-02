@@ -53,6 +53,7 @@
                                    promptText="Vorname"/>
                         <TextField fx:id="txtSurname" minWidth="200.0" prefHeight="26.0" prefWidth="200.0"
                                    promptText="Nachname" GridPane.columnIndex="1"/>
+<!--                        TODO: use calendar entry field for birthday-->
                         <TextField fx:id="txtBirthday" minWidth="160.0" prefWidth="160.0" promptText="Geburtstag"
                                    GridPane.columnIndex="2"/>
                         <TextField fx:id="txtCarelevel" prefHeight="26.0" prefWidth="200.0" promptText="Pflegegrad"

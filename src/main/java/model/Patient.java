@@ -11,6 +11,8 @@ import java.util.List;
  */
 public class Patient extends Person {
     private long pid;
+
+//    TODO: Move dateOfBirth to Person
     private LocalDate dateOfBirth;
     private String careLevel;
     private String roomnumber;
