@@ -124,7 +124,14 @@ public class AllPatientController {
     @FXML
     public void handleOnEditCareLevel(TableColumn.CellEditEvent<Patient, String> event) {
         event.getRowValue().setCareLevel(event.getNewValue());
-        doUpdate(event);
+        try {
+            Integer.valueOf(event.getNewValue());
+            doUpdate(event);
+        } catch (NumberFormatException e) {
+//          Todo: Create alert pop-up that the value entered was the wrong type
+            System.out.println("Must be integer");
+            readAllAndShowInTableView();
+        }
     }
 
     /**
