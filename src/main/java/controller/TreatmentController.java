@@ -10,9 +10,13 @@ import javafx.stage.Stage;
 import model.Patient;
 import model.Treatment;
 import model.TreatmentType;
+import org.controlsfx.control.textfield.TextFields;
 import utils.DateConverter;
+
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TreatmentController {
     @FXML
@@ -41,19 +45,20 @@ public class TreatmentController {
 
     public void initializeController(AllTreatmentController controller, Stage stage, Treatment treatment) {
         this.stage = stage;
-        this.controller= controller;
+        this.controller = controller;
         PatientDAO pDao = DAOFactory.getDAOFactory().createPatientDAO();
         try {
             this.patient = pDao.read((int) treatment.getPid());
             this.treatment = treatment;
             showData();
+            populateDescriptionTextField();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    private void showData(){
-        this.lblPatientName.setText(patient.getSurname()+", "+patient.getFirstName());
+    private void showData() {
+        this.lblPatientName.setText(patient.getSurname() + ", " + patient.getFirstName());
         this.lblCarelevel.setText(patient.getCareLevel());
         LocalDate date = DateConverter.convertStringToLocalDate(treatment.getDate());
         this.datepicker.setValue(date);
@@ -64,7 +69,7 @@ public class TreatmentController {
     }
 
     @FXML
-    public void handleChange(){
+    public void handleChange() {
         this.treatment.setDate(this.datepicker.getValue().toString());
         this.treatment.setBegin(txtBegin.getText());
         this.treatment.setEnd(txtEnd.getText());
@@ -75,7 +80,21 @@ public class TreatmentController {
         stage.close();
     }
 
-    private void doUpdate(){
+    public void populateDescriptionTextField() {
+        TreatmentTypeDAO dao = DAOFactory.getDAOFactory().createTreatmentTypeDAO();
+        List<String> treatmentTypes = new ArrayList<>();
+        try {
+            List<TreatmentType> allTreatmentTypes = dao.readAll();
+            for (TreatmentType type : allTreatmentTypes) {
+                treatmentTypes.add(type.getDescription());
+            }
+            TextFields.bindAutoCompletion(txtDescription, treatmentTypes);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void doUpdate() {
         TreatmentDAO dao = DAOFactory.getDAOFactory().createTreatmentDAO();
         TreatmentTypeDAO treatmentTypeDAO = DAOFactory.getDAOFactory().createTreatmentTypeDAO();
         try {
@@ -87,7 +106,7 @@ public class TreatmentController {
     }
 
     @FXML
-    public void handleCancel(){
+    public void handleCancel() {
         stage.close();
     }
 }

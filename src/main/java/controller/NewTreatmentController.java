@@ -43,7 +43,7 @@ public class NewTreatmentController {
         this.patient = patient;
         this.stage = stage;
         showPatientData();
-        handleComboBox();
+        populateDescriptionTextField();
     }
 
     private void showPatientData() {
@@ -66,7 +66,7 @@ public class NewTreatmentController {
         stage.close();
     }
 
-    public void handleComboBox() {
+    public void populateDescriptionTextField() {
         TreatmentTypeDAO dao = DAOFactory.getDAOFactory().createTreatmentTypeDAO();
         List<TreatmentType> allTreatmentTypes;
         List<String> treatmentTypes = new ArrayList<>();
