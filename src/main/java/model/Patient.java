@@ -65,7 +65,6 @@ public class Patient extends Person {
      * @param careLevel new care level
      */
     public void setCareLevel(String careLevel) {
-//        TODO: currently throws error if careLevel is not a number since the db currently requires an integer
         this.careLevel = careLevel;
     }
 
