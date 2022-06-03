@@ -1,5 +1,6 @@
 package controller;
 
+import enums.DialogueType;
 import datastorage.PatientDAO;
 import datastorage.PersonDAO;
 import datastorage.TreatmentDAO;
@@ -12,6 +13,7 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import model.Patient;
 import utils.DateConverter;
 import datastorage.DAOFactory;
+import utils.DialogueManager;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -129,7 +131,9 @@ public class AllPatientController {
             Integer.valueOf(event.getNewValue());
             doUpdate(event);
         } catch (NumberFormatException e) {
-//          Todo: Create alert pop-up that the value entered was the wrong type
+            DialogueManager.getInstance().open(DialogueType.ALERT, "Fehler",
+                    "Es wurde der falsche Datentyp angegeben.\n" +
+                            "Bitte eine Ganzzahl angeben.");
             System.out.println("Must be integer");
             readAllAndShowInTableView();
         }
