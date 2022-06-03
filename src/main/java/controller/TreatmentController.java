@@ -3,6 +3,7 @@ package controller;
 import datastorage.DAOFactory;
 import datastorage.PatientDAO;
 import datastorage.TreatmentDAO;
+import datastorage.TreatmentTypeDAO;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
@@ -67,9 +68,7 @@ public class TreatmentController {
         this.treatment.setDate(this.datepicker.getValue().toString());
         this.treatment.setBegin(txtBegin.getText());
         this.treatment.setEnd(txtEnd.getText());
-//      TODO: When editing a treatment type that is only used by the currently edited treatment, the old treatment type isn't deleted.
-//            Delete the old one, when its not used anymore, just trigger an SQLIntegrityConstraintViolationException and catch it with ignore
-        this.treatment.setType(new TreatmentType(txtDescription.getText()));
+        this.treatment.setType(new TreatmentType(this.treatment.getType().getId(), txtDescription.getText()));
         this.treatment.setRemarks(taRemarks.getText());
         doUpdate();
         controller.readAllAndShowInTableView();
@@ -78,8 +77,10 @@ public class TreatmentController {
 
     private void doUpdate(){
         TreatmentDAO dao = DAOFactory.getDAOFactory().createTreatmentDAO();
+        TreatmentTypeDAO treatmentTypeDAO = DAOFactory.getDAOFactory().createTreatmentTypeDAO();
         try {
             dao.update(treatment);
+            treatmentTypeDAO.deleteUnusedTypes();
         } catch (SQLException e) {
             e.printStackTrace();
         }

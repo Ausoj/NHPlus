@@ -41,8 +41,38 @@ public class TreatmentType {
     }
 
     public TreatmentType(long id, String description) {
+        TreatmentTypeDAO treatmentTypeDAO = DAOFactory.getDAOFactory().createTreatmentTypeDAO();
         this.id = id;
         this.description = new SimpleStringProperty(description);
+
+//        Check if new description already exists
+        try {
+//        YES: Set id to this object
+            this.id = treatmentTypeDAO.readIdByDescription(description);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+//        NO:
+        if (this.id != id) {
+//        Check if treatment type is used more than once and the id has not already been changed
+            if (treatmentTypeDAO.isTreatmentTypeUsedMoreThanOnce(id)) {
+//        YES: Create new treatment type with that description
+                try {
+                    treatmentTypeDAO.create(this);
+                    this.setId(treatmentTypeDAO.readIdByDescription(description));
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            } else {
+//        NO: Update treatment type description
+                try {
+                    treatmentTypeDAO.update(this);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
     }
 
 

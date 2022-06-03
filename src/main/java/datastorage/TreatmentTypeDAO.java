@@ -45,8 +45,8 @@ public class TreatmentTypeDAO extends DAOimp<TreatmentType> {
 
     @Override
     protected String getUpdateStatementString(TreatmentType treatmentType) {
-        return String.format("UPDATE TREATMENT_TYPE SET ID = %d, DESCRIPTION = %s",
-                treatmentType.getId(), treatmentType.getDescription());
+        return String.format("UPDATE TREATMENT_TYPE SET DESCRIPTION = '%s' WHERE ID = %d",
+                treatmentType.getDescription(), treatmentType.getId());
     }
 
     @Override
@@ -68,6 +68,25 @@ public class TreatmentTypeDAO extends DAOimp<TreatmentType> {
             return result.getLong(1);
         }
         return -1;
+    }
+
+    public boolean isTreatmentTypeUsedMoreThanOnce(long id) {
+        Statement st;
+        try {
+            st = conn.createStatement();
+            ResultSet result = st.executeQuery(String.format("SELECT COUNT(TREATMENT_TYPE) FROM TREATMENT WHERE TREATMENT_TYPE = %d", id));
+            if (result.next()) {
+                return result.getInt(1) > 1;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public void deleteUnusedTypes() throws SQLException {
+        Statement st = conn.createStatement();
+        st.executeQuery("DELETE FROM TREATMENT_TYPE WHERE ID NOT IN (SELECT TREATMENT_TYPE FROM TREATMENT)");
     }
 
 }
