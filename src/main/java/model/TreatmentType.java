@@ -18,7 +18,7 @@ public class TreatmentType {
 
         this.id = id;
         try {
-            this.description = new SimpleStringProperty(treatmentTypeDAO.readDescriptionById(id));
+            this.description = new SimpleStringProperty(capitalize(treatmentTypeDAO.readDescriptionById(id)));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -26,7 +26,7 @@ public class TreatmentType {
 
     public TreatmentType(String description) {
         TreatmentTypeDAO treatmentTypeDAO = DAOFactory.getDAOFactory().createTreatmentTypeDAO();
-
+        description = capitalize(description);
         this.description = new SimpleStringProperty(description);
 
         try {
@@ -42,6 +42,8 @@ public class TreatmentType {
 
     public TreatmentType(long id, String description) {
         TreatmentTypeDAO treatmentTypeDAO = DAOFactory.getDAOFactory().createTreatmentTypeDAO();
+        description = capitalize(description);
+
         this.id = id;
         this.description = new SimpleStringProperty(description);
 
@@ -94,5 +96,9 @@ public class TreatmentType {
 
     public void setDescription(String description) {
         this.description.set(description);
+    }
+
+    private String capitalize(String word) {
+        return word.substring(0, 1).toUpperCase() + word.substring(1);
     }
 }
