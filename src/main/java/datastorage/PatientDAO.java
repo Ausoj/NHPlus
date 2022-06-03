@@ -23,8 +23,6 @@ public class PatientDAO extends DAOimp<Patient> {
         super(conn);
     }
 
-//    TODO: extract inserts/updates/deletes etc. in regards to the person into a PersonDAO that will be used within the abstract Person Model
-
     /**
      * generates a <code>INSERT INTO</code>-Statement for a given patient
      *
