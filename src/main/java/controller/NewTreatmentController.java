@@ -2,19 +2,21 @@ package controller;
 
 import datastorage.DAOFactory;
 import datastorage.TreatmentDAO;
+import datastorage.TreatmentTypeDAO;
 import javafx.fxml.FXML;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import model.Patient;
 import model.Treatment;
 import model.TreatmentType;
+import org.controlsfx.control.textfield.TextFields;
 import utils.DateConverter;
+
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class NewTreatmentController {
     @FXML
@@ -37,19 +39,20 @@ public class NewTreatmentController {
     private Stage stage;
 
     public void initialize(AllTreatmentController controller, Stage stage, Patient patient) {
-        this.controller= controller;
+        this.controller = controller;
         this.patient = patient;
         this.stage = stage;
         showPatientData();
+        handleComboBox();
     }
 
-    private void showPatientData(){
+    private void showPatientData() {
         this.lblFirstname.setText(patient.getFirstName());
         this.lblSurname.setText(patient.getSurname());
     }
 
     @FXML
-    public void handleAdd(){
+    public void handleAdd() {
         LocalDate date = this.datepicker.getValue();
         String s_begin = txtBegin.getText();
         LocalTime begin = DateConverter.convertStringToLocalTime(txtBegin.getText());
@@ -63,6 +66,21 @@ public class NewTreatmentController {
         stage.close();
     }
 
+    public void handleComboBox() {
+        TreatmentTypeDAO dao = DAOFactory.getDAOFactory().createTreatmentTypeDAO();
+        List<TreatmentType> allTreatmentTypes;
+        List<String> treatmentTypes = new ArrayList<>();
+        try {
+            allTreatmentTypes = dao.readAll();
+            for (TreatmentType type : allTreatmentTypes) {
+                treatmentTypes.add(type.getDescription());
+            }
+            TextFields.bindAutoCompletion(txtDescription, treatmentTypes);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void createTreatment(Treatment treatment) {
         TreatmentDAO dao = DAOFactory.getDAOFactory().createTreatmentDAO();
         try {
@@ -73,7 +91,7 @@ public class NewTreatmentController {
     }
 
     @FXML
-    public void handleCancel(){
+    public void handleCancel() {
         stage.close();
     }
 }
