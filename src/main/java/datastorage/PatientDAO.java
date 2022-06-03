@@ -33,9 +33,8 @@ public class PatientDAO extends DAOimp<Patient> {
      */
     @Override
     protected String getCreateStatementString(Patient patient) {
-        return String.format("INSERT INTO PERSON (FIRSTNAME, SURNAME, DATE_OF_BIRTH) VALUES ('%s', '%s', '%s');\n" +
-                        "INSERT INTO PATIENT (PERSON_ID, CARE_LEVEL, ROOM_NUMBER) VALUES (IDENTITY(), %s, '%s');",
-                patient.getFirstName(), patient.getSurname(), patient.getDateOfBirth(), patient.getCareLevel(), patient.getRoomnumber());
+        return String.format("INSERT INTO PATIENT (PERSON_ID, CARE_LEVEL, ROOM_NUMBER) VALUES (%d, %s, '%s');",
+                patient.getId(), patient.getCareLevel(), patient.getRoomnumber());
     }
 
     /**
@@ -108,9 +107,8 @@ public class PatientDAO extends DAOimp<Patient> {
      */
     @Override
     protected String getUpdateStatementString(Patient patient) {
-        return String.format("UPDATE PATIENT SET CARE_LEVEL = '%s', ROOM_NUMBER = '%s' WHERE ID = %d;" +
-                        "UPDATE PERSON SET FIRSTNAME = '%s', SURNAME = '%s', DATE_OF_BIRTH = '%s' WHERE (ID = (SELECT PERSON_ID FROM PATIENT WHERE ID = %d));",
-                patient.getCareLevel(), patient.getRoomnumber(), patient.getPid(), patient.getFirstName(), patient.getSurname(), patient.getDateOfBirth(), patient.getPid());
+        return String.format("UPDATE PATIENT SET CARE_LEVEL = '%s', ROOM_NUMBER = '%s' WHERE ID = %d;",
+                patient.getCareLevel(), patient.getRoomnumber(), patient.getPid());
     }
 
     /**
@@ -121,6 +119,6 @@ public class PatientDAO extends DAOimp<Patient> {
      */
     @Override
     protected String getDeleteStatementString(long key) {
-        return String.format("DELETE FROM PERSON WHERE ID = (SELECT PERSON_ID FROM PATIENT WHERE ID = %d);", key);
+        return String.format("DELETE FROM PATIENT WHERE ID = %d;", key);
     }
 }

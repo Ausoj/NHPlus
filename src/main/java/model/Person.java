@@ -1,20 +1,43 @@
 package model;
 
+import datastorage.DAOFactory;
+import datastorage.PersonDAO;
 import utils.DateConverter;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 
 public abstract class Person {
+    private long id;
     private String firstName;
     private String surname;
 
     private LocalDate dateOfBirth;
 
     public Person(String firstName, String surname, LocalDate dateOfBirth) {
+        PersonDAO dao = DAOFactory.getDAOFactory().createPersonDAO();
+
         this.firstName = firstName;
         this.surname = surname;
         this.dateOfBirth = dateOfBirth;
 
+        try {
+            if (dao.getIdByInstance(this) == -1) {
+                dao.create(this);
+            }
+            this.id = dao.getIdByInstance(this);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getFirstName() {

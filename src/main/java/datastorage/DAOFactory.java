@@ -26,4 +26,8 @@ public class DAOFactory {
     public TreatmentTypeDAO createTreatmentTypeDAO() {
         return new TreatmentTypeDAO(ConnectionBuilder.getConnection());
     }
+
+    public PersonDAO createPersonDAO() {
+        return new PersonDAO(ConnectionBuilder.getConnection());
+    }
 }

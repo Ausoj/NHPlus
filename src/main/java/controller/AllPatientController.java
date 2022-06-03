@@ -1,6 +1,7 @@
 package controller;
 
 import datastorage.PatientDAO;
+import datastorage.PersonDAO;
 import datastorage.TreatmentDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -152,7 +153,9 @@ public class AllPatientController {
      * @param t row to be updated by the user (includes the patient)
      */
     private void doUpdate(TableColumn.CellEditEvent<Patient, String> t) {
+        PersonDAO personDAO = DAOFactory.getDAOFactory().createPersonDAO();
         try {
+            personDAO.update(t.getRowValue());
             dao.update(t.getRowValue());
         } catch (SQLException e) {
             e.printStackTrace();
@@ -182,10 +185,12 @@ public class AllPatientController {
     @FXML
     public void handleDeleteRow() {
         TreatmentDAO tDao = DAOFactory.getDAOFactory().createTreatmentDAO();
+        PersonDAO personDAO = DAOFactory.getDAOFactory().createPersonDAO();
         Patient selectedItem = this.tableView.getSelectionModel().getSelectedItem();
         try {
             tDao.deleteByPid(selectedItem.getPid());
             dao.deleteById(selectedItem.getPid());
+            personDAO.deleteById(selectedItem.getId());
             this.tableView.getItems().remove(selectedItem);
         } catch (SQLException e) {
             e.printStackTrace();
