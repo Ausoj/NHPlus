@@ -11,9 +11,6 @@ import java.util.List;
  */
 public class Patient extends Person {
     private long pid;
-
-//    TODO: Move dateOfBirth to Person
-    private LocalDate dateOfBirth;
     private String careLevel;
     private String roomnumber;
     private List<Treatment> allTreatments = new ArrayList<Treatment>();
@@ -28,8 +25,7 @@ public class Patient extends Person {
      * @param roomnumber
      */
     public Patient(String firstName, String surname, LocalDate dateOfBirth, String careLevel, String roomnumber) {
-        super(firstName, surname);
-        this.dateOfBirth = dateOfBirth;
+        super(firstName, surname, dateOfBirth);
         this.careLevel = careLevel;
         this.roomnumber = roomnumber;
     }
@@ -45,9 +41,8 @@ public class Patient extends Person {
      * @param roomnumber
      */
     public Patient(long pid, String firstName, String surname, LocalDate dateOfBirth, String careLevel, String roomnumber) {
-        super(firstName, surname);
+        super(firstName, surname, dateOfBirth);
         this.pid = pid;
-        this.dateOfBirth = dateOfBirth;
         this.careLevel = careLevel;
         this.roomnumber = roomnumber;
     }
@@ -57,23 +52,6 @@ public class Patient extends Person {
      */
     public long getPid() {
         return pid;
-    }
-
-    /**
-     * @return date of birth as a string
-     */
-    public String getDateOfBirth() {
-        return dateOfBirth.toString();
-    }
-
-    /**
-     * convert given param to a localDate and store as new <code>birthOfDate</code>
-     *
-     * @param dateOfBirth as string in the following format: YYYY-MM-DD
-     */
-    public void setDateOfBirth(String dateOfBirth) {
-        LocalDate birthday = DateConverter.convertStringToLocalDate(dateOfBirth);
-        this.dateOfBirth = birthday;
     }
 
     /**
@@ -127,7 +105,7 @@ public class Patient extends Person {
         return "Patient" + "\nMNID: " + this.pid +
                 "\nFirstname: " + this.getFirstName() +
                 "\nSurname: " + this.getSurname() +
-                "\nBirthday: " + this.dateOfBirth +
+                "\nBirthday: " + this.getDateOfBirth() +
                 "\nCarelevel: " + this.careLevel +
                 "\nRoomnumber: " + this.roomnumber +
                 "\n";
