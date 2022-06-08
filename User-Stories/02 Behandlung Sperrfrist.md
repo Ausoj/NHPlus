@@ -2,8 +2,8 @@
 
 ###### User-Story
 
-Als **Patient** möchte ich, dass **meine Behandlungsdaten nach einer abgeschlossenen Behandlung gesperrt werden**, um **
-in zukünftigen Behandlungen auf die ursprünglichen Behandlungsdaten zurückgreifen zu können.**
+Als **Patient** möchte ich, dass **meine Behandlungsdaten nach einer abgeschlossenen Behandlung gesperrt werden**, um 
+**in zukünftigen Behandlungen auf die ursprünglichen Behandlungsdaten zurückgreifen zu können.**
 
 ###### Akzeptanzkriterien
 
