@@ -19,26 +19,43 @@ public class DateConverter {
         return result;
     }
 
-//    Convert string to localdatetime (param only date) -> time = 00:00
+    public static LocalDateTime convertStringToLocalDateTime(String date) {
+        String[] dateArray = date.split("-");
 
-//    Convert string to localdatetime (param only time) -> date = now()
+        return LocalDateTime.of(Integer.parseInt(dateArray[0]), Integer.parseInt(dateArray[1]),
+                Integer.parseInt(dateArray[2]), 0, 0, 0);
+    }
 
-//    Convert string to localdatetime (param date, time)
+    public static LocalDateTime convertStringToLocalDateTime(String date, String time) {
+        String[] dateArray = date.split("-");
+        String[] timeArray = time.split(":");
+
+        return LocalDateTime.of(Integer.parseInt(dateArray[0]), Integer.parseInt(dateArray[1]),
+                Integer.parseInt(dateArray[2]), Integer.parseInt(timeArray[0]), Integer.parseInt(timeArray[1]),
+                0);
+    }
 
     //    Convert string to unixTimestamp
     public static long convertStringToUnixTimestamp(String date) {
-        return DateConverter.convertLocalDateToUnixTimestamp(DateConverter.convertStringToLocalDate(date));
+        return DateConverter.convertLocalDateTimeToUnixTimestamp(DateConverter.convertStringToLocalDateTime(date));
+    }    //    Convert string to unixTimestamp
+
+    public static long convertStringToUnixTimestamp(String date, String time) {
+        return DateConverter.convertLocalDateTimeToUnixTimestamp(DateConverter.convertStringToLocalDateTime(date, time));
     }
 
     //    Convert localDate to unixTimestamp
     public static long convertLocalDateToUnixTimestamp(LocalDate date) {
         LocalDateTime converted = LocalDateTime.from(date.atStartOfDay(DateConverter.timeZone));
-        long unixDate = DateConverter.convertLocalDateTimeToUnixTimestamp(converted);
-        return unixDate;
+        return DateConverter.convertLocalDateTimeToUnixTimestamp(converted);
     }
 
     public static LocalDate convertUnixTimestampToLocalDate(long timestamp) {
         return convertUnixTimestampToLocalDateTime(timestamp).toLocalDate();
+    }
+
+    public static LocalTime convertUnixTimestampToLocalTime(long timestamp) {
+        return convertUnixTimestampToLocalDateTime(timestamp).toLocalTime();
     }
 
     public static LocalDateTime convertUnixTimestampToLocalDateTime(long timestamp) {
@@ -46,6 +63,6 @@ public class DateConverter {
     }
 
     public static long convertLocalDateTimeToUnixTimestamp(LocalDateTime dateTime) {
-        return dateTime.toInstant(ZoneOffset.UTC).toEpochMilli();
+        return dateTime.toInstant(timeZone).toEpochMilli();
     }
 }

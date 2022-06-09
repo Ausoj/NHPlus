@@ -7,6 +7,20 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class DateConverterTest {
 
+    @org.junit.jupiter.api.Test
+    void testConvertStringToLocalDateTimeMethod() {
+        String date = "2022-04-20";
+        String time = "06:09:42";
+        LocalDateTime dateTime = LocalDateTime.of(2022, 4, 20, 6, 9, 42);
+        LocalDateTime dateTimeExclTime = LocalDateTime.of(2022, 4, 20, 0, 0, 0);
+
+        LocalDateTime convertedDateTime = DateConverter.convertStringToLocalDateTime(date, time);
+        LocalDateTime convertedDateTimeExclTime = DateConverter.convertStringToLocalDateTime(date);
+
+        assertEquals(dateTime, convertedDateTime);
+        assertEquals(dateTimeExclTime, convertedDateTimeExclTime);
+
+    }
 
     @org.junit.jupiter.api.Test
     void testConvertUnixTimestampToLocalDateTimeMethod() {
@@ -25,7 +39,6 @@ class DateConverterTest {
 
         assertEquals(unixTimestamp, convertedTimestamp);
     }
-
 
 
 }

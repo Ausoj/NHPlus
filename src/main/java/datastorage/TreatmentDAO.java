@@ -3,6 +3,7 @@ package datastorage;
 import model.Treatment;
 import model.TreatmentType;
 import utils.DateConverter;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,10 +21,11 @@ public class TreatmentDAO extends DAOimp<Treatment> {
 
     @Override
     protected String getCreateStatementString(Treatment treatment) {
-        return String.format("INSERT INTO treatment (pid, treatment_date, begin, end, TREATMENT_TYPE, remarks) VALUES " +
-                "(%d, '%s', '%s', '%s', '%s', '%s')", treatment.getPid(), treatment.getDate(),
-                treatment.getBegin(), treatment.getEnd(), treatment.getType().getId(),
-                treatment.getRemarks());
+        return String.format("INSERT INTO treatment (pid, begin, end, TREATMENT_TYPE, remarks) VALUES " +
+                        "(%d, %d, %d, '%s', '%s')", treatment.getPid(),
+                DateConverter.convertStringToUnixTimestamp(treatment.getDate(), treatment.getBegin()),
+                DateConverter.convertStringToUnixTimestamp(treatment.getDate(), treatment.getEnd()),
+                treatment.getType().getId(), treatment.getRemarks());
     }
 
     @Override
@@ -33,12 +35,11 @@ public class TreatmentDAO extends DAOimp<Treatment> {
 
     @Override
     protected Treatment getInstanceFromResultSet(ResultSet result) throws SQLException {
-        LocalDate date = DateConverter.convertStringToLocalDate(result.getString(3));
-        LocalTime begin = DateConverter.convertStringToLocalTime(result.getString(4));
-        LocalTime end = DateConverter.convertStringToLocalTime(result.getString(5));
-        Treatment m = new Treatment(result.getLong(1), result.getLong(2),
-                date, begin, end, new TreatmentType(result.getLong(6)), result.getString(7));
-        return m;
+        LocalDate date = DateConverter.convertUnixTimestampToLocalDate(result.getLong(3));
+        LocalTime begin = DateConverter.convertUnixTimestampToLocalTime(result.getLong(3));
+        LocalTime end = DateConverter.convertUnixTimestampToLocalTime(result.getLong(4));
+        return new Treatment(result.getLong(1), result.getLong(2),
+                date, begin, end, new TreatmentType(result.getLong(5)), result.getString(6));
     }
 
     @Override
@@ -51,11 +52,12 @@ public class TreatmentDAO extends DAOimp<Treatment> {
         ArrayList<Treatment> list = new ArrayList<Treatment>();
         Treatment t = null;
         while (result.next()) {
-            LocalDate date = DateConverter.convertStringToLocalDate(result.getString(3));
-            LocalTime begin = DateConverter.convertStringToLocalTime(result.getString(4));
-            LocalTime end = DateConverter.convertStringToLocalTime(result.getString(5));
+//            Todo: exchange logic with call to getInstanceFromResultSet() above
+            LocalDate date = DateConverter.convertUnixTimestampToLocalDate(result.getLong(3));
+            LocalTime begin = DateConverter.convertUnixTimestampToLocalTime(result.getLong(3));
+            LocalTime end = DateConverter.convertUnixTimestampToLocalTime(result.getLong(4));
             t = new Treatment(result.getLong(1), result.getLong(2),
-                    date, begin, end, new TreatmentType(result.getLong(6)), result.getString(7));
+                    date, begin, end, new TreatmentType(result.getLong(5)), result.getString(6));
             list.add(t);
         }
         return list;
@@ -63,10 +65,12 @@ public class TreatmentDAO extends DAOimp<Treatment> {
 
     @Override
     protected String getUpdateStatementString(Treatment treatment) {
-        return String.format("UPDATE treatment SET pid = %d, treatment_date ='%s', begin = '%s', end = '%s'," +
-                "TREATMENT_TYPE = '%s', remarks = '%s' WHERE tid = %d", treatment.getPid(), treatment.getDate(),
-                treatment.getBegin(), treatment.getEnd(), treatment.getType().getId(), treatment.getRemarks(),
-                treatment.getTid());
+//        Todo: swap out treatment__type %s with %d if its not making a difference since treatment_type id is long
+        return String.format("UPDATE treatment SET pid = %d, begin = %d, end = '%s'," +
+                        "TREATMENT_TYPE = '%s', remarks = '%s' WHERE tid = %d", treatment.getPid(),
+                DateConverter.convertStringToUnixTimestamp(treatment.getDate(), treatment.getBegin()),
+                DateConverter.convertStringToUnixTimestamp(treatment.getDate(), treatment.getEnd()),
+                treatment.getType().getId(), treatment.getRemarks(), treatment.getTid());
     }
 
     @Override
@@ -83,7 +87,7 @@ public class TreatmentDAO extends DAOimp<Treatment> {
         return list;
     }
 
-    private String getReadAllTreatmentsOfOnePatientByPid(long pid){
+    private String getReadAllTreatmentsOfOnePatientByPid(long pid) {
         return String.format("SELECT * FROM treatment WHERE pid = %d", pid);
     }
 

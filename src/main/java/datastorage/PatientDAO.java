@@ -31,6 +31,7 @@ public class PatientDAO extends DAOimp<Patient> {
      */
     @Override
     protected String getCreateStatementString(Patient patient) {
+//        Todo: Might throw error since %s isnt wrapped in ''
         return String.format("INSERT INTO PATIENT (PERSON_ID, CARE_LEVEL, ROOM_NUMBER) VALUES (%d, %s, '%s');",
                 patient.getId(), patient.getCareLevel(), patient.getRoomnumber());
     }
@@ -58,7 +59,7 @@ public class PatientDAO extends DAOimp<Patient> {
     @Override
     protected Patient getInstanceFromResultSet(ResultSet result) throws SQLException {
         Patient p = null;
-        LocalDate date = DateConverter.convertStringToLocalDate(result.getString(4));
+        LocalDate date = DateConverter.convertUnixTimestampToLocalDate(result.getLong(4));
         p = new Patient(result.getInt(1), result.getString(2),
                 result.getString(3), date, result.getString(5),
                 result.getString(6));
