@@ -1,6 +1,7 @@
 package datastorage;
 
 import model.Person;
+import utils.DateConverter;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -15,8 +16,8 @@ public class PersonDAO extends DAOimp<Person> {
 
     @Override
     protected String getCreateStatementString(Person person) {
-        return String.format("INSERT INTO PERSON (FIRSTNAME, SURNAME, DATE_OF_BIRTH) VALUES ('%s', '%s', '%s');",
-                person.getFirstName(), person.getSurname(), person.getDateOfBirth());
+        return String.format("INSERT INTO PERSON (FIRSTNAME, SURNAME, DATE_OF_BIRTH) VALUES ('%s', '%s', %d);",
+                person.getFirstName(), person.getSurname(), DateConverter.convertStringToUnixTimestamp(person.getDateOfBirth()));
     }
 
     @Override
@@ -41,8 +42,8 @@ public class PersonDAO extends DAOimp<Person> {
 
     @Override
     protected String getUpdateStatementString(Person person) {
-        return String.format("UPDATE PERSON SET FIRSTNAME = '%s', SURNAME = '%s', DATE_OF_BIRTH = '%s' WHERE ID = %d",
-                person.getFirstName(), person.getSurname(), person.getDateOfBirth(), person.getId());
+        return String.format("UPDATE PERSON SET FIRSTNAME = '%s', SURNAME = '%s', DATE_OF_BIRTH = %d WHERE ID = %d",
+                person.getFirstName(), person.getSurname(), DateConverter.convertStringToUnixTimestamp(person.getDateOfBirth()), person.getId());
     }
 
     @Override
@@ -52,8 +53,8 @@ public class PersonDAO extends DAOimp<Person> {
 
     public long getIdByInstance(Person instance) throws SQLException {
         Statement st = conn.createStatement();
-        ResultSet result = st.executeQuery(String.format("SELECT ID FROM PERSON WHERE FIRSTNAME = '%s' AND SURNAME = '%s' AND DATE_OF_BIRTH = '%s'",
-                instance.getFirstName(), instance.getSurname(), instance.getDateOfBirth()));
+        ResultSet result = st.executeQuery(String.format("SELECT ID FROM PERSON WHERE FIRSTNAME = '%s' AND SURNAME = '%s' AND DATE_OF_BIRTH = %d",
+                instance.getFirstName(), instance.getSurname(), DateConverter.convertStringToUnixTimestamp(instance.getDateOfBirth())));
         if (result.next()) {
             return result.getLong(1);
         }

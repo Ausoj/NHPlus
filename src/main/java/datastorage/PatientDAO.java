@@ -88,7 +88,7 @@ public class PatientDAO extends DAOimp<Patient> {
         ArrayList<Patient> list = new ArrayList<Patient>();
         Patient p = null;
         while (result.next()) {
-            LocalDate date = DateConverter.convertStringToLocalDate(result.getString(4));
+            LocalDate date = DateConverter.convertUnixTimestampToLocalDate(result.getLong(4));
             p = new Patient(result.getInt(1), result.getString(2),
                     result.getString(3), date,
                     result.getString(5), result.getString(6));
