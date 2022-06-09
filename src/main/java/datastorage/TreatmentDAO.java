@@ -52,12 +52,7 @@ public class TreatmentDAO extends DAOimp<Treatment> {
         ArrayList<Treatment> list = new ArrayList<Treatment>();
         Treatment t = null;
         while (result.next()) {
-//            Todo: exchange logic with call to getInstanceFromResultSet() above
-            LocalDate date = DateConverter.convertUnixTimestampToLocalDate(result.getLong(3));
-            LocalTime begin = DateConverter.convertUnixTimestampToLocalTime(result.getLong(3));
-            LocalTime end = DateConverter.convertUnixTimestampToLocalTime(result.getLong(4));
-            t = new Treatment(result.getLong(1), result.getLong(2),
-                    date, begin, end, new TreatmentType(result.getLong(5)), result.getString(6));
+            t = getInstanceFromResultSet(result);
             list.add(t);
         }
         return list;
