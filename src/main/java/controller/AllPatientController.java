@@ -213,10 +213,15 @@ public class AllPatientController {
         String carelevel = this.txtCarelevel.getText();
         String room = this.txtRoom.getText();
         try {
+            Integer.valueOf(carelevel);
             Patient p = new Patient(firstname, surname, date, carelevel, room);
             dao.create(p);
         } catch (SQLException e) {
             e.printStackTrace();
+        } catch (NumberFormatException e) {
+            DialogueManager.getInstance().open(DialogueType.ALERT, "Fehler",
+                    "Der Pflegegrad muss eine Zahl sein.");
+            System.out.println("Must be integer");
         }
         readAllAndShowInTableView();
         clearTextfields();

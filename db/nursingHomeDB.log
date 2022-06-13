@@ -1,8 +1,0 @@
-/*C3*/SET SCHEMA PUBLIC
-INSERT INTO PERSON VALUES(70,'Mosua','Jichalak',933804000000)
-COMMIT
-INSERT INTO PATIENT VALUES(16,70,2,'6969')
-COMMIT
-INSERT INTO TREATMENT VALUES(18,16,1654741200000,1654745340000,4,'Er wollte eine rauchen oder so, daher sind wir in den Park gegangen. \u000aScheint ihm danach super zu gehen, er lacht sehr viel.')
-COMMIT
-DISCONNECT
