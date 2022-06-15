@@ -15,6 +15,7 @@ import javafx.stage.Stage;
 import model.Patient;
 import model.Treatment;
 import datastorage.DAOFactory;
+
 import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
@@ -132,6 +133,18 @@ public class AllTreatmentController {
             }
         }
         return null;
+    }
+
+    @FXML
+    public void handleLock() {
+        int index = this.tableView.getSelectionModel().getSelectedIndex();
+        Treatment t = this.tableviewContent.remove(index);
+        TreatmentDAO dao = DAOFactory.getDAOFactory().createTreatmentDAO();
+        try {
+            dao.lock(t.getTid());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML

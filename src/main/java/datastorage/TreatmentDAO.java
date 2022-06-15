@@ -21,11 +21,11 @@ public class TreatmentDAO extends DAOimp<Treatment> {
 
     @Override
     protected String getCreateStatementString(Treatment treatment) {
-        return String.format("INSERT INTO treatment (pid, begin, end, TREATMENT_TYPE, remarks) VALUES " +
-                        "(%d, %d, %d, '%s', '%s')", treatment.getPid(),
+        return String.format("INSERT INTO treatment (pid, begin, end, TREATMENT_TYPE, remarks, LAST_CHANGE) VALUES " +
+                        "(%d, %d, %d, '%s', '%s', %d)", treatment.getPid(),
                 DateConverter.convertStringToUnixTimestamp(treatment.getDate(), treatment.getBegin()),
                 DateConverter.convertStringToUnixTimestamp(treatment.getDate(), treatment.getEnd()),
-                treatment.getType().getId(), treatment.getRemarks());
+                treatment.getType().getId(), treatment.getRemarks(), DateConverter.unixTimestampNow());
     }
 
     @Override
@@ -44,7 +44,7 @@ public class TreatmentDAO extends DAOimp<Treatment> {
 
     @Override
     protected String getReadAllStatementString() {
-        return "SELECT * FROM TREATMENT";
+        return "SELECT * FROM TREATMENT WHERE TID NOT IN (SELECT ID FROM TREATMENT_LOCKED)";
     }
 
     @Override
@@ -62,10 +62,10 @@ public class TreatmentDAO extends DAOimp<Treatment> {
     protected String getUpdateStatementString(Treatment treatment) {
 //        Todo: swap out treatment__type %s with %d if its not making a difference since treatment_type id is long
         return String.format("UPDATE treatment SET pid = %d, begin = %d, end = '%s'," +
-                        "TREATMENT_TYPE = '%s', remarks = '%s' WHERE tid = %d", treatment.getPid(),
+                        "TREATMENT_TYPE = '%s', remarks = '%s', LAST_CHANGE = %d WHERE tid = %d", treatment.getPid(),
                 DateConverter.convertStringToUnixTimestamp(treatment.getDate(), treatment.getBegin()),
                 DateConverter.convertStringToUnixTimestamp(treatment.getDate(), treatment.getEnd()),
-                treatment.getType().getId(), treatment.getRemarks(), treatment.getTid());
+                treatment.getType().getId(), treatment.getRemarks(), DateConverter.unixTimestampNow(), treatment.getTid());
     }
 
     @Override
@@ -86,8 +86,14 @@ public class TreatmentDAO extends DAOimp<Treatment> {
         return String.format("SELECT * FROM treatment WHERE pid = %d", pid);
     }
 
+    public void lock(long id) throws SQLException {
+        Statement st = conn.createStatement();
+        st.executeUpdate(String.format("INSERT INTO TREATMENT_LOCKED (ID) VALUES (%d)", id));
+    }
+
     public void deleteByPid(long key) throws SQLException {
         Statement st = conn.createStatement();
         st.executeUpdate(String.format("Delete FROM treatment WHERE pid= %d", key));
     }
+
 }
