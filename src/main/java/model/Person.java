@@ -14,6 +14,24 @@ public abstract class Person {
 
     private LocalDate dateOfBirth;
 
+
+    public Person(String firstName, String surname) {
+        PersonDAO dao = DAOFactory.getDAOFactory().createPersonDAO();
+
+        this.firstName = firstName;
+        this.surname = surname;
+        this.dateOfBirth = LocalDate.ofEpochDay(0);
+
+        try {
+            if (dao.getIdByInstance(this) == -1) {
+                dao.create(this);
+            }
+            this.id = dao.getIdByInstance(this);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public Person(String firstName, String surname, LocalDate dateOfBirth) {
         PersonDAO dao = DAOFactory.getDAOFactory().createPersonDAO();
 
