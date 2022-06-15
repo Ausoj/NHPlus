@@ -65,4 +65,9 @@ public class DateConverter {
     public static long convertLocalDateTimeToUnixTimestamp(LocalDateTime dateTime) {
         return dateTime.toInstant(timeZone).toEpochMilli();
     }
+
+    public static long unixTimestampNow() {
+        return Instant.now().toEpochMilli();
+    }
+
 }
