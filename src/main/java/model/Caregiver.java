@@ -1,17 +1,17 @@
 package model;
 
-public class Caretaker extends Person {
+public class Caregiver extends Person {
 
     private long cid;
     private String phoneNumber;
 
-    public Caretaker(String firstName, String surname, String phoneNumber) {
+    public Caregiver(String firstName, String surname, String phoneNumber) {
         super(firstName, surname);
         this.phoneNumber = phoneNumber;
 
     }
 
-    public Caretaker(long cid, String firstName, String surname, String phoneNumber) {
+    public Caregiver(long cid, String firstName, String surname, String phoneNumber) {
         super(firstName, surname);
         this.cid = cid;
         this.phoneNumber = phoneNumber;
@@ -35,7 +35,7 @@ public class Caretaker extends Person {
     }
 
     public String toString() {
-        return "Caretaker" + "\nID: " + this.cid +
+        return "Caregiver" + "\nID: " + this.cid +
                 "\nFirstname: " + this.getFirstName() +
                 "\nSurname: " + this.getSurname() +
                 "\nPhoneNumber: " + this.getPhoneNumber() +

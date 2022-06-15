@@ -1,7 +1,6 @@
 package controller;
 
 import datastorage.*;
-import enums.DialogueType;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -11,27 +10,23 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import model.Caretaker;
-import model.Patient;
-import utils.DateConverter;
-import utils.DialogueManager;
+import model.Caregiver;
 
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.List;
 
 public class AllCaregiverController {
 
     @FXML
-    private TableView<Caretaker> tableView;
+    private TableView<Caregiver> tableView;
     @FXML
-    private TableColumn<Caretaker, Integer> colID;
+    private TableColumn<Caregiver, Integer> colID;
     @FXML
-    private TableColumn<Caretaker, String> colFirstName;
+    private TableColumn<Caregiver, String> colFirstName;
     @FXML
-    private TableColumn<Caretaker, String> colSurname;
+    private TableColumn<Caregiver, String> colSurname;
     @FXML
-    private TableColumn<Caretaker, String> colPhoneNumber;
+    private TableColumn<Caregiver, String> colPhoneNumber;
 
 
     @FXML
@@ -46,8 +41,8 @@ public class AllCaregiverController {
     TextField txtPhoneNumber;
 
 
-    private ObservableList<Caretaker> tableviewContent = FXCollections.observableArrayList();
-    private CaretakerDAO dao;
+    private ObservableList<Caregiver> tableviewContent = FXCollections.observableArrayList();
+    private CaregiverDAO dao;
 
     /**
      * Initializes the corresponding fields. Is called as soon as the corresponding FXML file is to be displayed.
@@ -55,17 +50,17 @@ public class AllCaregiverController {
     public void initialize() {
         readAllAndShowInTableView();
 
-        this.colID.setCellValueFactory(new PropertyValueFactory<Caretaker, Integer>("cid"));
+        this.colID.setCellValueFactory(new PropertyValueFactory<Caregiver, Integer>("cid"));
 
         //CellValuefactory zum Anzeigen der Daten in der TableView
-        this.colFirstName.setCellValueFactory(new PropertyValueFactory<Caretaker, String>("firstName"));
+        this.colFirstName.setCellValueFactory(new PropertyValueFactory<Caregiver, String>("firstName"));
         //CellFactory zum Schreiben innerhalb der Tabelle
         this.colFirstName.setCellFactory(TextFieldTableCell.forTableColumn());
 
-        this.colSurname.setCellValueFactory(new PropertyValueFactory<Caretaker, String>("surname"));
+        this.colSurname.setCellValueFactory(new PropertyValueFactory<Caregiver, String>("surname"));
         this.colSurname.setCellFactory(TextFieldTableCell.forTableColumn());
 
-        this.colPhoneNumber.setCellValueFactory(new PropertyValueFactory<Caretaker, String>("phoneNumber"));
+        this.colPhoneNumber.setCellValueFactory(new PropertyValueFactory<Caregiver, String>("phoneNumber"));
         this.colPhoneNumber.setCellFactory(TextFieldTableCell.forTableColumn());
 
 
@@ -79,7 +74,7 @@ public class AllCaregiverController {
      * @param event event including the value that a user entered into the cell
      */
     @FXML
-    public void handleOnEditFirstname(TableColumn.CellEditEvent<Caretaker, String> event) {
+    public void handleOnEditFirstname(TableColumn.CellEditEvent<Caregiver, String> event) {
         event.getRowValue().setFirstName(event.getNewValue());
         doUpdate(event);
     }
@@ -90,7 +85,7 @@ public class AllCaregiverController {
      * @param event event including the value that a user entered into the cell
      */
     @FXML
-    public void handleOnEditSurname(TableColumn.CellEditEvent<Caretaker, String> event) {
+    public void handleOnEditSurname(TableColumn.CellEditEvent<Caregiver, String> event) {
         event.getRowValue().setSurname(event.getNewValue());
         doUpdate(event);
     }
@@ -101,7 +96,7 @@ public class AllCaregiverController {
      * @param event event including the value that a user entered into the cell
      */
     @FXML
-    public void handleOnEditPhoneNumber(TableColumn.CellEditEvent<Caretaker, String> event) {
+    public void handleOnEditPhoneNumber(TableColumn.CellEditEvent<Caregiver, String> event) {
         event.getRowValue().setPhoneNumber(event.getNewValue());
         doUpdate(event);
     }
@@ -112,7 +107,7 @@ public class AllCaregiverController {
      *
      * @param t row to be updated by the user (includes the patient)
      */
-    private void doUpdate(TableColumn.CellEditEvent<Caretaker, String> t) {
+    private void doUpdate(TableColumn.CellEditEvent<Caregiver, String> t) {
         PersonDAO personDAO = DAOFactory.getDAOFactory().createPersonDAO();
         try {
             personDAO.update(t.getRowValue());
@@ -127,11 +122,11 @@ public class AllCaregiverController {
      */
     private void readAllAndShowInTableView() {
         this.tableviewContent.clear();
-        this.dao = DAOFactory.getDAOFactory().createCaretakerDAO();
-        List<Caretaker> allCaregivers;
+        this.dao = DAOFactory.getDAOFactory().createCaregiverDAO();
+        List<Caregiver> allCaregivers;
         try {
             allCaregivers = dao.readAll();
-            for (Caretaker c : allCaregivers) {
+            for (Caregiver c : allCaregivers) {
                 this.tableviewContent.add(c);
             }
         } catch (SQLException e) {
@@ -145,7 +140,7 @@ public class AllCaregiverController {
     @FXML
     public void handleDeleteRow() {
         PersonDAO personDAO = DAOFactory.getDAOFactory().createPersonDAO();
-        Caretaker selectedItem = this.tableView.getSelectionModel().getSelectedItem();
+        Caregiver selectedItem = this.tableView.getSelectionModel().getSelectedItem();
         try {
             dao.deleteById(selectedItem.getCid());
             personDAO.deleteById(selectedItem.getId());
@@ -164,7 +159,7 @@ public class AllCaregiverController {
         String firstname = this.txtFirstname.getText();
         String phoneNumber = this.txtPhoneNumber.getText();
         try {
-            Caretaker c = new Caretaker(firstname, surname, phoneNumber);
+            Caregiver c = new Caregiver(firstname, surname, phoneNumber);
             dao.create(c);
         } catch (SQLException e) {
             e.printStackTrace();
