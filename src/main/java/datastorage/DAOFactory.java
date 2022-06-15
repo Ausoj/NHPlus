@@ -30,4 +30,6 @@ public class DAOFactory {
     public PersonDAO createPersonDAO() {
         return new PersonDAO(ConnectionBuilder.getConnection());
     }
+
+    public CaretakerDAO createCaretakerDAO(){return new CaretakerDAO(ConnectionBuilder.getConnection());}
 }
