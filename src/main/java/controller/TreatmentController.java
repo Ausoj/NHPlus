@@ -43,6 +43,8 @@ public class TreatmentController {
     private Patient patient;
     private Treatment treatment;
 
+    // Todo: Add Caregiver selection
+
     public void initializeController(AllTreatmentController controller, Stage stage, Treatment treatment) {
         this.stage = stage;
         this.controller = controller;
