@@ -4,6 +4,8 @@ import datastorage.CaregiverDAO;
 import datastorage.DAOFactory;
 import datastorage.TreatmentDAO;
 import datastorage.TreatmentTypeDAO;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
@@ -103,6 +105,20 @@ public class NewTreatmentController {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    private String abbreviateCaregiverName(Caregiver caregiver) {
+        String firstName = caregiver.getFirstName().substring(0, 1);
+        return String.format("%s. %s", firstName, caregiver.getSurname());
+    }
+
+    private Caregiver searchInList(String formattedName) {
+        for (Caregiver caregiver : allCaregivers) {
+            if (formattedName.equals(abbreviateCaregiverName(caregiver))) {
+                return caregiver;
+            }
+        }
+        return null;
     }
 
     private void createTreatment(Treatment treatment) {

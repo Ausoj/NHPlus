@@ -26,7 +26,7 @@ public class Treatment {
         this.cid = cid;
     }
 
-    public Treatment(long tid, long pid, LocalDate date, LocalTime begin,
+    public Treatment(long tid, long pid, long cid, LocalDate date, LocalTime begin,
                      LocalTime end, TreatmentType type, String remarks) {
         this.tid = tid;
         this.pid = pid;
@@ -35,6 +35,7 @@ public class Treatment {
         this.end = end;
         this.type = type;
         this.remarks = remarks;
+        this.cid = cid;
     }
 
     public long getTid() {
