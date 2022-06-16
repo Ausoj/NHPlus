@@ -170,6 +170,7 @@ public class AllTreatmentController {
             Patient patient = searchInList(p);
             newTreatmentWindow(patient);
         } catch (NullPointerException e) {
+//            Todo: Remove own DialogueManager and use this one
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Information");
             alert.setHeaderText("Patient für die Behandlung fehlt!");
