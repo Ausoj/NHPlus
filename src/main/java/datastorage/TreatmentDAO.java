@@ -21,11 +21,11 @@ public class TreatmentDAO extends DAOimp<Treatment> {
 
     @Override
     protected String getCreateStatementString(Treatment treatment) {
-        return String.format("INSERT INTO treatment (pid, begin, end, TREATMENT_TYPE, remarks, LAST_CHANGE) VALUES " +
-                        "(%d, %d, %d, '%s', '%s', %d)", treatment.getPid(),
+        return String.format("INSERT INTO treatment (pid, begin, end, TREATMENT_TYPE, remarks, LAST_CHANGE, CAREGIVER_ID) VALUES " +
+                        "(%d, %d, %d, '%s', '%s', %d, %d)", treatment.getPid(),
                 DateConverter.convertStringToUnixTimestamp(treatment.getDate(), treatment.getBegin()),
                 DateConverter.convertStringToUnixTimestamp(treatment.getDate(), treatment.getEnd()),
-                treatment.getType().getId(), treatment.getRemarks(), DateConverter.unixTimestampNow());
+                treatment.getType().getId(), treatment.getRemarks(), DateConverter.unixTimestampNow(), treatment.getCid());
     }
 
     @Override
@@ -38,7 +38,7 @@ public class TreatmentDAO extends DAOimp<Treatment> {
         LocalDate date = DateConverter.convertUnixTimestampToLocalDate(result.getLong(3));
         LocalTime begin = DateConverter.convertUnixTimestampToLocalTime(result.getLong(3));
         LocalTime end = DateConverter.convertUnixTimestampToLocalTime(result.getLong(4));
-        return new Treatment(result.getLong(1), result.getLong(2),
+        return new Treatment(result.getLong(1), result.getLong(2), result.getLong(7),
                 date, begin, end, new TreatmentType(result.getLong(5)), result.getString(6));
     }
 
@@ -62,10 +62,10 @@ public class TreatmentDAO extends DAOimp<Treatment> {
     protected String getUpdateStatementString(Treatment treatment) {
 //        Todo: swap out treatment__type %s with %d if its not making a difference since treatment_type id is long
         return String.format("UPDATE treatment SET pid = %d, begin = %d, end = '%s'," +
-                        "TREATMENT_TYPE = '%s', remarks = '%s', LAST_CHANGE = %d WHERE tid = %d", treatment.getPid(),
+                        "TREATMENT_TYPE = '%s', remarks = '%s', LAST_CHANGE = %d, CAREGIVER_ID = %d WHERE tid = %d", treatment.getPid(),
                 DateConverter.convertStringToUnixTimestamp(treatment.getDate(), treatment.getBegin()),
                 DateConverter.convertStringToUnixTimestamp(treatment.getDate(), treatment.getEnd()),
-                treatment.getType().getId(), treatment.getRemarks(), DateConverter.unixTimestampNow(), treatment.getTid());
+                treatment.getType().getId(), treatment.getRemarks(), DateConverter.unixTimestampNow(), treatment.getCid(), treatment.getTid());
     }
 
     @Override

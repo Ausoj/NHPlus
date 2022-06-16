@@ -1,11 +1,13 @@
 package controller;
 
+import datastorage.CaregiverDAO;
 import datastorage.DAOFactory;
 import datastorage.TreatmentDAO;
 import datastorage.TreatmentTypeDAO;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import model.Caregiver;
 import model.Patient;
 import model.Treatment;
 import model.TreatmentType;
@@ -33,10 +35,14 @@ public class NewTreatmentController {
     private TextArea taRemarks;
     @FXML
     private DatePicker datepicker;
+    @FXML
+    private ComboBox<String> comboCaregiver;
 
     private AllTreatmentController controller;
     private Patient patient;
     private Stage stage;
+
+    private List<Caregiver> allCaregivers;
 
     public void initialize(AllTreatmentController controller, Stage stage, Patient patient) {
         this.controller = controller;
@@ -44,6 +50,7 @@ public class NewTreatmentController {
         this.stage = stage;
         showPatientData();
         populateDescriptionTextField();
+        populateCaregiverCombobox();
     }
 
     private void showPatientData() {
@@ -59,11 +66,28 @@ public class NewTreatmentController {
         LocalTime end = DateConverter.convertStringToLocalTime(txtEnd.getText());
         TreatmentType type = new TreatmentType(txtDescription.getText());
         String remarks = taRemarks.getText();
-        Treatment treatment = new Treatment(patient.getPid(), date,
+        Caregiver caregiver = searchInList(comboCaregiver.getSelectionModel().getSelectedItem());
+//        Todo: Show dialogue box if caregiver is null
+        assert caregiver != null;
+        Treatment treatment = new Treatment(patient.getPid(), caregiver.getCid(), date,
                 begin, end, type, remarks);
         createTreatment(treatment);
         controller.readAllAndShowInTableView();
         stage.close();
+    }
+
+    public void populateCaregiverCombobox() {
+        CaregiverDAO caregiverDAO = DAOFactory.getDAOFactory().createCaregiverDAO();
+        ObservableList<String> allCaregiversNames = FXCollections.observableArrayList();
+        try {
+            allCaregivers = caregiverDAO.readAll();
+            for (Caregiver caregiver : allCaregivers) {
+                allCaregiversNames.add(abbreviateCaregiverName(caregiver));
+            }
+            comboCaregiver.setItems(allCaregiversNames);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public void populateDescriptionTextField() {

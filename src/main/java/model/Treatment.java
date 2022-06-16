@@ -8,13 +8,14 @@ import java.time.LocalTime;
 public class Treatment {
     private long tid;
     private long pid;
+    private long cid;
     private LocalDate date;
     private LocalTime begin;
     private LocalTime end;
     private TreatmentType type;
     private String remarks;
 
-    public Treatment(long pid, LocalDate date, LocalTime begin,
+    public Treatment(long pid, long cid, LocalDate date, LocalTime begin,
                      LocalTime end, TreatmentType type, String remarks) {
         this.pid = pid;
         this.date = date;
@@ -22,6 +23,7 @@ public class Treatment {
         this.end = end;
         this.type = type;
         this.remarks = remarks;
+        this.cid = cid;
     }
 
     public Treatment(long tid, long pid, LocalDate date, LocalTime begin,
@@ -84,6 +86,14 @@ public class Treatment {
 
     public void setRemarks(String remarks) {
         this.remarks = remarks;
+    }
+
+    public long getCid() {
+        return cid;
+    }
+
+    public void setCid(long cid) {
+        this.cid = cid;
     }
 
     public String toString() {
