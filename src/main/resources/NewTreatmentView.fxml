@@ -69,18 +69,18 @@
                   <Font name="System Bold" size="13.0" />
                </font>
             </Label>
+             <ComboBox fx:id="comboCaregiver" prefHeight="25.0" prefWidth="193.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
              <DatePicker fx:id="datepicker" prefWidth="192.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
              <TextField fx:id="txtBegin" GridPane.columnIndex="3" GridPane.rowIndex="3" />
              <TextField fx:id="txtEnd" maxWidth="192.0" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <Label fx:id="lblFirstname" text="Vorname" GridPane.columnIndex="1" />
-            <Label fx:id="lblSurname" text="Nachname" GridPane.columnIndex="3" />
-            <TextField fx:id="txtDescription" GridPane.columnIndex="3" GridPane.rowIndex="4" />
-            <Label text="Pfleger/in:" GridPane.rowIndex="2">
-               <font>
-                  <Font name="System Bold" size="13.0" />
+             <Label fx:id="lblFirstname" text="Vorname" GridPane.columnIndex="1" />
+             <Label fx:id="lblSurname" text="Nachname" GridPane.columnIndex="3" />
+             <TextField fx:id="txtDescription" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+             <Label text="Pfleger/in:" GridPane.rowIndex="2">
+                <font>
+                   <Font name="System Bold" size="13.0" />
                </font>
             </Label>
-            <ComboBox fx:id="comboCaregiver" prefHeight="25.0" prefWidth="193.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
          </children>
       </GridPane>
        <TextArea fx:id="taRemarks" layoutX="50.0" layoutY="252.0" prefHeight="134.0" prefWidth="700.0" AnchorPane.topAnchor="265.0" />

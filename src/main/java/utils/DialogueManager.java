@@ -9,6 +9,7 @@ import javafx.scene.control.DialogPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public final class DialogueManager {
 
@@ -30,6 +31,7 @@ public final class DialogueManager {
             FXMLLoader loader = new FXMLLoader(Main.class.getResource("/dialogue/" + type.toString() + ".fxml"));
             DialogPane pane = loader.load();
             Scene scene = new Scene(pane);
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/Application.css")).toExternalForm());
             Stage stage = new Stage();
 
             DialogueController dialogueController = loader.getController();

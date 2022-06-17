@@ -1,6 +1,14 @@
+@font-face {
+    font-family: 'Roboto Mono';
+    src: url('fonts/RobotoMono-VariableFont_wght.ttf');
+}
+@font-face {
+    font-family: 'Roboto Mono';
+    src: url('fonts/RobotoMono-Italic-VariableFont_wght.ttf');
+}
+
 * {
-    /* Todo: Use prettier monospaced google font and deliver it with application */
-    -fx-font-family: "Courier New", monospace;
+    -fx-font-family: "Roboto Mono";
 }
 
 .vBox{

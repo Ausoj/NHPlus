@@ -19,11 +19,11 @@
         <columns>
             <TableColumn fx:id="colID" maxWidth="-1.0" minWidth="40.0" prefWidth="50.0" text="ID" />
 <!--            TODO: show patient's full name/surname instead of id-->
-            <TableColumn fx:id="colPid" maxWidth="-1.0" minWidth="100.0" prefWidth="120.0" text="PatientID" />
-          <TableColumn fx:id="colDate" maxWidth="130.0" minWidth="80.0" text="Datum" />
-          <TableColumn fx:id="colBegin" maxWidth="90.0" minWidth="80.0" text="Beginn" />
-            <TableColumn fx:id="colEnd" maxWidth="90.0" minWidth="80.0" text="Ende" />
-            <TableColumn fx:id="colDescription" maxWidth="160.0" minWidth="160.0" prefWidth="160.0" text="Kurzbeschreibung" />
+            <TableColumn fx:id="colPid" maxWidth="-1.0" minWidth="80.0" text="PatientID" />
+          <TableColumn fx:id="colDate" maxWidth="130.0" minWidth="100.0" prefWidth="100.0" text="Datum" />
+          <TableColumn fx:id="colBegin" maxWidth="75.0" minWidth="75.0" prefWidth="75.0" text="Beginn" />
+            <TableColumn fx:id="colEnd" maxWidth="75.0" minWidth="75.0" prefWidth="75.0" text="Ende" />
+            <TableColumn fx:id="colDescription" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" text="Kurzbeschreibung" />
             <TableColumn fx:id="colCaregiver" maxWidth="1.7976931348623157E308" minWidth="150.0" prefWidth="150.0" text="Pfleger/in" />
         </columns>
          <columnResizePolicy>

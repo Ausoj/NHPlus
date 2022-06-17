@@ -20,6 +20,7 @@ import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class AllTreatmentController {
     @FXML
@@ -210,9 +211,9 @@ public class AllTreatmentController {
             FXMLLoader loader = new FXMLLoader(Main.class.getResource("/NewTreatmentView.fxml"));
             AnchorPane pane = loader.load();
             Scene scene = new Scene(pane);
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/Application.css")).toExternalForm());
             //da die primaryStage noch im Hintergrund bleiben soll
             Stage stage = new Stage();
-
             NewTreatmentController controller = loader.getController();
             controller.initialize(this, stage, patient);
 
@@ -229,6 +230,7 @@ public class AllTreatmentController {
             FXMLLoader loader = new FXMLLoader(Main.class.getResource("/TreatmentView.fxml"));
             AnchorPane pane = loader.load();
             Scene scene = new Scene(pane);
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/Application.css")).toExternalForm());
             //da die primaryStage noch im Hintergrund bleiben soll
             Stage stage = new Stage();
             TreatmentController controller = loader.getController();
