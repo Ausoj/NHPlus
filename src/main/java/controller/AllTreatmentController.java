@@ -1,8 +1,7 @@
 package controller;
 
-import datastorage.PatientDAO;
-import datastorage.TreatmentDAO;
-import datastorage.TreatmentTypeDAO;
+import datastorage.*;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -12,9 +11,9 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import model.Caregiver;
 import model.Patient;
 import model.Treatment;
-import datastorage.DAOFactory;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -38,6 +37,8 @@ public class AllTreatmentController {
     @FXML
     private TableColumn<Treatment, String> colDescription;
     @FXML
+    private TableColumn<Treatment, String> colCaregiver;
+    @FXML
     private ComboBox<String> comboBox;
     @FXML
     private Button btnNewTreatment;
@@ -54,6 +55,8 @@ public class AllTreatmentController {
 
     public void initialize() {
         readAllAndShowInTableView();
+        CaregiverDAO caregiverDAO = DAOFactory.getDAOFactory().createCaregiverDAO();
+
         comboBox.setItems(myComboBoxData);
         comboBox.getSelectionModel().select(0);
         this.main = main;
@@ -64,6 +67,17 @@ public class AllTreatmentController {
         this.colBegin.setCellValueFactory(new PropertyValueFactory<Treatment, String>("begin"));
         this.colEnd.setCellValueFactory(new PropertyValueFactory<Treatment, String>("end"));
         this.colDescription.setCellValueFactory(data -> data.getValue().getType().descriptionProperty());
+        this.colCaregiver.setCellValueFactory(data -> {
+            try {
+                Caregiver c = caregiverDAO.read(data.getValue().getCid());
+//              Todo: Extract abbreviated name logic
+                return new SimpleStringProperty(String.format("%-15s %s", c.getFirstName().charAt(0) + ". " + c.getSurname(), c.getPhoneNumber()));
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return null;
+        });
         this.tableView.setItems(this.tableviewContent);
         createComboBoxData();
     }

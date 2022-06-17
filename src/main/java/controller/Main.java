@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class Main extends Application {
 
@@ -28,6 +29,7 @@ public class Main extends Application {
             BorderPane pane = loader.load();
 
             Scene scene = new Scene(pane);
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/Application.css")).toExternalForm());
             this.primaryStage.setTitle("NHPlus");
             this.primaryStage.setScene(scene);
             this.primaryStage.setResizable(false);

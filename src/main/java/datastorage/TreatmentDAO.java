@@ -38,7 +38,7 @@ public class TreatmentDAO extends DAOimp<Treatment> {
         LocalDate date = DateConverter.convertUnixTimestampToLocalDate(result.getLong(3));
         LocalTime begin = DateConverter.convertUnixTimestampToLocalTime(result.getLong(3));
         LocalTime end = DateConverter.convertUnixTimestampToLocalTime(result.getLong(4));
-        return new Treatment(result.getLong(1), result.getLong(2), result.getLong(7),
+        return new Treatment(result.getLong(1), result.getLong(2), result.getLong(8),
                 date, begin, end, new TreatmentType(result.getLong(5)), result.getString(6));
     }
 
@@ -51,6 +51,7 @@ public class TreatmentDAO extends DAOimp<Treatment> {
     protected ArrayList<Treatment> getListFromResultSet(ResultSet result) throws SQLException {
         ArrayList<Treatment> list = new ArrayList<Treatment>();
         Treatment t = null;
+
         while (result.next()) {
             t = getInstanceFromResultSet(result);
             list.add(t);
