@@ -1,8 +1,7 @@
 package controller;
 
-import datastorage.PatientDAO;
-import datastorage.TreatmentDAO;
-import datastorage.TreatmentTypeDAO;
+import datastorage.*;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -15,7 +14,6 @@ import javafx.stage.Stage;
 import model.Caregiver;
 import model.Patient;
 import model.Treatment;
-import datastorage.DAOFactory;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -57,6 +55,8 @@ public class AllTreatmentController {
 
     public void initialize() {
         readAllAndShowInTableView();
+        CaregiverDAO caregiverDAO = DAOFactory.getDAOFactory().createCaregiverDAO();
+
         comboBox.setItems(myComboBoxData);
         comboBox.getSelectionModel().select(0);
         this.main = main;

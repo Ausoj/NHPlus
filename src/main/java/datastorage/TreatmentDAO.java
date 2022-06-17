@@ -51,6 +51,7 @@ public class TreatmentDAO extends DAOimp<Treatment> {
     protected ArrayList<Treatment> getListFromResultSet(ResultSet result) throws SQLException {
         ArrayList<Treatment> list = new ArrayList<Treatment>();
         Treatment t = null;
+
         while (result.next()) {
             t = getInstanceFromResultSet(result);
             list.add(t);
