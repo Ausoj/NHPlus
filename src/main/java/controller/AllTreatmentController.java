@@ -12,6 +12,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import model.Caregiver;
 import model.Patient;
 import model.Treatment;
 import datastorage.DAOFactory;
@@ -37,6 +38,8 @@ public class AllTreatmentController {
     private TableColumn<Treatment, String> colEnd;
     @FXML
     private TableColumn<Treatment, String> colDescription;
+    @FXML
+    private TableColumn<Treatment, String> colCaregiver;
     @FXML
     private ComboBox<String> comboBox;
     @FXML
@@ -64,6 +67,17 @@ public class AllTreatmentController {
         this.colBegin.setCellValueFactory(new PropertyValueFactory<Treatment, String>("begin"));
         this.colEnd.setCellValueFactory(new PropertyValueFactory<Treatment, String>("end"));
         this.colDescription.setCellValueFactory(data -> data.getValue().getType().descriptionProperty());
+        this.colCaregiver.setCellValueFactory(data -> {
+            try {
+                Caregiver c = caregiverDAO.read(data.getValue().getCid());
+//              Todo: Extract abbreviated name logic
+                return new SimpleStringProperty(String.format("%-15s %s", c.getFirstName().charAt(0) + ". " + c.getSurname(), c.getPhoneNumber()));
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return null;
+        });
         this.tableView.setItems(this.tableviewContent);
         createComboBoxData();
     }
