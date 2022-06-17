@@ -1,12 +1,12 @@
 package controller;
 
-import datastorage.DAOFactory;
-import datastorage.PatientDAO;
-import datastorage.TreatmentDAO;
-import datastorage.TreatmentTypeDAO;
+import datastorage.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import model.Caregiver;
 import model.Patient;
 import model.Treatment;
 import model.TreatmentType;
@@ -37,11 +37,14 @@ public class TreatmentController {
     private Button btnChange;
     @FXML
     private Button btnCancel;
+    @FXML
+    private ComboBox<String> comboCaregiver;
 
     private AllTreatmentController controller;
     private Stage stage;
     private Patient patient;
     private Treatment treatment;
+    private List<Caregiver> allCaregivers;
 
     // Todo: Add Caregiver selection
 
@@ -54,6 +57,7 @@ public class TreatmentController {
             this.treatment = treatment;
             showData();
             populateDescriptionTextField();
+            populateCaregiverCombobox();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -72,6 +76,10 @@ public class TreatmentController {
 
     @FXML
     public void handleChange() {
+        Caregiver caregiver = searchInList(comboCaregiver.getSelectionModel().getSelectedItem());
+//        Todo: Show dialogue box if caregiver is null
+        assert caregiver != null;
+        this.treatment.setCid(caregiver.getCid());
         this.treatment.setDate(this.datepicker.getValue().toString());
         this.treatment.setBegin(txtBegin.getText());
         this.treatment.setEnd(txtEnd.getText());
@@ -80,6 +88,21 @@ public class TreatmentController {
         doUpdate();
         controller.readAllAndShowInTableView();
         stage.close();
+    }
+
+    public void populateCaregiverCombobox() {
+        CaregiverDAO caregiverDAO = DAOFactory.getDAOFactory().createCaregiverDAO();
+        ObservableList<String> allCaregiversNames = FXCollections.observableArrayList();
+        try {
+            allCaregivers = caregiverDAO.readAll();
+            for (Caregiver caregiver : allCaregivers) {
+                allCaregiversNames.add(abbreviateCaregiverName(caregiver));
+            }
+            comboCaregiver.setItems(allCaregiversNames);
+            comboCaregiver.getSelectionModel().select(abbreviateCaregiverName(caregiverDAO.read(this.treatment.getCid())));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public void populateDescriptionTextField() {
@@ -95,6 +118,23 @@ public class TreatmentController {
             e.printStackTrace();
         }
     }
+
+// TODO: Put in Caregiver
+    private String abbreviateCaregiverName(Caregiver caregiver) {
+        String firstName = caregiver.getFirstName().substring(0, 1);
+        return String.format("%s. %s", firstName, caregiver.getSurname());
+    }
+
+// TODO: Maybe create CaregiverCollection
+    private Caregiver searchInList(String formattedName) {
+        for (Caregiver caregiver : allCaregivers) {
+            if (formattedName.equals(abbreviateCaregiverName(caregiver))) {
+                return caregiver;
+            }
+        }
+        return null;
+    }
+
 
     private void doUpdate() {
         TreatmentDAO dao = DAOFactory.getDAOFactory().createTreatmentDAO();
