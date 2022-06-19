@@ -75,9 +75,12 @@ public abstract class Person {
     }
 
     public String getAbbreviatedName() {
-        return this.firstName.length() != 0 ? String.format("%s. %s", this.firstName.charAt(0), this.getSurname()) : this.getSurname();
+        return hasFirstname() ? String.format("%s. %s", this.firstName.charAt(0), this.getSurname()) : this.getSurname();
     }
 
+    private boolean hasFirstname() {
+        return this.firstName.length() != 0;
+    }
     /**
      * @return date of birth as a string
      */
