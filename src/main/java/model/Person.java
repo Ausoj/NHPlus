@@ -74,6 +74,9 @@ public abstract class Person {
         this.surname = surname;
     }
 
+    public String getAbbreviatedName() {
+        return String.format("%s. %s", this.firstName, this.getSurname());
+    }
 
     /**
      * @return date of birth as a string

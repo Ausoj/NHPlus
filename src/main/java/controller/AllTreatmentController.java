@@ -71,8 +71,7 @@ public class AllTreatmentController {
         this.colCaregiver.setCellValueFactory(data -> {
             try {
                 Caregiver c = caregiverDAO.read(data.getValue().getCid());
-//              Todo: Extract abbreviated name logic
-                return new SimpleStringProperty(String.format("%-15s %s", c.getFirstName().charAt(0) + ". " + c.getSurname(), c.getPhoneNumber()));
+                return new SimpleStringProperty(String.format("%-15s %s", c.getAbbreviatedName(), c.getPhoneNumber()));
 
             } catch (SQLException e) {
                 e.printStackTrace();

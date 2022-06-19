@@ -84,7 +84,7 @@ public class NewTreatmentController {
         try {
             allCaregivers = caregiverDAO.readAll();
             for (Caregiver caregiver : allCaregivers) {
-                allCaregiversNames.add(abbreviateCaregiverName(caregiver));
+                allCaregiversNames.add(caregiver.getAbbreviatedName());
             }
             comboCaregiver.setItems(allCaregiversNames);
         } catch (SQLException e) {
@@ -107,14 +107,9 @@ public class NewTreatmentController {
         }
     }
 
-    private String abbreviateCaregiverName(Caregiver caregiver) {
-        String firstName = caregiver.getFirstName().substring(0, 1);
-        return String.format("%s. %s", firstName, caregiver.getSurname());
-    }
-
     private Caregiver searchInList(String formattedName) {
         for (Caregiver caregiver : allCaregivers) {
-            if (formattedName.equals(abbreviateCaregiverName(caregiver))) {
+            if (formattedName.equals(caregiver.getAbbreviatedName())) {
                 return caregiver;
             }
         }

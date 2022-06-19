@@ -94,10 +94,11 @@ public class TreatmentController {
         try {
             allCaregivers = caregiverDAO.readAll();
             for (Caregiver caregiver : allCaregivers) {
-                allCaregiversNames.add(abbreviateCaregiverName(caregiver));
+                allCaregiversNames.add(caregiver.getAbbreviatedName());
             }
             comboCaregiver.setItems(allCaregiversNames);
-            comboCaregiver.getSelectionModel().select(abbreviateCaregiverName(caregiverDAO.read(this.treatment.getCid())));
+            Caregiver preselectedCaregiver = caregiverDAO.read(this.treatment.getCid());
+            comboCaregiver.getSelectionModel().select(preselectedCaregiver.getAbbreviatedName());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -117,16 +118,10 @@ public class TreatmentController {
         }
     }
 
-// TODO: Put in Caregiver
-    private String abbreviateCaregiverName(Caregiver caregiver) {
-        String firstName = caregiver.getFirstName().substring(0, 1);
-        return String.format("%s. %s", firstName, caregiver.getSurname());
-    }
-
-// TODO: Maybe create CaregiverCollection
+    // TODO: Maybe create CaregiverCollection
     private Caregiver searchInList(String formattedName) {
         for (Caregiver caregiver : allCaregivers) {
-            if (formattedName.equals(abbreviateCaregiverName(caregiver))) {
+            if (formattedName.equals(caregiver.getAbbreviatedName())) {
                 return caregiver;
             }
         }
