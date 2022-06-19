@@ -46,8 +46,6 @@ public class TreatmentController {
     private Treatment treatment;
     private List<Caregiver> allCaregivers;
 
-    // Todo: Add Caregiver selection
-
     public void initializeController(AllTreatmentController controller, Stage stage, Treatment treatment) {
         this.stage = stage;
         this.controller = controller;
