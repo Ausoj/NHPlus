@@ -31,8 +31,7 @@ public class PatientDAO extends DAOimp<Patient> {
      */
     @Override
     protected String getCreateStatementString(Patient patient) {
-//        Todo: Might throw error since %s isnt wrapped in ''
-        return String.format("INSERT INTO PATIENT (PERSON_ID, CARE_LEVEL, ROOM_NUMBER) VALUES (%d, %s, '%s');",
+        return String.format("INSERT INTO PATIENT (PERSON_ID, CARE_LEVEL, ROOM_NUMBER) VALUES (%d, '%s', '%s');",
                 patient.getId(), patient.getCareLevel(), patient.getRoomnumber());
     }
 

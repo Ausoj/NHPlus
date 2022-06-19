@@ -61,9 +61,8 @@ public class TreatmentDAO extends DAOimp<Treatment> {
 
     @Override
     protected String getUpdateStatementString(Treatment treatment) {
-//        Todo: swap out treatment__type %s with %d if its not making a difference since treatment_type id is long
         return String.format("UPDATE treatment SET pid = %d, begin = %d, end = '%s'," +
-                        "TREATMENT_TYPE = '%s', remarks = '%s', LAST_CHANGE = %d, CAREGIVER_ID = %d WHERE tid = %d", treatment.getPid(),
+                        "TREATMENT_TYPE = %d, remarks = '%s', LAST_CHANGE = %d, CAREGIVER_ID = %d WHERE tid = %d", treatment.getPid(),
                 DateConverter.convertStringToUnixTimestamp(treatment.getDate(), treatment.getBegin()),
                 DateConverter.convertStringToUnixTimestamp(treatment.getDate(), treatment.getEnd()),
                 treatment.getType().getId(), treatment.getRemarks(), DateConverter.unixTimestampNow(), treatment.getCid(), treatment.getTid());
