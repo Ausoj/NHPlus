@@ -86,6 +86,19 @@ public class TreatmentDAO extends DAOimp<Treatment> {
         return String.format("SELECT * FROM treatment WHERE pid = %d", pid);
     }
 
+    public List<Treatment> readTreatmentsByCid(long cid) throws SQLException {
+        ArrayList<Treatment> list = new ArrayList<Treatment>();
+        Treatment object = null;
+        Statement st = conn.createStatement();
+        ResultSet result = st.executeQuery(getReadAllTreatmentsOfOneCaregiverByCid(cid));
+        list = getListFromResultSet(result);
+        return list;
+    }
+
+    private String getReadAllTreatmentsOfOneCaregiverByCid(long cid) {
+        return String.format("SELECT * FROM TREATMENT WHERE CAREGIVER_ID = %d", cid);
+    }
+
     public void lock(long id) throws SQLException {
         Statement st = conn.createStatement();
         st.executeUpdate(String.format("INSERT INTO TREATMENT_LOCKED (ID) VALUES (%d)", id));

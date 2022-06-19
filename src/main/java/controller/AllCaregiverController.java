@@ -4,16 +4,15 @@ import datastorage.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import model.Caregiver;
+import model.Treatment;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 public class AllCaregiverController {
 
@@ -139,14 +138,42 @@ public class AllCaregiverController {
      */
     @FXML
     public void handleDeleteRow() {
-        PersonDAO personDAO = DAOFactory.getDAOFactory().createPersonDAO();
         Caregiver selectedItem = this.tableView.getSelectionModel().getSelectedItem();
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Pfleger/in löschen");
+        alert.setHeaderText("Möchten Sie den Pfleger/in wirklich löschen?");
+        alert.setContentText(selectedItem.getAbbreviatedName() + " wird endgültig gelöscht.");
+        Optional<ButtonType> choice = alert.showAndWait();
+        if (!choice.get().getText().equals("OK")) return;
+
+        PersonDAO personDAO = DAOFactory.getDAOFactory().createPersonDAO();
+        TreatmentDAO treatmentDAO = DAOFactory.getDAOFactory().createTreatmentDAO();
         try {
-            dao.deleteById(selectedItem.getId());
+            long caregiverId = selectedItem.getId();
+            List<Treatment> treatments = treatmentDAO.readTreatmentsByCid(caregiverId);
+            setCaregiverIdOnTreatmentsToDeleted(treatments);
+            dao.deleteById(caregiverId);
             personDAO.deleteById(selectedItem.getPersonId());
             this.tableView.getItems().remove(selectedItem);
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void setCaregiverIdOnTreatmentsToLocked(List<Treatment> treatments) throws SQLException {
+        TreatmentDAO treatmentDAO = DAOFactory.getDAOFactory().createTreatmentDAO();
+        for (Treatment treatment : treatments) {
+            treatment.setCaregiverId(CaregiverDAO.LOCKED_ID);
+            treatmentDAO.update(treatment);
+        }
+    }
+
+    private void setCaregiverIdOnTreatmentsToDeleted(List<Treatment> treatments) throws SQLException {
+        TreatmentDAO treatmentDAO = DAOFactory.getDAOFactory().createTreatmentDAO();
+        for (Treatment treatment : treatments) {
+            treatment.setCaregiverId(CaregiverDAO.DELETED_ID);
+            treatmentDAO.update(treatment);
         }
     }
 
