@@ -51,11 +51,12 @@ public class TreatmentController {
         this.controller = controller;
         PatientDAO pDao = DAOFactory.getDAOFactory().createPatientDAO();
         try {
-            this.patient = pDao.read((int) treatment.getPid());
+            this.patient = pDao.read((int) treatment.getPatientId());
             this.treatment = treatment;
             showData();
             populateDescriptionTextField();
             populateCaregiverCombobox();
+            //        Todo: prefill Datefield with current date
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -77,7 +78,7 @@ public class TreatmentController {
         Caregiver caregiver = searchInList(comboCaregiver.getSelectionModel().getSelectedItem());
 //        Todo: Show dialogue box if caregiver is null
         assert caregiver != null;
-        this.treatment.setCid(caregiver.getCid());
+        this.treatment.setCaregiverId(caregiver.getId());
         this.treatment.setDate(this.datepicker.getValue().toString());
         this.treatment.setBegin(txtBegin.getText());
         this.treatment.setEnd(txtEnd.getText());
@@ -97,7 +98,7 @@ public class TreatmentController {
                 allCaregiversNames.add(caregiver.getAbbreviatedName());
             }
             comboCaregiver.setItems(allCaregiversNames);
-            Caregiver preselectedCaregiver = caregiverDAO.read(this.treatment.getCid());
+            Caregiver preselectedCaregiver = caregiverDAO.read(this.treatment.getCaregiverId());
             comboCaregiver.getSelectionModel().select(preselectedCaregiver.getAbbreviatedName());
         } catch (SQLException e) {
             e.printStackTrace();
@@ -118,7 +119,7 @@ public class TreatmentController {
         }
     }
 
-    // TODO: Maybe create CaregiverCollection
+    // TODO: Create CaregiverCollection IF it would be beneficial elsewhere (in another file)
     private Caregiver searchInList(String formattedName) {
         for (Caregiver caregiver : allCaregivers) {
             if (formattedName.equals(caregiver.getAbbreviatedName())) {

@@ -22,10 +22,10 @@ public class TreatmentDAO extends DAOimp<Treatment> {
     @Override
     protected String getCreateStatementString(Treatment treatment) {
         return String.format("INSERT INTO treatment (pid, begin, end, TREATMENT_TYPE, remarks, LAST_CHANGE, CAREGIVER_ID) VALUES " +
-                        "(%d, %d, %d, '%s', '%s', %d, %d)", treatment.getPid(),
+                        "(%d, %d, %d, '%s', '%s', %d, %d)", treatment.getPatientId(),
                 DateConverter.convertStringToUnixTimestamp(treatment.getDate(), treatment.getBegin()),
                 DateConverter.convertStringToUnixTimestamp(treatment.getDate(), treatment.getEnd()),
-                treatment.getType().getId(), treatment.getRemarks(), DateConverter.unixTimestampNow(), treatment.getCid());
+                treatment.getType().getId(), treatment.getRemarks(), DateConverter.unixTimestampNow(), treatment.getCaregiverId());
     }
 
     @Override
@@ -62,10 +62,10 @@ public class TreatmentDAO extends DAOimp<Treatment> {
     @Override
     protected String getUpdateStatementString(Treatment treatment) {
         return String.format("UPDATE treatment SET pid = %d, begin = %d, end = '%s'," +
-                        "TREATMENT_TYPE = %d, remarks = '%s', LAST_CHANGE = %d, CAREGIVER_ID = %d WHERE tid = %d", treatment.getPid(),
+                        "TREATMENT_TYPE = %d, remarks = '%s', LAST_CHANGE = %d, CAREGIVER_ID = %d WHERE tid = %d", treatment.getPatientId(),
                 DateConverter.convertStringToUnixTimestamp(treatment.getDate(), treatment.getBegin()),
                 DateConverter.convertStringToUnixTimestamp(treatment.getDate(), treatment.getEnd()),
-                treatment.getType().getId(), treatment.getRemarks(), DateConverter.unixTimestampNow(), treatment.getCid(), treatment.getTid());
+                treatment.getType().getId(), treatment.getRemarks(), DateConverter.unixTimestampNow(), treatment.getCaregiverId(), treatment.getId());
     }
 
     @Override

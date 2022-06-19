@@ -6,44 +6,44 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class Treatment {
-    private long tid;
-    private long pid;
-    private long cid;
+    private long id;
+    private long patientId;
+    private long caregiverId;
     private LocalDate date;
     private LocalTime begin;
     private LocalTime end;
     private TreatmentType type;
     private String remarks;
 
-    public Treatment(long pid, long cid, LocalDate date, LocalTime begin,
+    public Treatment(long patientId, long caregiverId, LocalDate date, LocalTime begin,
                      LocalTime end, TreatmentType type, String remarks) {
-        this.pid = pid;
+        this.patientId = patientId;
         this.date = date;
         this.begin = begin;
         this.end = end;
         this.type = type;
         this.remarks = remarks;
-        this.cid = cid;
+        this.caregiverId = caregiverId;
     }
 
-    public Treatment(long tid, long pid, long cid, LocalDate date, LocalTime begin,
+    public Treatment(long id, long patientId, long caregiverId, LocalDate date, LocalTime begin,
                      LocalTime end, TreatmentType type, String remarks) {
-        this.tid = tid;
-        this.pid = pid;
+        this.id = id;
+        this.patientId = patientId;
         this.date = date;
         this.begin = begin;
         this.end = end;
         this.type = type;
         this.remarks = remarks;
-        this.cid = cid;
+        this.caregiverId = caregiverId;
     }
 
-    public long getTid() {
-        return tid;
+    public long getId() {
+        return id;
     }
 
-    public long getPid() {
-        return this.pid;
+    public long getPatientId() {
+        return this.patientId;
     }
 
     public String getDate() {
@@ -89,17 +89,17 @@ public class Treatment {
         this.remarks = remarks;
     }
 
-    public long getCid() {
-        return cid;
+    public long getCaregiverId() {
+        return caregiverId;
     }
 
-    public void setCid(long cid) {
-        this.cid = cid;
+    public void setCaregiverId(long caregiverId) {
+        this.caregiverId = caregiverId;
     }
 
     public String toString() {
-        return "\nBehandlung" + "\nTID: " + this.tid +
-                "\nPID: " + this.pid +
+        return "\nBehandlung" + "\nTID: " + this.id +
+                "\nPID: " + this.patientId +
                 "\nDate: " + this.date +
                 "\nBegin: " + this.begin +
                 "\nEnd: " + this.end +

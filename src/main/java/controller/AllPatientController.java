@@ -63,7 +63,7 @@ public class AllPatientController {
     public void initialize() {
         readAllAndShowInTableView();
 
-        this.colID.setCellValueFactory(new PropertyValueFactory<Patient, Integer>("pid"));
+        this.colID.setCellValueFactory(new PropertyValueFactory<Patient, Integer>("id"));
 
         //CellValuefactory zum Anzeigen der Daten in der TableView
         this.colFirstName.setCellValueFactory(new PropertyValueFactory<Patient, String>("firstName"));
@@ -192,9 +192,9 @@ public class AllPatientController {
         PersonDAO personDAO = DAOFactory.getDAOFactory().createPersonDAO();
         Patient selectedItem = this.tableView.getSelectionModel().getSelectedItem();
         try {
-            tDao.deleteByPid(selectedItem.getPid());
-            dao.deleteById(selectedItem.getPid());
-            personDAO.deleteById(selectedItem.getId());
+            tDao.deleteByPid(selectedItem.getId());
+            dao.deleteById(selectedItem.getId());
+            personDAO.deleteById(selectedItem.getPersonId());
             this.tableView.getItems().remove(selectedItem);
         } catch (SQLException e) {
             e.printStackTrace();

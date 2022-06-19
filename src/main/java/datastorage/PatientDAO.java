@@ -32,7 +32,7 @@ public class PatientDAO extends DAOimp<Patient> {
     @Override
     protected String getCreateStatementString(Patient patient) {
         return String.format("INSERT INTO PATIENT (PERSON_ID, CARE_LEVEL, ROOM_NUMBER) VALUES (%d, '%s', '%s');",
-                patient.getId(), patient.getCareLevel(), patient.getRoomnumber());
+                patient.getPersonId(), patient.getCareLevel(), patient.getRoomnumber());
     }
 
     /**
@@ -106,7 +106,7 @@ public class PatientDAO extends DAOimp<Patient> {
     @Override
     protected String getUpdateStatementString(Patient patient) {
         return String.format("UPDATE PATIENT SET CARE_LEVEL = '%s', ROOM_NUMBER = '%s' WHERE ID = %d;",
-                patient.getCareLevel(), patient.getRoomnumber(), patient.getPid());
+                patient.getCareLevel(), patient.getRoomnumber(), patient.getId());
     }
 
     /**

@@ -2,7 +2,7 @@ package model;
 
 public class Caregiver extends Person {
 
-    private long cid;
+    private long id;
     private String phoneNumber;
 
     public Caregiver(String firstName, String surname, String phoneNumber) {
@@ -11,19 +11,19 @@ public class Caregiver extends Person {
 
     }
 
-    public Caregiver(long cid, String firstName, String surname, String phoneNumber) {
+    public Caregiver(long id, String firstName, String surname, String phoneNumber) {
         super(firstName, surname);
-        this.cid = cid;
+        this.id = id;
         this.phoneNumber = phoneNumber;
 
     }
 
-    public long getCid() {
-        return cid;
+    public long getId() {
+        return id;
     }
 
-    public void setCid(long cid) {
-        this.cid = cid;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getPhoneNumber() {
@@ -35,7 +35,7 @@ public class Caregiver extends Person {
     }
 
     public String toString() {
-        return "Caregiver" + "\nID: " + this.cid +
+        return "Caregiver" + "\nID: " + this.id +
                 "\nFirstname: " + this.getFirstName() +
                 "\nSurname: " + this.getSurname() +
                 "\nPhoneNumber: " + this.getPhoneNumber() +

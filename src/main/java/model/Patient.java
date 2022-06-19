@@ -1,7 +1,5 @@
 package model;
 
-import utils.DateConverter;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +8,7 @@ import java.util.List;
  * Patients live in a NURSING home and are treated by nurses.
  */
 public class Patient extends Person {
-    private long pid;
+    private long id;
     private String careLevel;
     private String roomnumber;
     private List<Treatment> allTreatments = new ArrayList<Treatment>();
@@ -33,16 +31,16 @@ public class Patient extends Person {
     /**
      * constructs a patient from the given params.
      *
-     * @param pid
+     * @param id
      * @param firstName
      * @param surname
      * @param dateOfBirth
      * @param careLevel
      * @param roomnumber
      */
-    public Patient(long pid, String firstName, String surname, LocalDate dateOfBirth, String careLevel, String roomnumber) {
+    public Patient(long id, String firstName, String surname, LocalDate dateOfBirth, String careLevel, String roomnumber) {
         super(firstName, surname, dateOfBirth);
-        this.pid = pid;
+        this.id = id;
         this.careLevel = careLevel;
         this.roomnumber = roomnumber;
     }
@@ -50,8 +48,8 @@ public class Patient extends Person {
     /**
      * @return patient id
      */
-    public long getPid() {
-        return pid;
+    public long getId() {
+        return id;
     }
 
     /**
@@ -101,7 +99,7 @@ public class Patient extends Person {
      * @return string-representation of the patient
      */
     public String toString() {
-        return "Patient" + "\nMNID: " + this.pid +
+        return "Patient" + "\nMNID: " + this.id +
                 "\nFirstname: " + this.getFirstName() +
                 "\nSurname: " + this.getSurname() +
                 "\nBirthday: " + this.getDateOfBirth() +

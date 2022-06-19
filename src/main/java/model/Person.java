@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 
 public abstract class Person {
-    private long id;
+    private long personId;
     private String firstName;
     private String surname;
 
@@ -26,7 +26,7 @@ public abstract class Person {
             if (dao.getIdByInstance(this) == -1) {
                 dao.create(this);
             }
-            this.id = dao.getIdByInstance(this);
+            this.personId = dao.getIdByInstance(this);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -43,19 +43,19 @@ public abstract class Person {
             if (dao.getIdByInstance(this) == -1) {
                 dao.create(this);
             }
-            this.id = dao.getIdByInstance(this);
+            this.personId = dao.getIdByInstance(this);
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
     }
 
-    public long getId() {
-        return id;
+    public long getPersonId() {
+        return personId;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setPersonId(long id) {
+        this.personId = id;
     }
 
     public String getFirstName() {
@@ -75,7 +75,7 @@ public abstract class Person {
     }
 
     public String getAbbreviatedName() {
-        return String.format("%s. %s", this.firstName, this.getSurname());
+        return String.format("%s. %s", this.firstName.charAt(0), this.getSurname());
     }
 
     /**

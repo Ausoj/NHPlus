@@ -53,6 +53,7 @@ public class NewTreatmentController {
         showPatientData();
         populateDescriptionTextField();
         populateCaregiverCombobox();
+//        Todo: prefill Datefield with current date
     }
 
     private void showPatientData() {
@@ -71,7 +72,7 @@ public class NewTreatmentController {
         Caregiver caregiver = searchInList(comboCaregiver.getSelectionModel().getSelectedItem());
 //        Todo: Show dialogue box if caregiver is null
         assert caregiver != null;
-        Treatment treatment = new Treatment(patient.getPid(), caregiver.getCid(), date,
+        Treatment treatment = new Treatment(patient.getId(), caregiver.getId(), date,
                 begin, end, type, remarks);
         createTreatment(treatment);
         controller.readAllAndShowInTableView();

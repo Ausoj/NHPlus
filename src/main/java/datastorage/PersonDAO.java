@@ -43,7 +43,7 @@ public class PersonDAO extends DAOimp<Person> {
     @Override
     protected String getUpdateStatementString(Person person) {
         return String.format("UPDATE PERSON SET FIRSTNAME = '%s', SURNAME = '%s', DATE_OF_BIRTH = %d WHERE ID = %d",
-                person.getFirstName(), person.getSurname(), DateConverter.convertStringToUnixTimestamp(person.getDateOfBirth()), person.getId());
+                person.getFirstName(), person.getSurname(), DateConverter.convertStringToUnixTimestamp(person.getDateOfBirth()), person.getPersonId());
     }
 
     @Override

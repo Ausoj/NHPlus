@@ -62,15 +62,15 @@ public class AllTreatmentController {
         comboBox.getSelectionModel().select(0);
         this.main = main;
 
-        this.colID.setCellValueFactory(new PropertyValueFactory<Treatment, Integer>("tid"));
-        this.colPid.setCellValueFactory(new PropertyValueFactory<Treatment, Integer>("pid"));
+        this.colID.setCellValueFactory(new PropertyValueFactory<Treatment, Integer>("id"));
+        this.colPid.setCellValueFactory(new PropertyValueFactory<Treatment, Integer>("patientId"));
         this.colDate.setCellValueFactory(new PropertyValueFactory<Treatment, String>("date"));
         this.colBegin.setCellValueFactory(new PropertyValueFactory<Treatment, String>("begin"));
         this.colEnd.setCellValueFactory(new PropertyValueFactory<Treatment, String>("end"));
         this.colDescription.setCellValueFactory(data -> data.getValue().getType().descriptionProperty());
         this.colCaregiver.setCellValueFactory(data -> {
             try {
-                Caregiver c = caregiverDAO.read(data.getValue().getCid());
+                Caregiver c = caregiverDAO.read(data.getValue().getCaregiverId());
                 return new SimpleStringProperty(String.format("%-15s %s", c.getAbbreviatedName(), c.getPhoneNumber()));
 
             } catch (SQLException e) {
@@ -130,7 +130,7 @@ public class AllTreatmentController {
         Patient patient = searchInList(p);
         if (patient != null) {
             try {
-                allTreatments = dao.readTreatmentsByPid(patient.getPid());
+                allTreatments = dao.readTreatmentsByPid(patient.getId());
                 for (Treatment treatment : allTreatments) {
                     this.tableviewContent.add(treatment);
                 }
@@ -155,7 +155,7 @@ public class AllTreatmentController {
         Treatment t = this.tableviewContent.remove(index);
         TreatmentDAO dao = DAOFactory.getDAOFactory().createTreatmentDAO();
         try {
-            dao.lock(t.getTid());
+            dao.lock(t.getId());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -168,7 +168,7 @@ public class AllTreatmentController {
         TreatmentDAO dao = DAOFactory.getDAOFactory().createTreatmentDAO();
         TreatmentTypeDAO tDAO = DAOFactory.getDAOFactory().createTreatmentTypeDAO();
         try {
-            dao.deleteById(t.getTid());
+            dao.deleteById(t.getId());
             tDAO.deleteById(t.getType().getId());
         } catch (SQLIntegrityConstraintViolationException ignored) {
 
