@@ -12,6 +12,7 @@ import model.Treatment;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 public class AllCaregiverController {
@@ -107,6 +108,7 @@ public class AllCaregiverController {
      * @param t row to be updated by the user (includes the patient)
      */
     private void doUpdate(TableColumn.CellEditEvent<Caregiver, String> t) {
+
         PersonDAO personDAO = DAOFactory.getDAOFactory().createPersonDAO();
         try {
             personDAO.update(t.getRowValue());
@@ -115,6 +117,7 @@ public class AllCaregiverController {
             e.printStackTrace();
         }
     }
+
 
     /**
      * calls readAll in {@link PatientDAO} and shows patients in the table
@@ -188,11 +191,18 @@ public class AllCaregiverController {
         try {
             Caregiver c = new Caregiver(firstname, surname, phoneNumber);
             dao.create(c);
+            readAllAndShowInTableView();
+            clearTextfields();
         } catch (SQLException e) {
             e.printStackTrace();
+        } catch (IllegalArgumentException e){
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Achtung");
+            alert.setHeaderText("Pfleger konnte nicht erstellt werden.");
+            alert.setContentText(e.getMessage());
+
+            alert.showAndWait();
         }
-        readAllAndShowInTableView();
-        clearTextfields();
     }
 
     /**

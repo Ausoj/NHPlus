@@ -1,5 +1,9 @@
 package model;
 
+import datastorage.CaregiverDAO;
+
+import java.util.Objects;
+
 public class Caregiver extends Person {
 
     private long id;
@@ -8,6 +12,7 @@ public class Caregiver extends Person {
     public Caregiver(String firstName, String surname, String phoneNumber) {
         super(firstName, surname);
         this.phoneNumber = phoneNumber;
+        throwExceptionWhenRequieredFieldIsEmpty();
 
     }
 
@@ -15,6 +20,18 @@ public class Caregiver extends Person {
         super(firstName, surname);
         this.id = id;
         this.phoneNumber = phoneNumber;
+        throwExceptionWhenRequieredFieldIsEmpty();
+    }
+
+    private void throwExceptionWhenRequieredFieldIsEmpty(){
+        if (CaregiverDAO.excludedIds.contains(getId())) return;
+        if (Objects.equals(getSurname(), "")){
+            throw new IllegalArgumentException("Bitte füge einen Nachnamen hinzu!");
+        } else if (Objects.equals(getFirstName(), "")) {
+            throw new IllegalArgumentException("Bitte füge einen Vornamen hinzu!");
+        } else if (Objects.equals(getPhoneNumber(), "")) {
+            throw new IllegalArgumentException("Bitte füge eine Telefonnummer hinzu!");
+        }
 
     }
 

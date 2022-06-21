@@ -6,18 +6,17 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class CaregiverDAO extends DAOimp<Caregiver> {
 
     public static final long LOCKED_ID = -6969;
     public static final long DELETED_ID = -69420;
-    private final List<Long> excludedIds = new ArrayList<>();
+    public static final List<Long> excludedIds = Arrays.asList(LOCKED_ID, DELETED_ID);
 
     public CaregiverDAO(Connection conn) {
         super(conn);
-        excludedIds.add(LOCKED_ID);
-        excludedIds.add(DELETED_ID);
     }
 
     @Override

@@ -74,6 +74,8 @@ public abstract class Person {
         this.surname = surname;
     }
 
+
+
     public String getAbbreviatedName() {
         return hasFirstname() ? String.format("%s. %s", this.firstName.charAt(0), this.getSurname()) : this.getSurname();
     }
