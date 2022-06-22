@@ -15,12 +15,14 @@ import model.Treatment;
 import model.TreatmentType;
 import org.controlsfx.control.textfield.TextFields;
 import utils.DateConverter;
+import utils.DialogueManager;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class NewTreatmentController {
     @FXML
@@ -63,20 +65,24 @@ public class NewTreatmentController {
 
     @FXML
     public void handleAdd() {
-        LocalDate date = this.datepicker.getValue();
         String s_begin = txtBegin.getText();
-        LocalTime begin = DateConverter.convertStringToLocalTime(txtBegin.getText());
-        LocalTime end = DateConverter.convertStringToLocalTime(txtEnd.getText());
-        TreatmentType type = new TreatmentType(txtDescription.getText());
         String remarks = taRemarks.getText();
-        Caregiver caregiver = searchInList(comboCaregiver.getSelectionModel().getSelectedItem());
-//        Todo: Show dialogue box if caregiver is null
-        assert caregiver != null;
-        Treatment treatment = new Treatment(patient.getId(), caregiver.getId(), date,
-                begin, end, type, remarks);
-        createTreatment(treatment);
-        controller.readAllAndShowInTableView();
-        stage.close();
+        try {
+            Caregiver caregiver = searchInList(comboCaregiver.getSelectionModel().getSelectedItem());
+            LocalDate date = this.datepicker.getValue();
+            if (date == null) throw new IllegalArgumentException("Bitte wähle ein Datum über den Kalender aus!");
+
+            LocalTime begin = DateConverter.convertStringToLocalTime(txtBegin.getText());
+            LocalTime end = DateConverter.convertStringToLocalTime(txtEnd.getText());
+            TreatmentType type = new TreatmentType(txtDescription.getText());
+            Treatment treatment = new Treatment(patient.getId(), caregiver.getId(), date,
+                    begin, end, type, remarks);
+            createTreatment(treatment);
+            controller.readAllAndShowInTableView();
+            stage.close();
+        } catch (IllegalArgumentException e) {
+            DialogueManager.getInstance().showAlert("Behandlung konnte nicht angelegt werden", e);
+        }
     }
 
     public void populateCaregiverCombobox() {
@@ -109,10 +115,14 @@ public class NewTreatmentController {
     }
 
     private Caregiver searchInList(String formattedName) {
-        for (Caregiver caregiver : allCaregivers) {
-            if (formattedName.equals(caregiver.getAbbreviatedName())) {
-                return caregiver;
+        try {
+            for (Caregiver caregiver : allCaregivers) {
+                if (formattedName.equals(caregiver.getAbbreviatedName())) {
+                    return caregiver;
+                }
             }
+        } catch (NullPointerException e) {
+            throw new IllegalArgumentException("Es muss ein Pfleger ausgewählt werden.");
         }
         return null;
     }

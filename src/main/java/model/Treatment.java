@@ -4,6 +4,7 @@ import utils.DateConverter;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Objects;
 
 public class Treatment {
     private long id;
@@ -23,7 +24,9 @@ public class Treatment {
         this.end = end;
         this.type = type;
         this.remarks = remarks;
+        if (remarks.equals("")) throw new IllegalArgumentException("Bemerkungen müssen angegeben werden!");
         this.caregiverId = caregiverId;
+
     }
 
     public Treatment(long id, long patientId, long caregiverId, LocalDate date, LocalTime begin,
@@ -59,18 +62,26 @@ public class Treatment {
     }
 
     public void setDate(String s_date) {
+        if (s_date == null || s_date == "") throw new IllegalArgumentException("Datum darf nicht leer sein.");
+
         LocalDate date = DateConverter.convertStringToLocalDate(s_date);
         this.date = date;
+
     }
 
     public void setBegin(String begin) {
+        if (begin.equals("")) throw new IllegalArgumentException("Begin darf nicht leer sein.");
+
         LocalTime time = DateConverter.convertStringToLocalTime(begin);
         this.begin = time;
     }
 
     public void setEnd(String end) {
+        if (end.equals("")) throw new IllegalArgumentException("Ende darf nicht leer sein.");
+
         LocalTime time = DateConverter.convertStringToLocalTime(end);
         this.end = time;
+
     }
 
     public TreatmentType getType() {
@@ -86,6 +97,8 @@ public class Treatment {
     }
 
     public void setRemarks(String remarks) {
+        if (remarks.equals("")) throw new IllegalArgumentException("Bemerkungen müssen angegeben werden.");
+
         this.remarks = remarks;
     }
 

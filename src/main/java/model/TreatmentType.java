@@ -6,6 +6,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 import java.sql.SQLException;
+import java.util.Objects;
 
 public class TreatmentType {
 
@@ -28,6 +29,7 @@ public class TreatmentType {
         TreatmentTypeDAO treatmentTypeDAO = DAOFactory.getDAOFactory().createTreatmentTypeDAO();
         description = capitalize(description);
         this.description = new SimpleStringProperty(description);
+        throwExceptionWhenRequiredFieldIsEmpty();
 
         try {
             this.id = treatmentTypeDAO.readIdByDescription(description);
@@ -38,6 +40,7 @@ public class TreatmentType {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
     }
 
     public TreatmentType(long id, String description) {
@@ -46,6 +49,7 @@ public class TreatmentType {
 
         this.id = id;
         this.description = new SimpleStringProperty(description);
+        throwExceptionWhenRequiredFieldIsEmpty();
 
 //        Check if new description already exists
         try {
@@ -74,7 +78,6 @@ public class TreatmentType {
                 }
             }
         }
-
     }
 
 
@@ -96,9 +99,19 @@ public class TreatmentType {
 
     public void setDescription(String description) {
         this.description.set(description);
+        throwExceptionWhenRequiredFieldIsEmpty();
     }
 
     private String capitalize(String word) {
-        return word.substring(0, 1).toUpperCase() + word.substring(1);
+        try {
+            return word.substring(0, 1).toUpperCase() + word.substring(1);
+        } catch (StringIndexOutOfBoundsException e) {
+            return word;
+        }
+    }
+
+    private void throwExceptionWhenRequiredFieldIsEmpty() throws IllegalArgumentException {
+        if (Objects.equals(getDescription().trim(), ""))
+            throw new IllegalArgumentException("Die Beschreibung darf nicht leer sein.");
     }
 }

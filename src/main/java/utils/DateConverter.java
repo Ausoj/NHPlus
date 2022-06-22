@@ -8,17 +8,34 @@ public class DateConverter {
     public static final ZoneOffset timeZone = ZoneId.systemDefault().getRules().getOffset(Instant.now());
 
     public static LocalDate convertStringToLocalDate(String date) {
-        if (Objects.equals(date, "")) date = LocalDate.ofEpochDay(-69420).toString();
+        if (Objects.equals(date, "")) throw new IllegalArgumentException("Datum darf nicht leer sein.");
+
+        LocalDate result = null;
         String[] array = date.split("-");
-        LocalDate result = LocalDate.of(Integer.parseInt(array[0]), Integer.parseInt(array[1]),
-                Integer.parseInt(array[2]));
-        return result;
+
+        if (array.length >= 3) {
+            result = LocalDate.of(Integer.parseInt(array[0]), Integer.parseInt(array[1]),
+                    Integer.parseInt(array[2]));
+            return result;
+        } else throw new IllegalArgumentException("Das Datum muss in dem Format 'YYYY-MM-DD' angegeben werden.");
+
     }
 
     public static LocalTime convertStringToLocalTime(String time) {
         String[] array = time.split(":");
-        LocalTime result = LocalTime.of(Integer.parseInt(array[0]), Integer.parseInt(array[1]));
-        return result;
+        LocalTime result;
+        try {
+            if (array.length >= 2) {
+                result = LocalTime.of(Integer.parseInt(array[0]), Integer.parseInt(array[1]));
+            } else {
+                result = LocalTime.of(Integer.parseInt(array[0]), 0);
+            }
+            return result;
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Die Uhrzeit darf nicht leer sein und muss im Format 16:20 angegeben werden.");
+        } catch (DateTimeException e) {
+            throw new IllegalArgumentException("Bitte gib eine gültige Uhrzeit an. (00:00-23:59)");
+        }
     }
 
     public static LocalDateTime convertStringToLocalDateTime(String date) {

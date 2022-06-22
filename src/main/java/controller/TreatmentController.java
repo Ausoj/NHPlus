@@ -12,7 +12,9 @@ import model.Treatment;
 import model.TreatmentType;
 import org.controlsfx.control.textfield.TextFields;
 import utils.DateConverter;
+import utils.DialogueManager;
 
+import java.security.InvalidParameterException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -79,14 +81,20 @@ public class TreatmentController {
 //        Todo: Show dialogue box if caregiver is null
         assert caregiver != null;
         this.treatment.setCaregiverId(caregiver.getId());
-        this.treatment.setDate(this.datepicker.getValue().toString());
-        this.treatment.setBegin(txtBegin.getText());
-        this.treatment.setEnd(txtEnd.getText());
-        this.treatment.setType(new TreatmentType(this.treatment.getType().getId(), txtDescription.getText()));
-        this.treatment.setRemarks(taRemarks.getText());
-        doUpdate();
-        controller.readAllAndShowInTableView();
-        stage.close();
+        try {
+            this.treatment.setDate(this.datepicker.getValue().toString());
+            this.treatment.setBegin(txtBegin.getText());
+            this.treatment.setEnd(txtEnd.getText());
+            this.treatment.setType(new TreatmentType(this.treatment.getType().getId(), txtDescription.getText()));
+            this.treatment.setRemarks(taRemarks.getText());
+            doUpdate();
+            controller.readAllAndShowInTableView();
+            stage.close();
+        } catch (IllegalArgumentException e) {
+            DialogueManager.getInstance().showAlert("Behandlung konnte nicht gespeichert werden", e);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void populateCaregiverCombobox() {
