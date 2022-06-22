@@ -183,7 +183,7 @@ public class AllCaregiverController {
         TreatmentDAO treatmentDAO = DAOFactory.getDAOFactory().createTreatmentDAO();
         for (Treatment treatment : treatments) {
             treatment.setCaregiverId(CaregiverDAO.LOCKED_ID);
-            treatmentDAO.update(treatment);
+            treatmentDAO.updateWithoutLastChange(treatment);
         }
     }
 
@@ -191,7 +191,7 @@ public class AllCaregiverController {
         TreatmentDAO treatmentDAO = DAOFactory.getDAOFactory().createTreatmentDAO();
         for (Treatment treatment : treatments) {
             treatment.setCaregiverId(CaregiverDAO.DELETED_ID);
-            treatmentDAO.update(treatment);
+            treatmentDAO.updateWithoutLastChange(treatment);
         }
     }
 

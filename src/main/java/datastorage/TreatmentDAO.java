@@ -109,4 +109,13 @@ public class TreatmentDAO extends DAOimp<Treatment> {
         st.executeUpdate(String.format("Delete FROM treatment WHERE pid= %d", key));
     }
 
+    public void updateWithoutLastChange(Treatment treatment) throws SQLException {
+        Statement st = conn.createStatement();
+        st.executeUpdate(String.format("UPDATE treatment SET pid = %d, begin = %d, end = '%s'," +
+                        "TREATMENT_TYPE = %d, remarks = '%s', CAREGIVER_ID = %d WHERE tid = %d", treatment.getPatientId(),
+                DateConverter.convertStringToUnixTimestamp(treatment.getDate(), treatment.getBegin()),
+                DateConverter.convertStringToUnixTimestamp(treatment.getDate(), treatment.getEnd()),
+                treatment.getType().getId(), treatment.getRemarks(), treatment.getCaregiverId(), treatment.getId()));
+    }
+
 }
