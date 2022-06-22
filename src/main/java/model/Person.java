@@ -21,8 +21,7 @@ public abstract class Person {
 
         this.firstName = firstName;
         this.surname = surname;
-        this.dateOfBirth = LocalDate.ofEpochDay(0);
-        throwExceptionWhenRequiredFieldIsEmpty();
+        this.dateOfBirth = LocalDate.ofEpochDay(-69420);
 
         try {
             if (dao.getIdByInstance(this) == -1) {
@@ -32,6 +31,7 @@ public abstract class Person {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        throwExceptionWhenRequiredFieldIsEmpty();
     }
 
     public Person(String firstName, String surname, LocalDate dateOfBirth) {
@@ -40,7 +40,6 @@ public abstract class Person {
         this.firstName = firstName;
         this.surname = surname;
         this.dateOfBirth = dateOfBirth;
-        throwExceptionWhenRequiredFieldIsEmpty();
 
         try {
             if (dao.getIdByInstance(this) == -1) {
@@ -50,7 +49,7 @@ public abstract class Person {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
+        throwExceptionWhenRequiredFieldIsEmpty();
     }
 
     public long getPersonId() {
@@ -93,6 +92,7 @@ public abstract class Person {
      */
     public void setDateOfBirth(String dateOfBirth) {
         this.dateOfBirth = DateConverter.convertStringToLocalDate(dateOfBirth);
+        throwExceptionWhenRequiredFieldIsEmpty();
     }
 
     private void throwExceptionWhenRequiredFieldIsEmpty() throws IllegalArgumentException {

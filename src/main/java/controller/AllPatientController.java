@@ -93,8 +93,13 @@ public class AllPatientController {
      */
     @FXML
     public void handleOnEditFirstname(TableColumn.CellEditEvent<Patient, String> event) {
-        event.getRowValue().setFirstName(event.getNewValue());
-        doUpdate(event);
+        try {
+            event.getRowValue().setFirstName(event.getNewValue());
+            doUpdate(event);
+        } catch (IllegalArgumentException e) {
+            DialogueManager.getInstance().showAlert("Patient konnte nicht angepasst werden", e);
+            readAllAndShowInTableView();
+        }
     }
 
     /**
@@ -104,8 +109,13 @@ public class AllPatientController {
      */
     @FXML
     public void handleOnEditSurname(TableColumn.CellEditEvent<Patient, String> event) {
-        event.getRowValue().setSurname(event.getNewValue());
-        doUpdate(event);
+        try {
+            event.getRowValue().setSurname(event.getNewValue());
+            doUpdate(event);
+        } catch (IllegalArgumentException e) {
+            DialogueManager.getInstance().showAlert("Patient konnte nicht angepasst werden", e);
+            readAllAndShowInTableView();
+        }
     }
 
     /**
@@ -115,8 +125,13 @@ public class AllPatientController {
      */
     @FXML
     public void handleOnEditDateOfBirth(TableColumn.CellEditEvent<Patient, String> event) {
-        event.getRowValue().setDateOfBirth(event.getNewValue());
-        doUpdate(event);
+        try {
+            event.getRowValue().setDateOfBirth(event.getNewValue());
+            doUpdate(event);
+        } catch (IllegalArgumentException e) {
+            DialogueManager.getInstance().showAlert("Patient konnte nicht angepasst werden", e);
+            readAllAndShowInTableView();
+        }
     }
 
     /**
@@ -126,15 +141,11 @@ public class AllPatientController {
      */
     @FXML
     public void handleOnEditCareLevel(TableColumn.CellEditEvent<Patient, String> event) {
-        event.getRowValue().setCareLevel(event.getNewValue());
         try {
-            Integer.valueOf(event.getNewValue());
+            event.getRowValue().setCareLevel(event.getNewValue());
             doUpdate(event);
-        } catch (NumberFormatException e) {
-            DialogueManager.getInstance().open(DialogueType.ALERT, "Fehler",
-                    "Es wurde der falsche Datentyp angegeben.\n" +
-                            "Bitte eine Ganzzahl angeben.");
-            System.out.println("Must be integer");
+        } catch (IllegalArgumentException e) {
+            DialogueManager.getInstance().showAlert("Patient konnte nicht angepasst werden", e);
             readAllAndShowInTableView();
         }
     }
@@ -146,8 +157,13 @@ public class AllPatientController {
      */
     @FXML
     public void handleOnEditRoomnumber(TableColumn.CellEditEvent<Patient, String> event) {
-        event.getRowValue().setRoomnumber(event.getNewValue());
-        doUpdate(event);
+        try {
+            event.getRowValue().setRoomnumber(event.getNewValue());
+            doUpdate(event);
+        } catch (IllegalArgumentException e) {
+            DialogueManager.getInstance().showAlert("Patient konnte nicht angepasst werden", e);
+            readAllAndShowInTableView();
+        }
     }
 
 
@@ -209,22 +225,28 @@ public class AllPatientController {
         String surname = this.txtSurname.getText();
         String firstname = this.txtFirstname.getText();
         String birthday = this.txtBirthday.getText();
-        LocalDate date = DateConverter.convertStringToLocalDate(birthday);
         String carelevel = this.txtCarelevel.getText();
         String room = this.txtRoom.getText();
         try {
-            Integer.valueOf(carelevel);
+            LocalDate date = DateConverter.convertStringToLocalDate(birthday);
             Patient p = new Patient(firstname, surname, date, carelevel, room);
             dao.create(p);
+            clearTextfields();
         } catch (SQLException e) {
             e.printStackTrace();
-        } catch (NumberFormatException e) {
-            DialogueManager.getInstance().open(DialogueType.ALERT, "Fehler",
-                    "Der Pflegegrad muss eine Zahl sein.");
-            System.out.println("Must be integer");
+        } catch (IllegalArgumentException e) {
+            DialogueManager.getInstance().showAlert("Patient konnte nicht erstellt werden", e);
         }
         readAllAndShowInTableView();
-        clearTextfields();
+    }
+
+    private void showAlert(String heading, Exception e) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Achtung");
+        alert.setHeaderText(heading);
+        alert.setContentText(e.getMessage());
+        alert.showAndWait();
+        readAllAndShowInTableView();
     }
 
     /**

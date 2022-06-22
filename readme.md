@@ -1,5 +1,9 @@
 # NHPlus
 
+## Probleme beim Starten?
+**Bitte achten Sie darauf, dass der Projektpfad keine Leerzeichen enthält, da dies unter Windows mit JavaFX beim Einbinden von eigenen CSS-Dateien für Fehler sorgt.**
+
+
 ## Informationen zur Lernsituation
 Du bist Mitarbeiter der HiTec GmbH, die seit über 15 Jahren IT-Dienstleister und seit einigen Jahren ISO/IEC 27001 zertifiziert ist. Die HiTec GmbH ist ein mittelgroßes IT-Systemhaus und ist auf dem IT-Markt mit folgenden Dienstleistungen und Produkten vetreten: 
 

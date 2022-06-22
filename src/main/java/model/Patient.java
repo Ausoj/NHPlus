@@ -1,8 +1,11 @@
 package model;
 
+import datastorage.CaregiverDAO;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Patients live in a NURSING home and are treated by nurses.
@@ -26,6 +29,7 @@ public class Patient extends Person {
         super(firstName, surname, dateOfBirth);
         this.careLevel = careLevel;
         this.roomnumber = roomnumber;
+        throwExceptionWhenRequiredFieldIsEmpty();
     }
 
     /**
@@ -43,6 +47,7 @@ public class Patient extends Person {
         this.id = id;
         this.careLevel = careLevel;
         this.roomnumber = roomnumber;
+        throwExceptionWhenRequiredFieldIsEmpty();
     }
 
     /**
@@ -64,6 +69,7 @@ public class Patient extends Person {
      */
     public void setCareLevel(String careLevel) {
         this.careLevel = careLevel;
+        throwExceptionWhenRequiredFieldIsEmpty();
     }
 
     /**
@@ -78,6 +84,7 @@ public class Patient extends Person {
      */
     public void setRoomnumber(String roomnumber) {
         this.roomnumber = roomnumber;
+        throwExceptionWhenRequiredFieldIsEmpty();
     }
 
 
@@ -93,6 +100,24 @@ public class Patient extends Person {
             return true;
         }
         return false;
+    }
+
+    private void throwExceptionWhenRequiredFieldIsEmpty() throws IllegalArgumentException {
+        if (CaregiverDAO.excludedIds.contains(getPersonId())) return;
+
+        if (Objects.equals(getDateOfBirth().trim(), LocalDate.ofEpochDay(-69420).toString())) {
+            throw new IllegalArgumentException("Das Geburtsdatum darf nicht leer sein!");
+        } else if (Objects.equals(getCareLevel().trim(), "")) {
+            throw new IllegalArgumentException("Der Pflegegrad darf nicht leer sein!");
+        } else if (Objects.equals(getRoomnumber().trim(), "")) {
+            throw new IllegalArgumentException("Der Raum darf nicht leer sein!");
+        }
+        try {
+            Integer.parseInt(getCareLevel());
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Der Pflegegrad muss eine Zahl sein!");
+        }
+
     }
 
     /**

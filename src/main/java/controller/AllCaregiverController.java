@@ -9,6 +9,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import model.Caregiver;
 import model.Treatment;
+import utils.DialogueManager;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -79,7 +80,8 @@ public class AllCaregiverController {
             event.getRowValue().setFirstName(event.getNewValue());
             doUpdate(event);
         } catch (IllegalArgumentException e) {
-            showAlert("Pfleger konnte nicht angepasst werden", e);
+            DialogueManager.getInstance().showAlert("Pfleger konnte nicht angepasst werden", e);
+            readAllAndShowInTableView();
         }
     }
 
@@ -94,7 +96,8 @@ public class AllCaregiverController {
             event.getRowValue().setSurname(event.getNewValue());
             doUpdate(event);
         } catch (IllegalArgumentException e) {
-            showAlert("Pfleger konnte nicht angepasst werden", e);
+            DialogueManager.getInstance().showAlert("Pfleger konnte nicht angepasst werden", e);
+            readAllAndShowInTableView();
         }
     }
 
@@ -109,7 +112,8 @@ public class AllCaregiverController {
             event.getRowValue().setPhoneNumber(event.getNewValue());
             doUpdate(event);
         } catch (IllegalArgumentException e) {
-            showAlert("Pfleger konnte nicht angepasst werden", e);
+            DialogueManager.getInstance().showAlert("Pfleger konnte nicht angepasst werden", e);
+            readAllAndShowInTableView();
         }
     }
 
@@ -207,17 +211,8 @@ public class AllCaregiverController {
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (IllegalArgumentException e) {
-            showAlert("Pfleger konnte nicht erstellt werden", e);
+            DialogueManager.getInstance().showAlert("Pfleger konnte nicht erstellt werden", e);
         }
-    }
-
-    private void showAlert(String heading, Exception e) {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Achtung");
-        alert.setHeaderText(heading);
-        alert.setContentText(e.getMessage());
-        alert.showAndWait();
-        readAllAndShowInTableView();
     }
 
     /**

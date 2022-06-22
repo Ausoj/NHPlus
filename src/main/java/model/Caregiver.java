@@ -23,7 +23,7 @@ public class Caregiver extends Person {
         throwExceptionWhenRequiredFieldIsEmpty();
     }
 
-    private void throwExceptionWhenRequiredFieldIsEmpty() {
+    private void throwExceptionWhenRequiredFieldIsEmpty() throws IllegalArgumentException {
         if (CaregiverDAO.excludedIds.contains(getId())) return;
 
         if (Objects.equals(getPhoneNumber().trim(), "")) {

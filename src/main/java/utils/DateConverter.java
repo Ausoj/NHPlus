@@ -1,12 +1,14 @@
 package utils;
 
 import java.time.*;
+import java.util.Objects;
 
 public class DateConverter {
 
     public static final ZoneOffset timeZone = ZoneId.systemDefault().getRules().getOffset(Instant.now());
 
     public static LocalDate convertStringToLocalDate(String date) {
+        if (Objects.equals(date, "")) date = LocalDate.ofEpochDay(-69420).toString();
         String[] array = date.split("-");
         LocalDate result = LocalDate.of(Integer.parseInt(array[0]), Integer.parseInt(array[1]),
                 Integer.parseInt(array[2]));
