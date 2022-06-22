@@ -75,8 +75,12 @@ public class AllCaregiverController {
      */
     @FXML
     public void handleOnEditFirstname(TableColumn.CellEditEvent<Caregiver, String> event) {
-        event.getRowValue().setFirstName(event.getNewValue());
-        doUpdate(event);
+        try {
+            event.getRowValue().setFirstName(event.getNewValue());
+            doUpdate(event);
+        } catch (IllegalArgumentException e) {
+            showAlert("Pfleger konnte nicht angepasst werden", e);
+        }
     }
 
     /**
@@ -86,8 +90,12 @@ public class AllCaregiverController {
      */
     @FXML
     public void handleOnEditSurname(TableColumn.CellEditEvent<Caregiver, String> event) {
-        event.getRowValue().setSurname(event.getNewValue());
-        doUpdate(event);
+        try {
+            event.getRowValue().setSurname(event.getNewValue());
+            doUpdate(event);
+        } catch (IllegalArgumentException e) {
+            showAlert("Pfleger konnte nicht angepasst werden", e);
+        }
     }
 
     /**
@@ -97,8 +105,12 @@ public class AllCaregiverController {
      */
     @FXML
     public void handleOnEditPhoneNumber(TableColumn.CellEditEvent<Caregiver, String> event) {
-        event.getRowValue().setPhoneNumber(event.getNewValue());
-        doUpdate(event);
+        try {
+            event.getRowValue().setPhoneNumber(event.getNewValue());
+            doUpdate(event);
+        } catch (IllegalArgumentException e) {
+            showAlert("Pfleger konnte nicht angepasst werden", e);
+        }
     }
 
 
@@ -108,7 +120,6 @@ public class AllCaregiverController {
      * @param t row to be updated by the user (includes the patient)
      */
     private void doUpdate(TableColumn.CellEditEvent<Caregiver, String> t) {
-
         PersonDAO personDAO = DAOFactory.getDAOFactory().createPersonDAO();
         try {
             personDAO.update(t.getRowValue());
@@ -195,14 +206,18 @@ public class AllCaregiverController {
             clearTextfields();
         } catch (SQLException e) {
             e.printStackTrace();
-        } catch (IllegalArgumentException e){
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Achtung");
-            alert.setHeaderText("Pfleger konnte nicht erstellt werden.");
-            alert.setContentText(e.getMessage());
-
-            alert.showAndWait();
+        } catch (IllegalArgumentException e) {
+            showAlert("Pfleger konnte nicht erstellt werden", e);
         }
+    }
+
+    private void showAlert(String heading, Exception e) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Achtung");
+        alert.setHeaderText(heading);
+        alert.setContentText(e.getMessage());
+        alert.showAndWait();
+        readAllAndShowInTableView();
     }
 
     /**

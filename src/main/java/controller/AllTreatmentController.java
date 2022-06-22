@@ -190,6 +190,7 @@ public class AllTreatmentController {
             alert.setHeaderText("Patient für die Behandlung fehlt!");
             alert.setContentText("Wählen Sie über die Combobox einen Patienten aus!");
             alert.showAndWait();
+
         }
     }
 

@@ -12,7 +12,7 @@ public class Caregiver extends Person {
     public Caregiver(String firstName, String surname, String phoneNumber) {
         super(firstName, surname);
         this.phoneNumber = phoneNumber;
-        throwExceptionWhenRequieredFieldIsEmpty();
+        throwExceptionWhenRequiredFieldIsEmpty();
 
     }
 
@@ -20,17 +20,14 @@ public class Caregiver extends Person {
         super(firstName, surname);
         this.id = id;
         this.phoneNumber = phoneNumber;
-        throwExceptionWhenRequieredFieldIsEmpty();
+        throwExceptionWhenRequiredFieldIsEmpty();
     }
 
-    private void throwExceptionWhenRequieredFieldIsEmpty(){
+    private void throwExceptionWhenRequiredFieldIsEmpty() {
         if (CaregiverDAO.excludedIds.contains(getId())) return;
-        if (Objects.equals(getSurname(), "")){
-            throw new IllegalArgumentException("Bitte füge einen Nachnamen hinzu!");
-        } else if (Objects.equals(getFirstName(), "")) {
-            throw new IllegalArgumentException("Bitte füge einen Vornamen hinzu!");
-        } else if (Objects.equals(getPhoneNumber(), "")) {
-            throw new IllegalArgumentException("Bitte füge eine Telefonnummer hinzu!");
+
+        if (Objects.equals(getPhoneNumber().trim(), "")) {
+            throw new IllegalArgumentException("Die Telefonnummer darf nicht leer sein.");
         }
 
     }
@@ -49,6 +46,7 @@ public class Caregiver extends Person {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+        throwExceptionWhenRequiredFieldIsEmpty();
     }
 
     public String toString() {

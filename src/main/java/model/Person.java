@@ -1,17 +1,18 @@
 package model;
 
+import datastorage.CaregiverDAO;
 import datastorage.DAOFactory;
 import datastorage.PersonDAO;
 import utils.DateConverter;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.Objects;
 
 public abstract class Person {
     private long personId;
     private String firstName;
     private String surname;
-
     private LocalDate dateOfBirth;
 
 
@@ -21,6 +22,7 @@ public abstract class Person {
         this.firstName = firstName;
         this.surname = surname;
         this.dateOfBirth = LocalDate.ofEpochDay(0);
+        throwExceptionWhenRequiredFieldIsEmpty();
 
         try {
             if (dao.getIdByInstance(this) == -1) {
@@ -38,6 +40,7 @@ public abstract class Person {
         this.firstName = firstName;
         this.surname = surname;
         this.dateOfBirth = dateOfBirth;
+        throwExceptionWhenRequiredFieldIsEmpty();
 
         try {
             if (dao.getIdByInstance(this) == -1) {
@@ -64,6 +67,7 @@ public abstract class Person {
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
+        throwExceptionWhenRequiredFieldIsEmpty();
     }
 
     public String getSurname() {
@@ -72,17 +76,9 @@ public abstract class Person {
 
     public void setSurname(String surname) {
         this.surname = surname;
+        throwExceptionWhenRequiredFieldIsEmpty();
     }
 
-
-
-    public String getAbbreviatedName() {
-        return hasFirstname() ? String.format("%s. %s", this.firstName.charAt(0), this.getSurname()) : this.getSurname();
-    }
-
-    private boolean hasFirstname() {
-        return this.firstName.length() != 0;
-    }
     /**
      * @return date of birth as a string
      */
@@ -97,5 +93,23 @@ public abstract class Person {
      */
     public void setDateOfBirth(String dateOfBirth) {
         this.dateOfBirth = DateConverter.convertStringToLocalDate(dateOfBirth);
+    }
+
+    private void throwExceptionWhenRequiredFieldIsEmpty() throws IllegalArgumentException {
+        if (CaregiverDAO.excludedIds.contains(getPersonId())) return;
+
+        if (Objects.equals(getSurname().trim(), "")) {
+            throw new IllegalArgumentException("Der Nachname darf nicht leer sein!");
+        } else if (Objects.equals(getFirstName().trim(), "")) {
+            throw new IllegalArgumentException("Der Vorname darf nicht leer sein!");
+        }
+    }
+
+    public String getAbbreviatedName() {
+        return hasFirstname() ? String.format("%s. %s", this.firstName.charAt(0), this.getSurname()) : this.getSurname();
+    }
+
+    private boolean hasFirstname() {
+        return this.firstName.length() != 0;
     }
 }
