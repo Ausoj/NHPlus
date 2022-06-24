@@ -1,13 +1,17 @@
 package datastorage;
 
+import model.Caregiver;
 import model.Patient;
+import model.Treatment;
 import utils.DateConverter;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Implements the Interface <code>DAOImp</code>. Overrides methods to generate specific patient-SQL-queries.
@@ -118,5 +122,43 @@ public class PatientDAO extends DAOimp<Patient> {
     @Override
     protected String getDeleteStatementString(long key) {
         return String.format("DELETE FROM PATIENT WHERE ID = %d;", key);
+    }
+
+    public ResultSet getAllPatientIdsWithoutTreatmentSince(long unixTime) throws SQLException {
+        Statement st = conn.createStatement();
+        return st.executeQuery("SELECT PATIENT.ID\n" +
+                "FROM PATIENT\n" +
+                "JOIN TREATMENT on PATIENT.ID = TREATMENT.PID\n" +
+                "GROUP BY PATIENT.ID\n" +
+                "HAVING MAX(LAST_CHANGE) < " + unixTime);
+    }
+
+    public void deletePatient(Patient patient) throws SQLException {
+        PersonDAO personDAO = DAOFactory.getDAOFactory().createPersonDAO();
+        long caregiverId = patient.getId();
+        unlockPatient(patient);
+        this.deleteById(caregiverId);
+        personDAO.deleteById(patient.getPersonId());
+    }
+
+    public void lockPatient(Patient patient) throws SQLException {
+        long patientId = patient.getId();
+        this.addPatientToLockedTable(patientId);
+    }
+
+    public void unlockPatient(Patient patient) throws SQLException {
+        long patientId = patient.getId();
+        this.removePatientFromLockedTable(patientId);
+
+    }
+
+    private void addPatientToLockedTable(long id) throws SQLException {
+        Statement st = conn.createStatement();
+        st.executeUpdate("INSERT INTO PATIENT_LOCKED (ID) VALUES (" + id + ")");
+    }
+
+    private void removePatientFromLockedTable(long id) throws SQLException {
+        Statement st = conn.createStatement();
+        st.executeUpdate("DELETE FROM PATIENT_LOCKED WHERE ID = " + id);
     }
 }

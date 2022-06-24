@@ -5,6 +5,7 @@ import datastorage.DAOFactory;
 import datastorage.PatientDAO;
 import datastorage.TreatmentDAO;
 import model.Caregiver;
+import model.Patient;
 import model.Treatment;
 
 import java.sql.ResultSet;
@@ -26,7 +27,7 @@ public class DSGVOCleaner {
         cleanUpCaregivers();
     }
 
-    private void cleanUpPatients() {
+    private void cleanUpPatients() throws SQLException {
         System.out.println("Cleaning up patients");
 
         PatientDAO dao = daoFactory.createPatientDAO();
@@ -34,12 +35,39 @@ public class DSGVOCleaner {
         deletePatients(dao);
     }
 
-    private void lockPatients(PatientDAO dao) {
+    private void lockPatients(PatientDAO dao) throws SQLException {
 //        3 months no treatment -> lock
+        long time3MonthAgo = DateConverter.getUnixMilliHowLongAgo("3 months");
+        ResultSet result = dao.getAllPatientIdsWithoutTreatmentSince(time3MonthAgo);
+        ArrayList<Patient> patients = new ArrayList<Patient>();
+        while (result.next()) {
+            patients.add(dao.read(result.getLong(1)));
+        }
+
+        for (Patient patient :
+                patients) {
+            dao.lockPatient(patient);
+            System.out.println("Locked patient: ");
+            System.out.println(patient);
+        }
+
     }
 
-    private void deletePatients(PatientDAO dao) {
+    private void deletePatients(PatientDAO dao) throws SQLException {
 //        10 years no treatment -> delete
+        long time10YearsAgo = DateConverter.getUnixMilliHowLongAgo("10 years");
+        ResultSet result = dao.getAllPatientIdsWithoutTreatmentSince(time10YearsAgo);
+        ArrayList<Patient> patients = new ArrayList<Patient>();
+        while (result.next()) {
+            patients.add(dao.read(result.getLong(1)));
+        }
+
+        for (Patient patient :
+                patients) {
+            dao.deletePatient(patient);
+            System.out.println("Deleted patient: ");
+            System.out.println(patient);
+        }
 
     }
 
