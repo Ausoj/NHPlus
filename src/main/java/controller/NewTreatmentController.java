@@ -78,9 +78,11 @@ public class NewTreatmentController {
             Treatment treatment = new Treatment(patient.getId(), caregiver.getId(), date,
                     begin, end, type, remarks);
             createTreatment(treatment);
+            CaregiverDAO caregiverDAO = DAOFactory.getDAOFactory().createCaregiverDAO();
+            caregiverDAO.setLastTreatment(caregiverDAO.read(treatment.getCaregiverId()));
             controller.readAllAndShowInTableView();
             stage.close();
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | SQLException e) {
             DialogueManager.getInstance().showAlert("Behandlung konnte nicht angelegt werden", e);
         }
     }

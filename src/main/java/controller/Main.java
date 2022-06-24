@@ -1,6 +1,7 @@
 package controller;
 
 import datastorage.ConnectionBuilder;
+import datastorage.DAOFactory;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -9,8 +10,10 @@ import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import utils.DSGVOCleaner;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Objects;
 
 public class Main extends Application {
@@ -35,6 +38,11 @@ public class Main extends Application {
             this.primaryStage.setResizable(false);
             this.primaryStage.show();
 
+            DAOFactory daoFactory = DAOFactory.getDAOFactory();
+            DSGVOCleaner cleaner = new DSGVOCleaner(daoFactory);
+//          Run DSGVO Cleaner
+            cleaner.run();
+
             this.primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
                 @Override
                 public void handle(WindowEvent e) {
@@ -43,7 +51,7 @@ public class Main extends Application {
                     System.exit(0);
                 }
             });
-        } catch (IOException e) {
+        } catch (IOException | SQLException e) {
             e.printStackTrace();
         }
     }

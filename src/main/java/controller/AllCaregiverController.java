@@ -9,6 +9,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import model.Caregiver;
 import model.Treatment;
+import utils.DateConverter;
 import utils.DialogueManager;
 
 import java.sql.SQLException;
@@ -158,6 +159,33 @@ public class AllCaregiverController {
     public void handleDeleteRow() {
         Caregiver selectedItem = this.tableView.getSelectionModel().getSelectedItem();
 
+//      When Caregiver has no treatments (10 years) else lock
+        try {
+            if (DateConverter.isWithinLast10Years(dao.getLastTreatmentTime(selectedItem.getId()))) {
+                lockCaregiver(selectedItem);
+            } else {
+                deleteCaregiver(selectedItem);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void lockCaregiver(Caregiver selectedItem) throws SQLException {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Pfleger/in sperren");
+        alert.setHeaderText("Der ausgewählte Pfleger hat in den letzten 10 Jahren Behandlungen durchgeführt.\n" +
+                "Möchten Sie den Pfleger/in sperren?");
+        alert.setContentText(selectedItem.getAbbreviatedName() + " wird gesperrt.");
+        Optional<ButtonType> choice = alert.showAndWait();
+        if (!choice.get().getText().equals("OK")) return;
+
+        dao.lockCaregiver(selectedItem);
+        this.tableView.getItems().remove(selectedItem);
+
+    }
+
+    private void deleteCaregiver(Caregiver selectedItem) throws SQLException {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Pfleger/in löschen");
         alert.setHeaderText("Möchten Sie den Pfleger/in wirklich löschen?");
@@ -165,34 +193,8 @@ public class AllCaregiverController {
         Optional<ButtonType> choice = alert.showAndWait();
         if (!choice.get().getText().equals("OK")) return;
 
-        PersonDAO personDAO = DAOFactory.getDAOFactory().createPersonDAO();
-        TreatmentDAO treatmentDAO = DAOFactory.getDAOFactory().createTreatmentDAO();
-        try {
-            long caregiverId = selectedItem.getId();
-            List<Treatment> treatments = treatmentDAO.readTreatmentsByCid(caregiverId);
-            setCaregiverIdOnTreatmentsToDeleted(treatments);
-            dao.deleteById(caregiverId);
-            personDAO.deleteById(selectedItem.getPersonId());
-            this.tableView.getItems().remove(selectedItem);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void setCaregiverIdOnTreatmentsToLocked(List<Treatment> treatments) throws SQLException {
-        TreatmentDAO treatmentDAO = DAOFactory.getDAOFactory().createTreatmentDAO();
-        for (Treatment treatment : treatments) {
-            treatment.setCaregiverId(CaregiverDAO.LOCKED_ID);
-            treatmentDAO.updateWithoutLastChange(treatment);
-        }
-    }
-
-    private void setCaregiverIdOnTreatmentsToDeleted(List<Treatment> treatments) throws SQLException {
-        TreatmentDAO treatmentDAO = DAOFactory.getDAOFactory().createTreatmentDAO();
-        for (Treatment treatment : treatments) {
-            treatment.setCaregiverId(CaregiverDAO.DELETED_ID);
-            treatmentDAO.updateWithoutLastChange(treatment);
-        }
+        dao.deleteCaregiver(selectedItem);
+        this.tableView.getItems().remove(selectedItem);
     }
 
     /**

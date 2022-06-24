@@ -141,8 +141,10 @@ public class TreatmentController {
     private void doUpdate() {
         TreatmentDAO dao = DAOFactory.getDAOFactory().createTreatmentDAO();
         TreatmentTypeDAO treatmentTypeDAO = DAOFactory.getDAOFactory().createTreatmentTypeDAO();
+        CaregiverDAO caregiverDAO = DAOFactory.getDAOFactory().createCaregiverDAO();
         try {
             dao.update(treatment);
+            caregiverDAO.setLastTreatment(caregiverDAO.read(treatment.getCaregiverId()));
             treatmentTypeDAO.deleteUnusedTypes();
         } catch (SQLException e) {
             e.printStackTrace();

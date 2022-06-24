@@ -5,6 +5,11 @@ import java.util.Objects;
 
 public class DateConverter {
 
+    private static final long oneYearInUnixMilli = 31556926000L;
+    private static final long oneMonthInUnixMilli = 2629743000L;
+    private static final long oneWeekInUnixMilli = 604800000L;
+    private static final long oneDayInUnixMilli = 86400000L;
+
     public static final ZoneOffset timeZone = ZoneId.systemDefault().getRules().getOffset(Instant.now());
 
     public static LocalDate convertStringToLocalDate(String date) {
@@ -87,6 +92,50 @@ public class DateConverter {
 
     public static long unixTimestampNow() {
         return Instant.now().toEpochMilli();
+    }
+
+    public static boolean isWithinLast10Years(long unixTime) {
+        long tenYearsInUnixTime = oneYearInUnixMilli * 10;
+        return (Instant.now().toEpochMilli() - tenYearsInUnixTime) < unixTime;
+    }
+
+    public static boolean isWithinLast3Months(long unixTime) {
+        long threeMonthsInUnixTime = oneMonthInUnixMilli * 3;
+        return (Instant.now().toEpochMilli() - threeMonthsInUnixTime) < unixTime;
+    }
+
+    public static boolean isWithinLast1Month(long unixTime) {
+        return (Instant.now().toEpochMilli() - oneMonthInUnixMilli) < unixTime;
+    }
+
+    public static long getUnixMilliHowLongAgo(String timeAgo) {
+        String[] arguments = timeAgo.split(" ");
+        int amount = -1;
+        String unit = null;
+        try {
+            amount = Integer.parseInt(arguments[0]);
+            unit = arguments[1];
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (unit == null) return -1;
+
+        switch (unit.toLowerCase()) {
+            case "day":
+            case "days":
+                return Instant.now().toEpochMilli() - oneDayInUnixMilli * amount;
+            case "week":
+            case "weeks":
+                return Instant.now().toEpochMilli() - oneWeekInUnixMilli * amount;
+            case "month":
+            case "months":
+                return Instant.now().toEpochMilli() - oneMonthInUnixMilli * amount;
+            case "year":
+            case "years":
+                return Instant.now().toEpochMilli() - oneYearInUnixMilli * amount;
+            default:
+                return -1;
+        }
     }
 
 }
