@@ -5,6 +5,7 @@ import datastorage.DAOFactory;
 import datastorage.PatientDAO;
 import datastorage.TreatmentDAO;
 import model.Caregiver;
+import model.Treatment;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -42,7 +43,7 @@ public class DSGVOCleaner {
 
     }
 
-    private void cleanUpTreatments() {
+    private void cleanUpTreatments() throws SQLException {
         System.out.println("Cleaning up treatments");
 
         TreatmentDAO dao = daoFactory.createTreatmentDAO();
@@ -50,12 +51,37 @@ public class DSGVOCleaner {
         deleteTreatments(dao);
     }
 
-    private void lockTreatments(TreatmentDAO dao) {
+    private void lockTreatments(TreatmentDAO dao) throws SQLException {
 //        1 month no change -> lock
+        long time1MonthAgo = DateConverter.getUnixMilliHowLongAgo("1 month");
+        ResultSet result = dao.getAllTreatmentsWithoutChangeSince(time1MonthAgo);
+        ArrayList<Treatment> treatments = new ArrayList<>();
+        while (result.next()) {
+            treatments.add(dao.read(result.getLong(1)));
+        }
+
+        for (Treatment treatment :
+                treatments) {
+            dao.lockTreatment(treatment);
+            System.out.println("Locked treatment: ");
+            System.out.println(treatment);
+        }
     }
 
-    private void deleteTreatments(TreatmentDAO dao) {
+    private void deleteTreatments(TreatmentDAO dao) throws SQLException {
 //        10 years no change -> delete
+        long time10YearsAgo = DateConverter.getUnixMilliHowLongAgo("10 years");
+        ResultSet result = dao.getAllTreatmentsWithoutChangeSince(time10YearsAgo);
+        ArrayList<Treatment> treatments = new ArrayList<>();
+        while (result.next()) {
+            treatments.add(dao.read(result.getLong(1)));
+        }
+        for (Treatment treatment :
+                treatments) {
+            dao.deleteTreatment(treatment);
+            System.out.println("Deleted treatment: ");
+            System.out.println(treatment);
+        }
     }
 
     private void cleanUpCaregivers() throws SQLException {
@@ -77,6 +103,8 @@ public class DSGVOCleaner {
         for (Caregiver caregiver :
                 caregivers) {
             dao.lockCaregiver(caregiver);
+            System.out.println("Locked caregiver: ");
+            System.out.println(caregiver);
         }
 
     }
@@ -92,6 +120,8 @@ public class DSGVOCleaner {
         for (Caregiver caregiver :
                 caregivers) {
             dao.deleteCaregiver(caregiver);
+            System.out.println("Deleted caregiver: ");
+            System.out.println(caregiver);
         }
     }
 }

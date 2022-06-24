@@ -21,6 +21,7 @@ import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public class AllTreatmentController {
     @FXML
@@ -151,30 +152,36 @@ public class AllTreatmentController {
 
     @FXML
     public void handleLock() {
+        TreatmentDAO dao = DAOFactory.getDAOFactory().createTreatmentDAO();
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Behandlung sperren");
+        alert.setHeaderText("Die ausgewählte Behandlung wird gesperrt.\n" +
+                "Möchten Sie die Behandlung sperren?");
+        alert.setContentText("Die Behandlung wird gesperrt.");
+        Optional<ButtonType> choice = alert.showAndWait();
+        if (!choice.get().getText().equals("OK")) return;
+
         int index = this.tableView.getSelectionModel().getSelectedIndex();
         Treatment t = this.tableviewContent.remove(index);
-        TreatmentDAO dao = DAOFactory.getDAOFactory().createTreatmentDAO();
-        try {
-            dao.lock(t.getId());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        dao.lockTreatment(t);
     }
 
     @FXML
     public void handleDelete() {
+        TreatmentDAO dao = DAOFactory.getDAOFactory().createTreatmentDAO();
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Behandlung löschen");
+        alert.setHeaderText("Die ausgewählte Behandlung wird gelöscht.\n" +
+                "Möchten Sie die Behandlung wirklich löschen?");
+        alert.setContentText("Die Behandlung wird endgültig gelöscht.");
+        Optional<ButtonType> choice = alert.showAndWait();
+        if (!choice.get().getText().equals("OK")) return;
+
         int index = this.tableView.getSelectionModel().getSelectedIndex();
         Treatment t = this.tableviewContent.remove(index);
-        TreatmentDAO dao = DAOFactory.getDAOFactory().createTreatmentDAO();
-        TreatmentTypeDAO tDAO = DAOFactory.getDAOFactory().createTreatmentTypeDAO();
-        try {
-            dao.deleteById(t.getId());
-            tDAO.deleteById(t.getType().getId());
-        } catch (SQLIntegrityConstraintViolationException ignored) {
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        dao.deleteTreatment(t);
     }
 
     @FXML

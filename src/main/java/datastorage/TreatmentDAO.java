@@ -4,10 +4,7 @@ import model.Treatment;
 import model.TreatmentType;
 import utils.DateConverter;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -99,14 +96,52 @@ public class TreatmentDAO extends DAOimp<Treatment> {
         return String.format("SELECT * FROM TREATMENT WHERE CAREGIVER_ID = %d", cid);
     }
 
-    public void lock(long id) throws SQLException {
+    private void lock(long id) throws SQLException {
         Statement st = conn.createStatement();
         st.executeUpdate(String.format("INSERT INTO TREATMENT_LOCKED (ID) VALUES (%d)", id));
+    }
+
+    private void unlock(long id) throws SQLException {
+        Statement st = conn.createStatement();
+        st.executeUpdate("DELETE FROM TREATMENT_LOCKED WHERE ID = " + id);
     }
 
     public void deleteByPid(long key) throws SQLException {
         Statement st = conn.createStatement();
         st.executeUpdate(String.format("Delete FROM treatment WHERE pid= %d", key));
+    }
+
+    public void lockTreatment(Treatment treatment) {
+        try {
+            this.lock(treatment.getId());
+        } catch (SQLIntegrityConstraintViolationException ignore) {
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void unlockTreatment(Treatment treatment) {
+        try {
+            this.unlock(treatment.getId());
+        } catch (SQLIntegrityConstraintViolationException ignore) {
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteTreatment(Treatment treatment) {
+        TreatmentTypeDAO tDAO = DAOFactory.getDAOFactory().createTreatmentTypeDAO();
+        try {
+            this.unlock(treatment.getId());
+            this.deleteById(treatment.getId());
+            tDAO.deleteById(treatment.getType().getId());
+        } catch (SQLIntegrityConstraintViolationException ignored) {
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public void updateWithoutLastChange(Treatment treatment) throws SQLException {
@@ -118,4 +153,10 @@ public class TreatmentDAO extends DAOimp<Treatment> {
                 treatment.getType().getId(), treatment.getRemarks(), treatment.getCaregiverId(), treatment.getId()));
     }
 
+    public ResultSet getAllTreatmentsWithoutChangeSince(long unixTime) throws SQLException {
+        Statement st = conn.createStatement();
+        return st.executeQuery("SELECT TID\n" +
+                "FROM TREATMENT\n" +
+                "WHERE LAST_CHANGE < " + unixTime);
+    }
 }
