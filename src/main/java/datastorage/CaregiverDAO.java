@@ -118,6 +118,8 @@ public class CaregiverDAO extends DAOimp<Caregiver> {
     public void unlockCaregiver(Caregiver caregiver) throws SQLException {
         TreatmentDAO treatmentDAO = DAOFactory.getDAOFactory().createTreatmentDAO();
 //      Todo: fix being unable to set the previous treatments of this caregiver because there exists no reference
+//        possible solution: create another field within the TREATMENTS table that gets set to the last caregiver id when the caregiver gets locked
+//        if hes unlocked the current caregiver id gets set to the previous one saved
         long caregiverId = caregiver.getId();
         this.removeCaregiverFromLockedTable(caregiverId);
 
