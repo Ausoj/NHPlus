@@ -23,39 +23,45 @@ public class LoginController {
 
 
     public void handleSubmitButtonAction() {
-        if (!userName.getText().isEmpty() && !passwordField.getText().isEmpty()) {
-            UserDAO userDAO = DAOFactory.getDAOFactory().createUserDAO();
-            List<User> users;
-            try {
-                users = userDAO.readAll();
-                User searchForUser = null;
-                for (User user : users) {
-                    if (user.getUsername().equals(userName.getText())) {
-                        searchForUser = user;
-                        break;
-                    }
-                }
-                if (searchForUser != null) {
-                    if (searchForUser.getPassword().equals(passwordField.getText())) {
-                        FXMLLoader loader = new FXMLLoader(Main.class.getResource("/MainWindowView.fxml"));
-                        try {
-                            Main.primaryStage.setScene(new Scene(loader.load()));
-                        } catch (IOException ex) {
-                            ex.printStackTrace();
-                        }
-                    } else {
-                        passwordAlert();
-                    }
-                } else {
-                    userNameAlert();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        } else {
+        if (loginFieldsAreEmpty()) {
             noInputAlert();
+            return;
         }
 
+        UserDAO userDAO = DAOFactory.getDAOFactory().createUserDAO();
+        List<User> users;
+        try {
+            users = userDAO.readAll();
+            User searchForUser = null;
+            for (User user : users) {
+                if (user.getUsername().equals(userName.getText())) {
+                    searchForUser = user;
+                    break;
+                }
+            }
+            if (searchForUser == null) {
+                userNameAlert();
+                return;
+            }
+            if (!searchForUser.getPassword().equals(passwordField.getText())) {
+                passwordAlert();
+                return;
+            }
+
+            FXMLLoader loader = new FXMLLoader(Main.class.getResource("/MainWindowView.fxml"));
+            try {
+                Main.primaryStage.setScene(new Scene(loader.load()));
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private boolean loginFieldsAreEmpty() {
+        return userName.getText().isEmpty() && passwordField.getText().isEmpty();
     }
 
     public void userNameAlert() {
