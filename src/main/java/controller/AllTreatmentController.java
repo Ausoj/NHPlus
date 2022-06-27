@@ -1,6 +1,9 @@
 package controller;
 
-import datastorage.*;
+import datastorage.CaregiverDAO;
+import datastorage.DAOFactory;
+import datastorage.PatientDAO;
+import datastorage.TreatmentDAO;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

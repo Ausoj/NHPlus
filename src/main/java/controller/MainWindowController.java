@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.BorderPane;
+
 import java.io.IOException;
 
 public class MainWindowController {
@@ -32,6 +33,7 @@ public class MainWindowController {
         }
         AllCaregiverController controller = loader.getController();
     }
+
     @FXML
     private void handleShowAllTreatments(ActionEvent e) {
         FXMLLoader loader = new FXMLLoader(Main.class.getResource("/AllTreatmentView.fxml"));
