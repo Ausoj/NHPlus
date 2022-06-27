@@ -25,6 +25,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+/**
+ * The <code>AllTreatmentController</code> is the controller for the AllTreatmentView.
+ */
 public class AllTreatmentController {
     @FXML
     private TableView<Treatment> tableView;
@@ -52,6 +55,9 @@ public class AllTreatmentController {
             FXCollections.observableArrayList();
     private ArrayList<Patient> patientList;
 
+    /**
+     * Initializes the controller class. This method is automatically called once the fxml file has been loaded.
+     */
     public void initialize() {
         readAllAndShowInTableView();
         CaregiverDAO caregiverDAO = DAOFactory.getDAOFactory().createCaregiverDAO();
@@ -79,6 +85,9 @@ public class AllTreatmentController {
         createComboBoxData();
     }
 
+    /**
+     * Calls the {@link TreatmentDAO#readAll()} method and adds the returned treatments to the tableview.
+     */
     public void readAllAndShowInTableView() {
         comboBox.getSelectionModel().select(0);
         this.tableviewContent.clear();
@@ -92,6 +101,9 @@ public class AllTreatmentController {
         }
     }
 
+    /**
+     * Creates the data for the combobox regarding the patients.
+     */
     private void createComboBoxData() {
         PatientDAO dao = DAOFactory.getDAOFactory().createPatientDAO();
         try {
@@ -106,6 +118,10 @@ public class AllTreatmentController {
     }
 
 
+    /**
+     * Handles the event when the user interacts with the combobox.
+     * Clears the current tableview and calls the respective method in {@link TreatmentDAO} to fetch the right treatments.
+     */
     @FXML
     public void handleComboBox() {
         String p = this.comboBox.getSelectionModel().getSelectedItem();
@@ -131,6 +147,12 @@ public class AllTreatmentController {
         }
     }
 
+    /**
+     *  Searches for a specific surname within the list of patients.
+     *
+     * @param surname the surname of the patient to search for.
+     * @return the patient that was searched or null if the patient was not found.
+     */
     private Patient searchInList(String surname) {
         for (Patient patient : this.patientList) {
             if (patient.getSurname().equals(surname)) {
@@ -140,6 +162,11 @@ public class AllTreatmentController {
         return null;
     }
 
+    /**
+     * Handles the event when the user clicks the button to lock a treatment.
+     * Displays a dialog to ask the user if he really wants to lock the treatment.
+     * Calls the {@link TreatmentDAO#lockTreatment(Treatment)} method if the dialogue was confirmed.
+     */
     @FXML
     public void handleLock() {
         TreatmentDAO dao = DAOFactory.getDAOFactory().createTreatmentDAO();
@@ -157,6 +184,11 @@ public class AllTreatmentController {
         dao.lockTreatment(t);
     }
 
+    /**
+     * Handles the event when the user clicks the button to delete a treatment.
+     * Displays a dialog to ask the user if he really wants to delete the treatment.
+     * Calls the {@link TreatmentDAO#deleteTreatment(Treatment)} method if the dialogue was confirmed.
+     */
     @FXML
     public void handleDelete() {
         TreatmentDAO dao = DAOFactory.getDAOFactory().createTreatmentDAO();
@@ -174,6 +206,10 @@ public class AllTreatmentController {
         dao.deleteTreatment(t);
     }
 
+    /**
+     * Handles the event when the user clicks the button to add a new treatment.
+     * Displays an informational dialog if the user has not selected a patient.
+     */
     @FXML
     public void handleNewTreatment() {
         try {
@@ -191,6 +227,9 @@ public class AllTreatmentController {
         }
     }
 
+    /**
+     * Handles the event when the user clicks on a specific cell in the tableview.
+     */
     @FXML
     public void handleMouseClick() {
         tableView.setOnMouseClicked(event -> {
@@ -203,6 +242,11 @@ public class AllTreatmentController {
         });
     }
 
+    /**
+     * Opens another window on top of the current one to add a new treatment.
+     *
+     * @param patient the patient to whom the treatment belongs to.
+     */
     public void newTreatmentWindow(Patient patient) {
         try {
             FXMLLoader loader = new FXMLLoader(Main.class.getResource("/NewTreatmentView.fxml"));
@@ -222,6 +266,11 @@ public class AllTreatmentController {
         }
     }
 
+    /**
+     * Opens another window on top of the current one to edit the selected treatment.
+     *
+     * @param treatment the treatment to be edited in the newly created window.
+     */
     public void treatmentWindow(Treatment treatment) {
         try {
             FXMLLoader loader = new FXMLLoader(Main.class.getResource("/TreatmentView.fxml"));

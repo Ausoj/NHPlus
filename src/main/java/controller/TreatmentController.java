@@ -19,6 +19,10 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The <code>TreatmentController</code> is the controller for the TreatmentView.
+ * It handles the editing of a treatment.
+ */
 public class TreatmentController {
     @FXML
     private Label lblPatientName;
@@ -35,10 +39,6 @@ public class TreatmentController {
     @FXML
     private DatePicker datepicker;
     @FXML
-    private Button btnChange;
-    @FXML
-    private Button btnCancel;
-    @FXML
     private ComboBox<String> comboCaregiver;
 
     private AllTreatmentController controller;
@@ -47,6 +47,13 @@ public class TreatmentController {
     private Treatment treatment;
     private List<Caregiver> allCaregivers;
 
+    /**
+     * Initializes the controller class. This method is automatically called after the fxml file has been loaded.
+     *
+     * @param controller The controller of the all treatments view.
+     * @param stage      The previous stage.
+     * @param treatment  The treatment to edit.
+     */
     public void initializeController(AllTreatmentController controller, Stage stage, Treatment treatment) {
         this.stage = stage;
         this.controller = controller;
@@ -63,6 +70,9 @@ public class TreatmentController {
         }
     }
 
+    /**
+     * Shows the data of the treatment in the text fields.
+     */
     private void showData() {
         this.lblPatientName.setText(patient.getSurname() + ", " + patient.getFirstName());
         this.lblCareLevel.setText(patient.getCareLevel());
@@ -74,6 +84,12 @@ public class TreatmentController {
         this.taRemarks.setText(this.treatment.getRemarks());
     }
 
+    /**
+     * Handles the saving of the treatment.
+     * Sets the values of the current treatment to the values of the text fields and calls the {@link #doUpdate()} method.
+     * Refreshes the table of all treatments afterwards using {@link AllTreatmentController#readAllAndShowInTableView()}.
+     * Shows an alert if the treatment could not be saved.
+     */
     @FXML
     public void handleChange() {
         Caregiver caregiver = searchInList(comboCaregiver.getSelectionModel().getSelectedItem());
@@ -96,6 +112,10 @@ public class TreatmentController {
         }
     }
 
+    /**
+     * Populates the caregiver combobox with the abbreviated names of all caregivers.
+     * Also preselects the caregiver of the currently edited treatment.
+     */
     public void populateCaregiverCombobox() {
         CaregiverDAO caregiverDAO = DAOFactory.getDAOFactory().createCaregiverDAO();
         ObservableList<String> allCaregiversNames = FXCollections.observableArrayList();
@@ -112,6 +132,10 @@ public class TreatmentController {
         }
     }
 
+    /**
+     * Gathers a list of all treatment types from the database using the {@link TreatmentTypeDAO#readAll()} method
+     * and populates the autocompleting text field with them to provide a better user experience.
+     */
     public void populateDescriptionTextField() {
         TreatmentTypeDAO dao = DAOFactory.getDAOFactory().createTreatmentTypeDAO();
         List<String> treatmentTypes = new ArrayList<>();
@@ -126,6 +150,12 @@ public class TreatmentController {
         }
     }
 
+    /**
+     * Searches for a caregiver in the list of all caregivers.
+     *
+     * @param formattedName The abbreviated name of the caregiver to search for.
+     * @return The caregiver with the given abbreviated name or null.
+     */
     // TODO: Create CaregiverCollection IF it would be beneficial elsewhere (in another file)
     private Caregiver searchInList(String formattedName) {
         for (Caregiver caregiver : allCaregivers) {
@@ -137,6 +167,11 @@ public class TreatmentController {
     }
 
 
+    /**
+     * Updates the treatment in the database using the {@link TreatmentDAO#update(Treatment)} method
+     * while also updating the Caregivers last treatment date using {@link CaregiverDAO#setLastTreatment(Caregiver)}
+     * as well as deleting unused {@link TreatmentType}s.
+     */
     private void doUpdate() {
         TreatmentDAO dao = DAOFactory.getDAOFactory().createTreatmentDAO();
         TreatmentTypeDAO treatmentTypeDAO = DAOFactory.getDAOFactory().createTreatmentTypeDAO();
@@ -150,6 +185,9 @@ public class TreatmentController {
         }
     }
 
+    /**
+     * Handles the 'Abbruch' button.
+     */
     @FXML
     public void handleCancel() {
         stage.close();

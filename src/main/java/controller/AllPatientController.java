@@ -170,7 +170,7 @@ public class AllPatientController {
 
 
     /**
-     * updates a patient by calling the update-Method in the {@link PatientDAO}
+     * updates a patient by calling the update-Method in the {@link PatientDAO} & {@link PersonDAO}
      *
      * @param t row to be updated by the user (includes the patient)
      */
@@ -185,7 +185,7 @@ public class AllPatientController {
     }
 
     /**
-     * calls readAll in {@link PatientDAO} and shows patients in the table
+     * calls {@link PatientDAO#readAll()} and shows patients in the table
      */
     private void readAllAndShowInTableView() {
         this.tableviewContent.clear();
@@ -200,7 +200,9 @@ public class AllPatientController {
     }
 
     /**
-     * handles a delete-click-event. Calls the delete methods in the {@link PatientDAO} and {@link TreatmentDAO}
+     * handles a delete-click-event.
+     * Calls the {@link PatientDAO#deleteById(long)}, {@link TreatmentDAO#deleteByPid(long)} and {@link PersonDAO#deleteById(long)} methods,
+     * and removes the selected Patient from the table.
      */
     @FXML
     public void handleDeleteRow() {
@@ -218,7 +220,8 @@ public class AllPatientController {
     }
 
     /**
-     * handles an add-click-event. Creates a patient and calls the create method in the {@link PatientDAO}
+     * handles an add-click-event. Creates a patient and calls {@link PatientDAO#create(Patient)}.
+     * Also displays a dialogue if the patient could not be created.
      */
     @FXML
     public void handleAdd() {

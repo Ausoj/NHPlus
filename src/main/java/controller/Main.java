@@ -14,16 +14,27 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Objects;
 
+/**
+ * Main class of the application.
+ */
 public class Main extends Application {
 
     public static Stage primaryStage;
 
+    /**
+     * @param primaryStage The primary stage of the application.
+     */
     @Override
     public void start(Stage primaryStage) {
         Main.primaryStage = primaryStage;
         mainWindow();
     }
 
+    /**
+     * This method handles the creation of the main window of the application
+     * It is also responsible for loading the LoginView, and the styling for the current scene.
+     * After the creation of the main window scene, the {@link DSGVOCleaner#run()} methos is called.
+     */
     public void mainWindow() {
         try {
             FXMLLoader loader = new FXMLLoader(Main.class.getResource("/LoginView.fxml"));

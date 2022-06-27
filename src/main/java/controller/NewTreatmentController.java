@@ -23,6 +23,10 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The <code>NewTreatmentController</code> is the controller for the NewTreatmentView.
+ * It handles the gathering of data from the user through the input fields and creates the corresponding treatment.
+ */
 public class NewTreatmentController {
     @FXML
     private Label lblSurname;
@@ -47,6 +51,13 @@ public class NewTreatmentController {
 
     private List<Caregiver> allCaregivers;
 
+    /**
+     * Initializes the controller class. This method is automatically called after the fxml file has been loaded.
+     *
+     * @param controller The controller of the AllTreatmentView.
+     * @param stage The previous stage.
+     * @param patient The patient for which the treatment is to be created.
+     */
     public void initialize(AllTreatmentController controller, Stage stage, Patient patient) {
         this.controller = controller;
         this.patient = patient;
@@ -57,11 +68,20 @@ public class NewTreatmentController {
 //        Todo: prefill Date field with current date
     }
 
+    /**
+     * Shows the patients' data in the labels.
+     */
     private void showPatientData() {
         this.lblFirstname.setText(patient.getFirstName());
         this.lblSurname.setText(patient.getSurname());
     }
 
+    /**
+     * Handles the creation of a new treatment.
+     * It checks if the input is valid and creates the treatment if it is.
+     * Otherwise, it displays an error message.
+     *
+     */
     @FXML
     public void handleAdd() {
         String remarks = taRemarks.getText();
@@ -87,6 +107,10 @@ public class NewTreatmentController {
         }
     }
 
+    /**
+     * Populates the combobox for selection of a caregiver.
+     * The list of all caregivers is loaded from the database using the {@link CaregiverDAO#readAll()}.
+     */
     public void populateCaregiverCombobox() {
         CaregiverDAO caregiverDAO = DAOFactory.getDAOFactory().createCaregiverDAO();
         ObservableList<String> allCaregiversNames = FXCollections.observableArrayList();
@@ -101,6 +125,10 @@ public class NewTreatmentController {
         }
     }
 
+    /**
+     * Gathers a list of all treatment types from the database using the {@link TreatmentTypeDAO#readAll()} method
+     * and populates the autocompleting text field with them to provide a better user experience.
+     */
     public void populateDescriptionTextField() {
         TreatmentTypeDAO dao = DAOFactory.getDAOFactory().createTreatmentTypeDAO();
         List<TreatmentType> allTreatmentTypes;
@@ -116,6 +144,13 @@ public class NewTreatmentController {
         }
     }
 
+    /**
+     * Searches for the abbreviated name of a caregiver in the list of all caregivers.
+     * Throws an exception if the caregiver is not found.
+     *
+     * @param formattedName The name of the caregiver as it is displayed in the combobox.
+     * @return The caregiver object with the given name or null if no caregiver with the given name exists.
+     */
     private Caregiver searchInList(String formattedName) {
         try {
             for (Caregiver caregiver : allCaregivers) {
@@ -129,6 +164,11 @@ public class NewTreatmentController {
         return null;
     }
 
+    /**
+     * Creates a new treatment in the database by calling the {@link TreatmentDAO#create(Treatment)} method.
+     *
+     * @param treatment The treatment to be created.
+     */
     private void createTreatment(Treatment treatment) {
         TreatmentDAO dao = DAOFactory.getDAOFactory().createTreatmentDAO();
         try {
@@ -138,6 +178,9 @@ public class NewTreatmentController {
         }
     }
 
+    /**
+     * Handles the 'Abbruch' button.
+     */
     @FXML
     public void handleCancel() {
         stage.close();

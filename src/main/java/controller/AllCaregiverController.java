@@ -15,6 +15,10 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * The <code>AllCaregiverController</code> is the controller for the AllCaregiverView.
+ * It contains the entire logic of the view. It determines which data is displayed and how to react to events.
+ */
 public class AllCaregiverController {
 
     @FXML
@@ -52,9 +56,7 @@ public class AllCaregiverController {
 
         this.colID.setCellValueFactory(new PropertyValueFactory<>("id"));
 
-        //CellValueFactory zum Anzeigen der Daten in der TableView
         this.colFirstName.setCellValueFactory(new PropertyValueFactory<>("firstName"));
-        //CellFactory zum Schreiben innerhalb der Tabelle
         this.colFirstName.setCellFactory(TextFieldTableCell.forTableColumn());
 
         this.colSurname.setCellValueFactory(new PropertyValueFactory<>("surname"));
@@ -64,7 +66,6 @@ public class AllCaregiverController {
         this.colPhoneNumber.setCellFactory(TextFieldTableCell.forTableColumn());
 
 
-        //Anzeigen der Daten
         this.tableView.setItems(this.tableviewContent);
     }
 
@@ -101,7 +102,7 @@ public class AllCaregiverController {
     }
 
     /**
-     * handles new birthdate value
+     * handles new phoneNumber value
      *
      * @param event event including the value that a user entered into the cell
      */
@@ -118,9 +119,9 @@ public class AllCaregiverController {
 
 
     /**
-     * updates a patient by calling the update-Method in the {@link PatientDAO}
+     * updates a caregiver by calling the update-Method in the {@link CaregiverDAO} & {@link PersonDAO}
      *
-     * @param t row to be updated by the user (includes the patient)
+     * @param t row to be updated by the user (includes the caregiver)
      */
     private void doUpdate(TableColumn.CellEditEvent<Caregiver, String> t) {
         PersonDAO personDAO = DAOFactory.getDAOFactory().createPersonDAO();
@@ -134,7 +135,7 @@ public class AllCaregiverController {
 
 
     /**
-     * calls readAll in {@link PatientDAO} and shows patients in the table
+     * calls readAll in {@link CaregiverDAO} and shows caregivers in the tableview
      */
     private void readAllAndShowInTableView() {
         this.tableviewContent.clear();
@@ -149,7 +150,8 @@ public class AllCaregiverController {
     }
 
     /**
-     * handles a delete-click-event. Calls the delete methods in the {@link PatientDAO} and {@link TreatmentDAO}
+     * handles a delete-click-event.
+     * Calls the {@link #lockCaregiver(Caregiver)}- or {@link #deleteCaregiver(Caregiver)} method depending on if the caregiver had done a treatment in the last 10 years or not.
      */
     @FXML
     public void handleDeleteRow() {
@@ -167,6 +169,12 @@ public class AllCaregiverController {
         }
     }
 
+    /**
+     * Displays a confirmation dialogue and locks the caregiver if the user confirms it.
+     *
+     * @param selectedItem Caregiver to be locked.
+     * @throws SQLException if an error occurs while trying to lock the caregiver.
+     */
     private void lockCaregiver(Caregiver selectedItem) throws SQLException {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Pfleger/in sperren");
@@ -181,6 +189,12 @@ public class AllCaregiverController {
 
     }
 
+    /**
+     * Displays a confirmation dialogue and deletes the caregiver if the user confirms it.
+     *
+     * @param selectedItem Caregiver to be deleted.
+     * @throws SQLException if an error occurs while trying to delete the caregiver.
+     */
     private void deleteCaregiver(Caregiver selectedItem) throws SQLException {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Pfleger/in löschen");
@@ -194,7 +208,7 @@ public class AllCaregiverController {
     }
 
     /**
-     * handles an add-click-event. Creates a patient and calls the create method in the {@link PatientDAO}
+     * handles an add-click-event. Creates a caregiver and calls the create method in the {@link CaregiverDAO}.
      */
     @FXML
     public void handleAdd() {

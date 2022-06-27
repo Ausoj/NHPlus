@@ -14,6 +14,9 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * The <code>LoginController</code> is the controller for the LoginView.
+ */
 public class LoginController {
 
     @FXML
@@ -22,6 +25,18 @@ public class LoginController {
     public TextField userName;
 
 
+    /**
+     * This method handles the event when the user clicks the login button.
+     * It checks if:
+     * <ul>
+     *     <li>The user name is not empty</li>
+     *     <li>The password is not empty</li>
+     *     <li>The username exists in the database</li>
+     *     <li>The entered password corresponds to the entered username</li>
+     * </ul>
+     * If all of the above is true, the user is logged in and the main view is loaded.
+     * If not, an error message regarding the specific error will be displayed.
+     */
     public void handleSubmitButtonAction() {
         if (loginFieldsAreEmpty()) {
             noInputAlert();
@@ -60,10 +75,18 @@ public class LoginController {
 
     }
 
+    /**
+     * Checks whether the userName and password fields are empty.
+     *
+     * @return true if the userName and password fields are empty, false otherwise
+     */
     private boolean loginFieldsAreEmpty() {
         return userName.getText().isEmpty() && passwordField.getText().isEmpty();
     }
 
+    /**
+     * Displays an error message if the userName is not found in the database.
+     */
     public void userNameAlert() {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Fehler!");
@@ -72,6 +95,9 @@ public class LoginController {
         alert.showAndWait();
     }
 
+    /**
+     * Displays an error message if the password is not correct.
+     */
     public void passwordAlert() {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Fehler!");
@@ -80,6 +106,9 @@ public class LoginController {
         alert.showAndWait();
     }
 
+    /**
+     * Displays an error message if the userName and password fields are empty.
+     */
     public void noInputAlert() {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Fehler!");
