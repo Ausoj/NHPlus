@@ -37,7 +37,7 @@ public class CaregiverDAO extends DAOimp<Caregiver> {
 
     @Override
     protected Caregiver getInstanceFromResultSet(ResultSet set) throws SQLException {
-        Caregiver c = null;
+        Caregiver c;
         c = new Caregiver(set.getLong(1), set.getString(2), set.getString(3), set.getString(4));
         return c;
     }
@@ -58,7 +58,7 @@ public class CaregiverDAO extends DAOimp<Caregiver> {
     @Override
     protected ArrayList<Caregiver> getListFromResultSet(ResultSet set) throws SQLException {
         ArrayList<Caregiver> list = new ArrayList<>();
-        Caregiver c = null;
+        Caregiver c;
         while (set.next()) {
             c = getInstanceFromResultSet(set);
             list.add(c);
@@ -116,7 +116,6 @@ public class CaregiverDAO extends DAOimp<Caregiver> {
     }
 
     public void unlockCaregiver(Caregiver caregiver) throws SQLException {
-        TreatmentDAO treatmentDAO = DAOFactory.getDAOFactory().createTreatmentDAO();
 //      Todo: fix being unable to set the previous treatments of this caregiver because there exists no reference
 //        possible solution: create another field within the TREATMENTS table that gets set to the last caregiver id when the caregiver gets locked
 //        if hes unlocked the current caregiver id gets set to the previous one saved

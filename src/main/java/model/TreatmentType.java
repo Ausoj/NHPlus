@@ -97,11 +97,6 @@ public class TreatmentType {
         return description.get();
     }
 
-    public void setDescription(String description) {
-        this.description.set(description);
-        throwExceptionWhenRequiredFieldIsEmpty();
-    }
-
     private String capitalize(String word) {
         try {
             return word.substring(0, 1).toUpperCase() + word.substring(1);

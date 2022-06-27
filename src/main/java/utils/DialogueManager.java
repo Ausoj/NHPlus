@@ -1,16 +1,6 @@
 package utils;
 
-import controller.Main;
-import controller.dialogue.DialogueController;
-import enums.DialogueType;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.DialogPane;
-import javafx.stage.Stage;
-
-import java.io.IOException;
-import java.util.Objects;
 
 public final class DialogueManager {
 

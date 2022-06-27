@@ -46,8 +46,8 @@ public class TreatmentDAO extends DAOimp<Treatment> {
 
     @Override
     protected ArrayList<Treatment> getListFromResultSet(ResultSet result) throws SQLException {
-        ArrayList<Treatment> list = new ArrayList<Treatment>();
-        Treatment t = null;
+        ArrayList<Treatment> list = new ArrayList<>();
+        Treatment t;
 
         while (result.next()) {
             t = getInstanceFromResultSet(result);
@@ -71,8 +71,7 @@ public class TreatmentDAO extends DAOimp<Treatment> {
     }
 
     public List<Treatment> readTreatmentsByPid(long pid) throws SQLException {
-        ArrayList<Treatment> list = new ArrayList<Treatment>();
-        Treatment object = null;
+        ArrayList<Treatment> list;
         Statement st = conn.createStatement();
         ResultSet result = st.executeQuery(getReadAllTreatmentsOfOnePatientByPid(pid));
         list = getListFromResultSet(result);
@@ -84,8 +83,7 @@ public class TreatmentDAO extends DAOimp<Treatment> {
     }
 
     public List<Treatment> readTreatmentsByCid(long cid) throws SQLException {
-        ArrayList<Treatment> list = new ArrayList<Treatment>();
-        Treatment object = null;
+        ArrayList<Treatment> list;
         Statement st = conn.createStatement();
         ResultSet result = st.executeQuery(getReadAllTreatmentsOfOneCaregiverByCid(cid));
         list = getListFromResultSet(result);

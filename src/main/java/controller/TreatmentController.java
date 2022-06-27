@@ -14,7 +14,6 @@ import org.controlsfx.control.textfield.TextFields;
 import utils.DateConverter;
 import utils.DialogueManager;
 
-import java.security.InvalidParameterException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -24,7 +23,7 @@ public class TreatmentController {
     @FXML
     private Label lblPatientName;
     @FXML
-    private Label lblCarelevel;
+    private Label lblCareLevel;
     @FXML
     private TextField txtBegin;
     @FXML
@@ -58,7 +57,7 @@ public class TreatmentController {
             showData();
             populateDescriptionTextField();
             populateCaregiverCombobox();
-            //        Todo: prefill Datefield with current date
+//        Todo: prefill Date field with current date
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -66,7 +65,7 @@ public class TreatmentController {
 
     private void showData() {
         this.lblPatientName.setText(patient.getSurname() + ", " + patient.getFirstName());
-        this.lblCarelevel.setText(patient.getCareLevel());
+        this.lblCareLevel.setText(patient.getCareLevel());
         LocalDate date = DateConverter.convertStringToLocalDate(treatment.getDate());
         this.datepicker.setValue(date);
         this.txtBegin.setText(this.treatment.getBegin());

@@ -1,6 +1,5 @@
 package controller;
 
-import enums.DialogueType;
 import datastorage.PatientDAO;
 import datastorage.PersonDAO;
 import datastorage.TreatmentDAO;
@@ -50,11 +49,11 @@ public class AllPatientController {
     @FXML
     TextField txtBirthday;
     @FXML
-    TextField txtCarelevel;
+    TextField txtCareLevel;
     @FXML
     TextField txtRoom;
 
-    private ObservableList<Patient> tableviewContent = FXCollections.observableArrayList();
+    private final ObservableList<Patient> tableviewContent = FXCollections.observableArrayList();
     private PatientDAO dao;
 
     /**
@@ -63,23 +62,23 @@ public class AllPatientController {
     public void initialize() {
         readAllAndShowInTableView();
 
-        this.colID.setCellValueFactory(new PropertyValueFactory<Patient, Integer>("id"));
+        this.colID.setCellValueFactory(new PropertyValueFactory<>("id"));
 
-        //CellValuefactory zum Anzeigen der Daten in der TableView
-        this.colFirstName.setCellValueFactory(new PropertyValueFactory<Patient, String>("firstName"));
+        //CellValueFactory zum Anzeigen der Daten in der TableView
+        this.colFirstName.setCellValueFactory(new PropertyValueFactory<>("firstName"));
         //CellFactory zum Schreiben innerhalb der Tabelle
         this.colFirstName.setCellFactory(TextFieldTableCell.forTableColumn());
 
-        this.colSurname.setCellValueFactory(new PropertyValueFactory<Patient, String>("surname"));
+        this.colSurname.setCellValueFactory(new PropertyValueFactory<>("surname"));
         this.colSurname.setCellFactory(TextFieldTableCell.forTableColumn());
 
-        this.colDateOfBirth.setCellValueFactory(new PropertyValueFactory<Patient, String>("dateOfBirth"));
+        this.colDateOfBirth.setCellValueFactory(new PropertyValueFactory<>("dateOfBirth"));
         this.colDateOfBirth.setCellFactory(TextFieldTableCell.forTableColumn());
 
-        this.colCareLevel.setCellValueFactory(new PropertyValueFactory<Patient, String>("careLevel"));
+        this.colCareLevel.setCellValueFactory(new PropertyValueFactory<>("careLevel"));
         this.colCareLevel.setCellFactory(TextFieldTableCell.forTableColumn());
 
-        this.colRoom.setCellValueFactory(new PropertyValueFactory<Patient, String>("roomnumber"));
+        this.colRoom.setCellValueFactory(new PropertyValueFactory<>("roomNumber"));
         this.colRoom.setCellFactory(TextFieldTableCell.forTableColumn());
 
         //Anzeigen der Daten
@@ -135,7 +134,7 @@ public class AllPatientController {
     }
 
     /**
-     * handles new carelevel value
+     * handles new careLevel value
      *
      * @param event event including the value that a user entered into the cell
      */
@@ -151,14 +150,14 @@ public class AllPatientController {
     }
 
     /**
-     * handles new roomnumber value
+     * handles new roomNumber value
      *
      * @param event event including the value that a user entered into the cell
      */
     @FXML
-    public void handleOnEditRoomnumber(TableColumn.CellEditEvent<Patient, String> event) {
+    public void handleOnEditRoomNumber(TableColumn.CellEditEvent<Patient, String> event) {
         try {
-            event.getRowValue().setRoomnumber(event.getNewValue());
+            event.getRowValue().setRoomNumber(event.getNewValue());
             doUpdate(event);
         } catch (IllegalArgumentException e) {
             DialogueManager.getInstance().showAlert("Patient konnte nicht angepasst werden", e);
@@ -191,9 +190,7 @@ public class AllPatientController {
         List<Patient> allPatients;
         try {
             allPatients = dao.readAll();
-            for (Patient p : allPatients) {
-                this.tableviewContent.add(p);
-            }
+            this.tableviewContent.addAll(allPatients);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -218,20 +215,20 @@ public class AllPatientController {
     }
 
     /**
-     * handles a add-click-event. Creates a patient and calls the create method in the {@link PatientDAO}
+     * handles an add-click-event. Creates a patient and calls the create method in the {@link PatientDAO}
      */
     @FXML
     public void handleAdd() {
         String surname = this.txtSurname.getText();
         String firstname = this.txtFirstname.getText();
         String birthday = this.txtBirthday.getText();
-        String carelevel = this.txtCarelevel.getText();
+        String careLevel = this.txtCareLevel.getText();
         String room = this.txtRoom.getText();
         try {
             LocalDate date = DateConverter.convertStringToLocalDate(birthday);
-            Patient p = new Patient(firstname, surname, date, carelevel, room);
+            Patient p = new Patient(firstname, surname, date, careLevel, room);
             dao.create(p);
-            clearTextfields();
+            clearTextFields();
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (IllegalArgumentException e) {
@@ -240,23 +237,14 @@ public class AllPatientController {
         readAllAndShowInTableView();
     }
 
-    private void showAlert(String heading, Exception e) {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Achtung");
-        alert.setHeaderText(heading);
-        alert.setContentText(e.getMessage());
-        alert.showAndWait();
-        readAllAndShowInTableView();
-    }
-
     /**
-     * removes content from all textfields
+     * removes content from all text fields
      */
-    private void clearTextfields() {
+    private void clearTextFields() {
         this.txtFirstname.clear();
         this.txtSurname.clear();
         this.txtBirthday.clear();
-        this.txtCarelevel.clear();
+        this.txtCareLevel.clear();
         this.txtRoom.clear();
     }
 }

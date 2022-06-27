@@ -56,10 +56,6 @@ public abstract class Person {
         return personId;
     }
 
-    public void setPersonId(long id) {
-        this.personId = id;
-    }
-
     public String getFirstName() {
         return firstName;
     }

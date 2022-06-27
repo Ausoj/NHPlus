@@ -1,8 +1,6 @@
 package datastorage;
 
-import model.Caregiver;
 import model.Patient;
-import model.Treatment;
 import utils.DateConverter;
 
 import java.sql.Connection;
@@ -11,7 +9,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Implements the Interface <code>DAOImp</code>. Overrides methods to generate specific patient-SQL-queries.
@@ -19,7 +16,7 @@ import java.util.List;
 public class PatientDAO extends DAOimp<Patient> {
 
     /**
-     * constructs Onbject. Calls the Constructor from <code>DAOImp</code> to store the connection.
+     * constructs object. Calls the Constructor from <code>DAOImp</code> to store the connection.
      *
      * @param conn
      */
@@ -36,13 +33,13 @@ public class PatientDAO extends DAOimp<Patient> {
     @Override
     protected String getCreateStatementString(Patient patient) {
         return String.format("INSERT INTO PATIENT (PERSON_ID, CARE_LEVEL, ROOM_NUMBER) VALUES (%d, '%s', '%s');",
-                patient.getPersonId(), patient.getCareLevel(), patient.getRoomnumber());
+                patient.getPersonId(), patient.getCareLevel(), patient.getRoomNumber());
     }
 
     /**
      * generates a <code>select</code>-Statement for a given key
      *
-     * @param key for which a specific SELECTis to be created
+     * @param key for which a specific SELECT is to be created
      * @return <code>String</code> with the generated SQL.
      */
     @Override
@@ -61,7 +58,7 @@ public class PatientDAO extends DAOimp<Patient> {
      */
     @Override
     protected Patient getInstanceFromResultSet(ResultSet result) throws SQLException {
-        Patient p = null;
+        Patient p;
         LocalDate date = DateConverter.convertUnixTimestampToLocalDate(result.getLong(4));
         p = new Patient(result.getInt(1), result.getString(2),
                 result.getString(3), date, result.getString(5),
@@ -89,8 +86,8 @@ public class PatientDAO extends DAOimp<Patient> {
      */
     @Override
     protected ArrayList<Patient> getListFromResultSet(ResultSet result) throws SQLException {
-        ArrayList<Patient> list = new ArrayList<Patient>();
-        Patient p = null;
+        ArrayList<Patient> list = new ArrayList<>();
+        Patient p;
         while (result.next()) {
             LocalDate date = DateConverter.convertUnixTimestampToLocalDate(result.getLong(4));
             p = new Patient(result.getInt(1), result.getString(2),
@@ -110,7 +107,7 @@ public class PatientDAO extends DAOimp<Patient> {
     @Override
     protected String getUpdateStatementString(Patient patient) {
         return String.format("UPDATE PATIENT SET CARE_LEVEL = '%s', ROOM_NUMBER = '%s' WHERE ID = %d;",
-                patient.getCareLevel(), patient.getRoomnumber(), patient.getId());
+                patient.getCareLevel(), patient.getRoomNumber(), patient.getId());
     }
 
     /**

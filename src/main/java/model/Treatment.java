@@ -4,11 +4,10 @@ import utils.DateConverter;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Objects;
 
 public class Treatment {
     private long id;
-    private long patientId;
+    private final long patientId;
     private long caregiverId;
     private LocalDate date;
     private LocalTime begin;
@@ -62,25 +61,22 @@ public class Treatment {
     }
 
     public void setDate(String s_date) {
-        if (s_date == null || s_date == "") throw new IllegalArgumentException("Datum darf nicht leer sein.");
+        if (s_date == null || s_date.equals("")) throw new IllegalArgumentException("Datum darf nicht leer sein.");
 
-        LocalDate date = DateConverter.convertStringToLocalDate(s_date);
-        this.date = date;
+        this.date = DateConverter.convertStringToLocalDate(s_date);
 
     }
 
     public void setBegin(String begin) {
         if (begin.equals("")) throw new IllegalArgumentException("Begin darf nicht leer sein.");
 
-        LocalTime time = DateConverter.convertStringToLocalTime(begin);
-        this.begin = time;
+        this.begin = DateConverter.convertStringToLocalTime(begin);
     }
 
     public void setEnd(String end) {
         if (end.equals("")) throw new IllegalArgumentException("Ende darf nicht leer sein.");
 
-        LocalTime time = DateConverter.convertStringToLocalTime(end);
-        this.end = time;
+        this.end = DateConverter.convertStringToLocalTime(end);
 
     }
 

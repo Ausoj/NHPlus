@@ -36,7 +36,7 @@ public class PersonDAO extends DAOimp<Person> {
     }
 
     @Override
-    protected ArrayList<Person> getListFromResultSet(ResultSet set) throws SQLException {
+    protected ArrayList<Person> getListFromResultSet(ResultSet set) {
         return null;
     }
 

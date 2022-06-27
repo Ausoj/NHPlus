@@ -15,7 +15,7 @@ public class DateConverter {
     public static LocalDate convertStringToLocalDate(String date) {
         if (Objects.equals(date, "")) throw new IllegalArgumentException("Datum darf nicht leer sein.");
 
-        LocalDate result = null;
+        LocalDate result;
         String[] array = date.split("-");
 
         if (array.length >= 3) {
@@ -68,12 +68,6 @@ public class DateConverter {
         return DateConverter.convertLocalDateTimeToUnixTimestamp(DateConverter.convertStringToLocalDateTime(date, time));
     }
 
-    //    Convert localDate to unixTimestamp
-    public static long convertLocalDateToUnixTimestamp(LocalDate date) {
-        LocalDateTime converted = LocalDateTime.from(date.atStartOfDay(DateConverter.timeZone));
-        return DateConverter.convertLocalDateTimeToUnixTimestamp(converted);
-    }
-
     public static LocalDate convertUnixTimestampToLocalDate(long timestamp) {
         return convertUnixTimestampToLocalDateTime(timestamp).toLocalDate();
     }
@@ -97,15 +91,6 @@ public class DateConverter {
     public static boolean isWithinLast10Years(long unixTime) {
         long tenYearsInUnixTime = oneYearInUnixMilli * 10;
         return (Instant.now().toEpochMilli() - tenYearsInUnixTime) < unixTime;
-    }
-
-    public static boolean isWithinLast3Months(long unixTime) {
-        long threeMonthsInUnixTime = oneMonthInUnixMilli * 3;
-        return (Instant.now().toEpochMilli() - threeMonthsInUnixTime) < unixTime;
-    }
-
-    public static boolean isWithinLast1Month(long unixTime) {
-        return (Instant.now().toEpochMilli() - oneMonthInUnixMilli) < unixTime;
     }
 
     public static long getUnixMilliHowLongAgo(String timeAgo) {

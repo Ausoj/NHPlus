@@ -17,7 +17,6 @@ import model.Treatment;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -42,18 +41,13 @@ public class AllTreatmentController {
     private TableColumn<Treatment, String> colCaregiver;
     @FXML
     private ComboBox<String> comboBox;
-    @FXML
-    private Button btnNewTreatment;
-    @FXML
-    private Button btnDelete;
 
-    private ObservableList<Treatment> tableviewContent =
+    private final ObservableList<Treatment> tableviewContent =
             FXCollections.observableArrayList();
     private TreatmentDAO dao;
-    private ObservableList<String> myComboBoxData =
+    private final ObservableList<String> myComboBoxData =
             FXCollections.observableArrayList();
     private ArrayList<Patient> patientList;
-    private Main main;
 
     public void initialize() {
         readAllAndShowInTableView();
@@ -61,13 +55,12 @@ public class AllTreatmentController {
 
         comboBox.setItems(myComboBoxData);
         comboBox.getSelectionModel().select(0);
-        this.main = main;
 
-        this.colID.setCellValueFactory(new PropertyValueFactory<Treatment, Integer>("id"));
-        this.colPid.setCellValueFactory(new PropertyValueFactory<Treatment, Integer>("patientId"));
-        this.colDate.setCellValueFactory(new PropertyValueFactory<Treatment, String>("date"));
-        this.colBegin.setCellValueFactory(new PropertyValueFactory<Treatment, String>("begin"));
-        this.colEnd.setCellValueFactory(new PropertyValueFactory<Treatment, String>("end"));
+        this.colID.setCellValueFactory(new PropertyValueFactory<>("id"));
+        this.colPid.setCellValueFactory(new PropertyValueFactory<>("patientId"));
+        this.colDate.setCellValueFactory(new PropertyValueFactory<>("date"));
+        this.colBegin.setCellValueFactory(new PropertyValueFactory<>("begin"));
+        this.colEnd.setCellValueFactory(new PropertyValueFactory<>("end"));
         this.colDescription.setCellValueFactory(data -> data.getValue().getType().descriptionProperty());
         this.colCaregiver.setCellValueFactory(data -> {
             try {
@@ -90,9 +83,7 @@ public class AllTreatmentController {
         List<Treatment> allTreatments;
         try {
             allTreatments = dao.readAll();
-            for (Treatment treatment : allTreatments) {
-                this.tableviewContent.add(treatment);
-            }
+            this.tableviewContent.addAll(allTreatments);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -121,9 +112,7 @@ public class AllTreatmentController {
         if (p.equals("alle")) {
             try {
                 allTreatments = this.dao.readAll();
-                for (Treatment treatment : allTreatments) {
-                    this.tableviewContent.add(treatment);
-                }
+                this.tableviewContent.addAll(allTreatments);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -132,9 +121,7 @@ public class AllTreatmentController {
         if (patient != null) {
             try {
                 allTreatments = dao.readTreatmentsByPid(patient.getId());
-                for (Treatment treatment : allTreatments) {
-                    this.tableviewContent.add(treatment);
-                }
+                this.tableviewContent.addAll(allTreatments);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -142,9 +129,9 @@ public class AllTreatmentController {
     }
 
     private Patient searchInList(String surname) {
-        for (int i = 0; i < this.patientList.size(); i++) {
-            if (this.patientList.get(i).getSurname().equals(surname)) {
-                return this.patientList.get(i);
+        for (Patient patient : this.patientList) {
+            if (patient.getSurname().equals(surname)) {
+                return patient;
             }
         }
         return null;

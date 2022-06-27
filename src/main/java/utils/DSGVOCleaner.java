@@ -39,7 +39,7 @@ public class DSGVOCleaner {
 //        3 months no treatment -> lock
         long time3MonthAgo = DateConverter.getUnixMilliHowLongAgo("3 months");
         ResultSet result = dao.getAllPatientIdsWithoutTreatmentSince(time3MonthAgo);
-        ArrayList<Patient> patients = new ArrayList<Patient>();
+        ArrayList<Patient> patients = new ArrayList<>();
         while (result.next()) {
             patients.add(dao.read(result.getLong(1)));
         }
@@ -57,7 +57,7 @@ public class DSGVOCleaner {
 //        10 years no treatment -> delete
         long time10YearsAgo = DateConverter.getUnixMilliHowLongAgo("10 years");
         ResultSet result = dao.getAllPatientIdsWithoutTreatmentSince(time10YearsAgo);
-        ArrayList<Patient> patients = new ArrayList<Patient>();
+        ArrayList<Patient> patients = new ArrayList<>();
         while (result.next()) {
             patients.add(dao.read(result.getLong(1)));
         }

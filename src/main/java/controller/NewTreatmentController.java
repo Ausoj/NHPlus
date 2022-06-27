@@ -22,7 +22,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class NewTreatmentController {
     @FXML
@@ -55,7 +54,7 @@ public class NewTreatmentController {
         showPatientData();
         populateDescriptionTextField();
         populateCaregiverCombobox();
-//        Todo: prefill Datefield with current date
+//        Todo: prefill Date field with current date
     }
 
     private void showPatientData() {
@@ -65,10 +64,11 @@ public class NewTreatmentController {
 
     @FXML
     public void handleAdd() {
-        String s_begin = txtBegin.getText();
         String remarks = taRemarks.getText();
         try {
             Caregiver caregiver = searchInList(comboCaregiver.getSelectionModel().getSelectedItem());
+            assert caregiver != null;
+
             LocalDate date = this.datepicker.getValue();
             if (date == null) throw new IllegalArgumentException("Bitte wähle ein Datum über den Kalender aus!");
 

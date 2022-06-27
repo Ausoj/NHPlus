@@ -13,8 +13,8 @@ import java.util.Objects;
 public class Patient extends Person {
     private long id;
     private String careLevel;
-    private String roomnumber;
-    private List<Treatment> allTreatments = new ArrayList<Treatment>();
+    private String roomNumber;
+    private final List<Treatment> allTreatments = new ArrayList<>();
 
     /**
      * constructs a patient from the given params.
@@ -23,12 +23,12 @@ public class Patient extends Person {
      * @param surname
      * @param dateOfBirth
      * @param careLevel
-     * @param roomnumber
+     * @param roomNumber
      */
-    public Patient(String firstName, String surname, LocalDate dateOfBirth, String careLevel, String roomnumber) {
+    public Patient(String firstName, String surname, LocalDate dateOfBirth, String careLevel, String roomNumber) {
         super(firstName, surname, dateOfBirth);
         this.careLevel = careLevel;
-        this.roomnumber = roomnumber;
+        this.roomNumber = roomNumber;
         throwExceptionWhenRequiredFieldIsEmpty();
     }
 
@@ -40,13 +40,13 @@ public class Patient extends Person {
      * @param surname
      * @param dateOfBirth
      * @param careLevel
-     * @param roomnumber
+     * @param roomNumber
      */
-    public Patient(long id, String firstName, String surname, LocalDate dateOfBirth, String careLevel, String roomnumber) {
+    public Patient(long id, String firstName, String surname, LocalDate dateOfBirth, String careLevel, String roomNumber) {
         super(firstName, surname, dateOfBirth);
         this.id = id;
         this.careLevel = careLevel;
-        this.roomnumber = roomnumber;
+        this.roomNumber = roomNumber;
         throwExceptionWhenRequiredFieldIsEmpty();
     }
 
@@ -75,15 +75,15 @@ public class Patient extends Person {
     /**
      * @return roomNumber as string
      */
-    public String getRoomnumber() {
-        return roomnumber;
+    public String getRoomNumber() {
+        return roomNumber;
     }
 
     /**
-     * @param roomnumber
+     * @param roomNumber
      */
-    public void setRoomnumber(String roomnumber) {
-        this.roomnumber = roomnumber;
+    public void setRoomNumber(String roomNumber) {
+        this.roomNumber = roomNumber;
         throwExceptionWhenRequiredFieldIsEmpty();
     }
 
@@ -109,7 +109,7 @@ public class Patient extends Person {
             throw new IllegalArgumentException("Das Geburtsdatum darf nicht leer sein!");
         } else if (Objects.equals(getCareLevel().trim(), "")) {
             throw new IllegalArgumentException("Der Pflegegrad darf nicht leer sein!");
-        } else if (Objects.equals(getRoomnumber().trim(), "")) {
+        } else if (Objects.equals(getRoomNumber().trim(), "")) {
             throw new IllegalArgumentException("Der Raum darf nicht leer sein!");
         }
         try {
@@ -128,8 +128,8 @@ public class Patient extends Person {
                 "\nFirstname: " + this.getFirstName() +
                 "\nSurname: " + this.getSurname() +
                 "\nBirthday: " + this.getDateOfBirth() +
-                "\nCarelevel: " + this.careLevel +
-                "\nRoomnumber: " + this.roomnumber +
+                "\nCareLevel: " + this.careLevel +
+                "\nRoomNumber: " + this.roomNumber +
                 "\n";
     }
 }

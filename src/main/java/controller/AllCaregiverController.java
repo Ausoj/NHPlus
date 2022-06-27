@@ -8,13 +8,11 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import model.Caregiver;
-import model.Treatment;
 import utils.DateConverter;
 import utils.DialogueManager;
 
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 public class AllCaregiverController {
@@ -43,7 +41,7 @@ public class AllCaregiverController {
     TextField txtPhoneNumber;
 
 
-    private ObservableList<Caregiver> tableviewContent = FXCollections.observableArrayList();
+    private final ObservableList<Caregiver> tableviewContent = FXCollections.observableArrayList();
     private CaregiverDAO dao;
 
     /**
@@ -52,17 +50,17 @@ public class AllCaregiverController {
     public void initialize() {
         readAllAndShowInTableView();
 
-        this.colID.setCellValueFactory(new PropertyValueFactory<Caregiver, Integer>("id"));
+        this.colID.setCellValueFactory(new PropertyValueFactory<>("id"));
 
-        //CellValuefactory zum Anzeigen der Daten in der TableView
-        this.colFirstName.setCellValueFactory(new PropertyValueFactory<Caregiver, String>("firstName"));
+        //CellValueFactory zum Anzeigen der Daten in der TableView
+        this.colFirstName.setCellValueFactory(new PropertyValueFactory<>("firstName"));
         //CellFactory zum Schreiben innerhalb der Tabelle
         this.colFirstName.setCellFactory(TextFieldTableCell.forTableColumn());
 
-        this.colSurname.setCellValueFactory(new PropertyValueFactory<Caregiver, String>("surname"));
+        this.colSurname.setCellValueFactory(new PropertyValueFactory<>("surname"));
         this.colSurname.setCellFactory(TextFieldTableCell.forTableColumn());
 
-        this.colPhoneNumber.setCellValueFactory(new PropertyValueFactory<Caregiver, String>("phoneNumber"));
+        this.colPhoneNumber.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
         this.colPhoneNumber.setCellFactory(TextFieldTableCell.forTableColumn());
 
 
@@ -144,9 +142,7 @@ public class AllCaregiverController {
         List<Caregiver> allCaregivers;
         try {
             allCaregivers = dao.readAll();
-            for (Caregiver c : allCaregivers) {
-                this.tableviewContent.add(c);
-            }
+            this.tableviewContent.addAll(allCaregivers);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -198,7 +194,7 @@ public class AllCaregiverController {
     }
 
     /**
-     * handles a add-click-event. Creates a patient and calls the create method in the {@link PatientDAO}
+     * handles an add-click-event. Creates a patient and calls the create method in the {@link PatientDAO}
      */
     @FXML
     public void handleAdd() {
@@ -209,7 +205,7 @@ public class AllCaregiverController {
             Caregiver c = new Caregiver(firstname, surname, phoneNumber);
             dao.create(c);
             readAllAndShowInTableView();
-            clearTextfields();
+            clearTextFields();
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (IllegalArgumentException e) {
@@ -218,9 +214,9 @@ public class AllCaregiverController {
     }
 
     /**
-     * removes content from all textfields
+     * removes content from all text fields
      */
-    private void clearTextfields() {
+    private void clearTextFields() {
         this.txtFirstname.clear();
         this.txtSurname.clear();
         this.txtPhoneNumber.clear();
