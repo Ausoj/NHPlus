@@ -8,6 +8,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import utils.DSGVOCleaner;
@@ -18,7 +19,7 @@ import java.util.Objects;
 
 public class Main extends Application {
 
-    private Stage primaryStage;
+    public static Stage primaryStage;
 
     @Override
     public void start(Stage primaryStage) {
@@ -28,8 +29,8 @@ public class Main extends Application {
 
     public void mainWindow() {
         try {
-            FXMLLoader loader = new FXMLLoader(Main.class.getResource("/MainWindowView.fxml"));
-            BorderPane pane = loader.load();
+            FXMLLoader loader = new FXMLLoader(Main.class.getResource("/LoginView.fxml"));
+            GridPane pane = loader.load();
 
             Scene scene = new Scene(pane);
             scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/Application.css")).toExternalForm());
