@@ -90,6 +90,8 @@ public class TreatmentTypeDAO extends DAOimp<TreatmentType> {
     /**
      * @param id The primary key of the treatment type to be fetched from the database.
      * @return The description of the treatment type.
+     *
+     * @throws SQLException If the query fails.
      */
     public String readDescriptionById(long id) throws SQLException {
         Statement st = conn.createStatement();
@@ -101,6 +103,8 @@ public class TreatmentTypeDAO extends DAOimp<TreatmentType> {
     /**
      * @param description The description of the treatment type to be fetched from the database.
      * @return The primary key of the treatment type.
+     *
+     * @throws SQLException If the query fails.
      */
     public long readIdByDescription(String description) throws SQLException {
         Statement st = conn.createStatement();
@@ -131,6 +135,7 @@ public class TreatmentTypeDAO extends DAOimp<TreatmentType> {
 
     /**
      * Deletes unused treatment types from the database.
+     * @throws SQLException If the query fails.
      */
     public void deleteUnusedTypes() throws SQLException {
         Statement st = conn.createStatement();

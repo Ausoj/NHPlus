@@ -19,8 +19,14 @@ import java.util.List;
  */
 public class LoginController {
 
+    /**
+     * The <code>passwordField</code> is the text field for the password.
+     */
     @FXML
     public PasswordField passwordField;
+    /**
+     * The <code>userName</code> is the text field for the username.
+     */
     @FXML
     public TextField userName;
 

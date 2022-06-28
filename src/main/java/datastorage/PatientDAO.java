@@ -126,6 +126,8 @@ public class PatientDAO extends DAOimp<Patient> {
      *
      * @param unixTime unix timestamp
      * @return the query string
+     *
+     * @throws SQLException if the query fails
      */
     public ResultSet getAllPatientIdsWithoutTreatmentSince(long unixTime) throws SQLException {
         Statement st = conn.createStatement();
@@ -138,6 +140,8 @@ public class PatientDAO extends DAOimp<Patient> {
 
     /**
      * @param patient the patient to be deleted
+     *
+     * @throws SQLException If any SQL-error occurs.
      */
     public void deletePatient(Patient patient) throws SQLException {
         PersonDAO personDAO = DAOFactory.getDAOFactory().createPersonDAO();
@@ -149,6 +153,8 @@ public class PatientDAO extends DAOimp<Patient> {
 
     /**
      * @param patient the patient to be locked
+     *
+     * @throws SQLException if {@link #addPatientToLockedTable(long)} fails
      */
     public void lockPatient(Patient patient) throws SQLException {
         long patientId = patient.getId();
@@ -157,6 +163,8 @@ public class PatientDAO extends DAOimp<Patient> {
 
     /**
      * @param patient the patient to be unlocked
+     *
+     * @throws SQLException if {@link #removePatientFromLockedTable(long)} fails
      */
     public void unlockPatient(Patient patient) throws SQLException {
         long patientId = patient.getId();

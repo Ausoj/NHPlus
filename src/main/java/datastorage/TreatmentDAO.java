@@ -105,7 +105,9 @@ public class TreatmentDAO extends DAOimp<Treatment> {
 
     /**
      * @param pid The id of the patient.
-     * @return A list of all treatments by the provided patient..
+     * @return A list of all treatments by the provided patient.
+     *
+     * @throws SQLException If the query fails.
      */
     public List<Treatment> readTreatmentsByPid(long pid) throws SQLException {
         ArrayList<Treatment> list;
@@ -126,6 +128,8 @@ public class TreatmentDAO extends DAOimp<Treatment> {
     /**
      * @param cid The id of the caregiver.
      * @return A list of all treatments by the provided caregiver.
+     *
+     * @throws SQLException If the query fails.
      */
     public List<Treatment> readTreatmentsByCid(long cid) throws SQLException {
         ArrayList<Treatment> list;
@@ -161,6 +165,8 @@ public class TreatmentDAO extends DAOimp<Treatment> {
 
     /**
      * @param key the id of the patient to delete his treatments.
+     *
+     * @throws SQLException if the query fails.
      */
     public void deleteByPid(long key) throws SQLException {
         Statement st = conn.createStatement();
@@ -211,6 +217,8 @@ public class TreatmentDAO extends DAOimp<Treatment> {
 
     /**
      * @param treatment The treatment to be updated without changing its last change date.
+     *
+     * @throws SQLException If the update fails.
      */
     public void updateWithoutLastChange(Treatment treatment) throws SQLException {
         Statement st = conn.createStatement();
@@ -224,6 +232,8 @@ public class TreatmentDAO extends DAOimp<Treatment> {
     /**
      * @param unixTime A unix timestamp.
      * @return A {@link ResultSet} with all treatments that have not been changed since the provided timestamp.
+     *
+     * @throws SQLException If an error occurs.
      */
     public ResultSet getAllTreatmentsWithoutChangeSince(long unixTime) throws SQLException {
         Statement st = conn.createStatement();

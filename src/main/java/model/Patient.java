@@ -80,7 +80,7 @@ public class Patient extends Person {
     }
 
     /**
-     * @param roomNumber
+     * @param roomNumber new room number
      */
     public void setRoomNumber(String roomNumber) {
         this.roomNumber = roomNumber;

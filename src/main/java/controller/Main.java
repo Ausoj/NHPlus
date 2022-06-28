@@ -19,6 +19,9 @@ import java.util.Objects;
  */
 public class Main extends Application {
 
+    /**
+     * The primary Stage of the application.
+     */
     public static Stage primaryStage;
 
     /**
@@ -62,6 +65,11 @@ public class Main extends Application {
         }
     }
 
+    /**
+     * Main method of the application.
+     *
+     * @param args The command line arguments.
+     */
     public static void main(String[] args) {
         launch(args);
     }

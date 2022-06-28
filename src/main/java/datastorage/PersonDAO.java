@@ -79,6 +79,8 @@ public class PersonDAO extends DAOimp<Person> {
     /**
      * @param instance the person to be added to the database.
      * @return the query string.
+     *
+     * @throws SQLException If the query fails.
      */
     public long getIdByInstance(Person instance) throws SQLException {
         Statement st = conn.createStatement();

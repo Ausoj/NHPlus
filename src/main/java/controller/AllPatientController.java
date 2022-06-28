@@ -220,7 +220,7 @@ public class AllPatientController {
     }
 
     /**
-     * handles an add-click-event. Creates a patient and calls {@link PatientDAO#create(Patient)}.
+     * handles an add-click-event. Creates a patient and calls the create() method on the {@link PatientDAO}.
      * Also displays a dialogue if the patient could not be created.
      */
     @FXML

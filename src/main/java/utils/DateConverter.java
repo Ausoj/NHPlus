@@ -13,6 +13,9 @@ public class DateConverter {
     private static final long oneWeekInUnixMilli = 604800000L;
     private static final long oneDayInUnixMilli = 86400000L;
 
+    /**
+     * System default timezone.
+     */
     public static final ZoneOffset timeZone = ZoneId.systemDefault().getRules().getOffset(Instant.now());
 
     /**

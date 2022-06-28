@@ -15,6 +15,9 @@ public class TreatmentType {
 
     private long id;
 
+    /**
+     * The description of the treatment type as {@link StringProperty} to properly display it in the table view.
+     */
     private StringProperty description;
 
     /**

@@ -27,8 +27,14 @@ public class CaregiverDAO extends DAOimp<Caregiver> {
      * ID for DELETED Caregivers/Persons
      */
     public static final long DELETED_ID = -69420;
+    /**
+     * {@link List} of ids that should be excluded.
+     */
     public static final List<Long> excludedIds = Arrays.asList(LOCKED_ID, DELETED_ID);
 
+    /**
+     * @param conn The connection to the database.
+     */
     public CaregiverDAO(Connection conn) {
         super(conn);
     }
@@ -117,6 +123,8 @@ public class CaregiverDAO extends DAOimp<Caregiver> {
     /**
      * @param unixTime used to find the caregivers that have not had a treatment since the given time
      * @return SQL-Statement to find the caregivers that have not had a treatment since the given time
+     *
+     * @throws SQLException if the query fails
      */
     public ResultSet getAllCaregiverIdsWithoutATreatmentSince(long unixTime) throws SQLException {
         Statement st = conn.createStatement();
@@ -128,6 +136,8 @@ public class CaregiverDAO extends DAOimp<Caregiver> {
     /**
      * @param key used to find the caregiver in the database
      * @return SQL-Statement to fetch the caregivers last treatment time in the database
+     *
+     * @throws SQLException if the query fails
      */
     public long getLastTreatmentTime(long key) throws SQLException {
         Statement st = conn.createStatement();
@@ -138,6 +148,8 @@ public class CaregiverDAO extends DAOimp<Caregiver> {
 
     /**
      * @param caregiver to update the last treatment time
+     *
+     * @throws SQLException if the update fails
      */
     public void setLastTreatment(Caregiver caregiver) throws SQLException {
         Statement st = conn.createStatement();
@@ -164,6 +176,8 @@ public class CaregiverDAO extends DAOimp<Caregiver> {
 
     /**
      * @param caregiver to be locked
+     *
+     * @throws SQLException if the caregiver is already locked
      */
     public void lockCaregiver(Caregiver caregiver) throws SQLException {
         TreatmentDAO treatmentDAO = DAOFactory.getDAOFactory().createTreatmentDAO();
@@ -175,6 +189,8 @@ public class CaregiverDAO extends DAOimp<Caregiver> {
 
     /**
      * @param caregiver to be unlocked
+     *
+     * @throws SQLException if the caregiver is not locked or the caregiver does not exist in the database
      */
     public void unlockCaregiver(Caregiver caregiver) throws SQLException {
 //      Todo: fix being unable to set the previous treatments of this caregiver because there exists no reference
@@ -188,6 +204,8 @@ public class CaregiverDAO extends DAOimp<Caregiver> {
 
     /**
      * @param caregiver to be deleted from the database
+     *
+     * @throws SQLException if an error occurs while deleting the caregiver from the database
      */
     public void deleteCaregiver(Caregiver caregiver) throws SQLException {
         PersonDAO personDAO = DAOFactory.getDAOFactory().createPersonDAO();
