@@ -3,6 +3,9 @@ package utils;
 import java.time.*;
 import java.util.Objects;
 
+/**
+ * This class is used to convert dates to and from unix timestamps as well as calculate time differences.
+ */
 public class DateConverter {
 
     private static final long oneYearInUnixMilli = 31556926000L;
@@ -12,6 +15,10 @@ public class DateConverter {
 
     public static final ZoneOffset timeZone = ZoneId.systemDefault().getRules().getOffset(Instant.now());
 
+    /**
+     * @param date The date string to convert to {@link LocalDate}.
+     * @return The converted {@link LocalDate}.
+     */
     public static LocalDate convertStringToLocalDate(String date) {
         if (Objects.equals(date, "")) throw new IllegalArgumentException("Datum darf nicht leer sein.");
 
@@ -26,6 +33,10 @@ public class DateConverter {
 
     }
 
+    /**
+     * @param time The time string to convert to {@link LocalTime}.
+     * @return The converted {@link LocalTime}.
+     */
     public static LocalTime convertStringToLocalTime(String time) {
         String[] array = time.split(":");
         LocalTime result;
@@ -43,6 +54,10 @@ public class DateConverter {
         }
     }
 
+    /**
+     * @param date The date string to convert to {@link LocalDateTime}.
+     * @return The converted {@link LocalDateTime}.
+     */
     public static LocalDateTime convertStringToLocalDateTime(String date) {
         String[] dateArray = date.split("-");
 
@@ -50,6 +65,11 @@ public class DateConverter {
                 Integer.parseInt(dateArray[2]), 0, 0, 0);
     }
 
+    /**
+     * @param date The date string to convert to {@link LocalDateTime}.
+     * @param time The time string to convert to {@link LocalDateTime}.
+     * @return The converted {@link LocalDateTime}.
+     */
     public static LocalDateTime convertStringToLocalDateTime(String date, String time) {
         String[] dateArray = date.split("-");
         String[] timeArray = time.split(":");
@@ -59,40 +79,76 @@ public class DateConverter {
                 0);
     }
 
+    /**
+     * @param date The date string to convert to a unix timestamp.
+     * @return The converted unix timestamp.
+     */
     //    Convert string to unixTimestamp
     public static long convertStringToUnixTimestamp(String date) {
         return DateConverter.convertLocalDateTimeToUnixTimestamp(DateConverter.convertStringToLocalDateTime(date));
     }    //    Convert string to unixTimestamp
 
+    /**
+     * @param date The date string to convert to a unix timestamp.
+     * @param time The time string to convert to a unix timestamp.
+     * @return The converted unix timestamp.
+     */
     public static long convertStringToUnixTimestamp(String date, String time) {
         return DateConverter.convertLocalDateTimeToUnixTimestamp(DateConverter.convertStringToLocalDateTime(date, time));
     }
 
+    /**
+     * @param timestamp The unix timestamp to convert to a {@link LocalDate}.
+     * @return The converted {@link LocalDate}.
+     */
     public static LocalDate convertUnixTimestampToLocalDate(long timestamp) {
         return convertUnixTimestampToLocalDateTime(timestamp).toLocalDate();
     }
 
+    /**
+     * @param timestamp The unix timestamp to convert to a {@link LocalTime}.
+     * @return The converted {@link LocalTime}.
+     */
     public static LocalTime convertUnixTimestampToLocalTime(long timestamp) {
         return convertUnixTimestampToLocalDateTime(timestamp).toLocalTime();
     }
 
+    /**
+     * @param timestamp The unix timestamp to convert to a {@link LocalDateTime}.
+     * @return The converted {@link LocalDateTime}.
+     */
     public static LocalDateTime convertUnixTimestampToLocalDateTime(long timestamp) {
         return Instant.ofEpochMilli(timestamp).atOffset(timeZone).toLocalDateTime();
     }
 
+    /**
+     * @param dateTime The {@link LocalDateTime} to convert to a unix timestamp.
+     * @return The converted unix timestamp.
+     */
     public static long convertLocalDateTimeToUnixTimestamp(LocalDateTime dateTime) {
         return dateTime.toInstant(timeZone).toEpochMilli();
     }
 
+    /**
+     * @return The current unix timestamp.
+     */
     public static long unixTimestampNow() {
         return Instant.now().toEpochMilli();
     }
 
+    /**
+     * @param unixTime The unix timestamp to check.
+     * @return True if the unix timestamp is in the past 10 years. False otherwise.
+     */
     public static boolean isWithinLast10Years(long unixTime) {
         long tenYearsInUnixTime = oneYearInUnixMilli * 10;
         return (Instant.now().toEpochMilli() - tenYearsInUnixTime) < unixTime;
     }
 
+    /**
+     * @param timeAgo The time ago to check.
+     * @return The unix time stamp of the time ago provided.
+     */
     public static long getUnixMilliHowLongAgo(String timeAgo) {
         String[] arguments = timeAgo.split(" ");
         int amount = -1;

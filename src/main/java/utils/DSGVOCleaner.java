@@ -12,14 +12,24 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+/**
+ * This class is used to clean the database.
+ * It removes patients, caregivers, and treatments that are not beyond a given date threshold.
+ */
 public class DSGVOCleaner {
 
     private final DAOFactory daoFactory;
 
+    /**
+     * @param daoFactory The DAOFactory used to access the database.
+     */
     public DSGVOCleaner(DAOFactory daoFactory) {
         this.daoFactory = daoFactory;
     }
 
+    /**
+     * @throws SQLException If there is an error accessing the database.
+     */
     public void run() throws SQLException {
         System.out.println("Cleaner started");
         cleanUpPatients();
@@ -27,6 +37,9 @@ public class DSGVOCleaner {
         cleanUpCaregivers();
     }
 
+    /**
+     * Calls the {@link #lockPatients(PatientDAO)} and {@link #deletePatients(PatientDAO)} methods.
+     */
     private void cleanUpPatients() throws SQLException {
         System.out.println("Cleaning up patients");
 
@@ -35,6 +48,11 @@ public class DSGVOCleaner {
         deletePatients(dao);
     }
 
+    /**
+     * Locks the patients if their last treatment is more than 3 months ago.
+     *
+     * @param dao The DAO used to access the database.
+     */
     private void lockPatients(PatientDAO dao) throws SQLException {
 //        3 months no treatment -> lock
         long time3MonthAgo = DateConverter.getUnixMilliHowLongAgo("3 months");
@@ -53,6 +71,11 @@ public class DSGVOCleaner {
 
     }
 
+    /**
+     * Deletes the patients if their last treatment is more than 10 years ago.
+     *
+     * @param dao The DAO used to access the database.
+     */
     private void deletePatients(PatientDAO dao) throws SQLException {
 //        10 years no treatment -> delete
         long time10YearsAgo = DateConverter.getUnixMilliHowLongAgo("10 years");
@@ -71,6 +94,9 @@ public class DSGVOCleaner {
 
     }
 
+    /**
+     * Calls the {@link #lockTreatments(TreatmentDAO)}} and {@link #deleteTreatments(TreatmentDAO)} methods.
+     */
     private void cleanUpTreatments() throws SQLException {
         System.out.println("Cleaning up treatments");
 
@@ -79,6 +105,11 @@ public class DSGVOCleaner {
         deleteTreatments(dao);
     }
 
+    /**
+     * Locks the treatments if their last change is more than 1 month ago.
+     *
+     * @param dao The DAO used to access the database.
+     */
     private void lockTreatments(TreatmentDAO dao) throws SQLException {
 //        1 month no change -> lock
         long time1MonthAgo = DateConverter.getUnixMilliHowLongAgo("1 month");
@@ -96,6 +127,11 @@ public class DSGVOCleaner {
         }
     }
 
+    /**
+     * Deletes the treatments if their last change is more than 10 years ago.
+     *
+     * @param dao The DAO used to access the database.
+     */
     private void deleteTreatments(TreatmentDAO dao) throws SQLException {
 //        10 years no change -> delete
         long time10YearsAgo = DateConverter.getUnixMilliHowLongAgo("10 years");
@@ -112,6 +148,9 @@ public class DSGVOCleaner {
         }
     }
 
+    /**
+     * Calls the {@link #lockCaregivers(CaregiverDAO)} and {@link #deleteCaregivers(CaregiverDAO)} methods.
+     */
     private void cleanUpCaregivers() throws SQLException {
         System.out.println("Cleaning up caregivers");
 
@@ -120,6 +159,11 @@ public class DSGVOCleaner {
         deleteCaregivers(dao);
     }
 
+    /**
+     * Locks the caregivers if their last treatment is more than 3 months ago.
+     *
+     * @param dao The DAO used to access the database.
+     */
     private void lockCaregivers(CaregiverDAO dao) throws SQLException {
 //        3 months no treatment -> lock
         long time3MonthsAgo = DateConverter.getUnixMilliHowLongAgo("3 months");
@@ -137,6 +181,11 @@ public class DSGVOCleaner {
 
     }
 
+    /**
+     * Deletes the caregivers if their last treatment is more than 10 years ago.
+     *
+     * @param dao The DAO used to access the database.
+     */
     private void deleteCaregivers(CaregiverDAO dao) throws SQLException {
 //        10 years no treatment  -> delete
         long time10YearsAgo = DateConverter.getUnixMilliHowLongAgo("10 years");
