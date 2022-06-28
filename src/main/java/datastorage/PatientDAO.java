@@ -18,7 +18,7 @@ public class PatientDAO extends DAOimp<Patient> {
     /**
      * constructs object. Calls the Constructor from <code>DAOImp</code> to store the connection.
      *
-     * @param conn
+     * @param conn connection to the database
      */
     public PatientDAO(Connection conn) {
         super(conn);
@@ -121,6 +121,12 @@ public class PatientDAO extends DAOimp<Patient> {
         return String.format("DELETE FROM PATIENT WHERE ID = %d;", key);
     }
 
+    /**
+     * Generates a query string to get the patientIds of patients that have not had a treatment since param
+     *
+     * @param unixTime unix timestamp
+     * @return the query string
+     */
     public ResultSet getAllPatientIdsWithoutTreatmentSince(long unixTime) throws SQLException {
         Statement st = conn.createStatement();
         return st.executeQuery("SELECT PATIENT.ID\n" +
@@ -130,6 +136,9 @@ public class PatientDAO extends DAOimp<Patient> {
                 "HAVING MAX(LAST_CHANGE) < " + unixTime);
     }
 
+    /**
+     * @param patient the patient to be deleted
+     */
     public void deletePatient(Patient patient) throws SQLException {
         PersonDAO personDAO = DAOFactory.getDAOFactory().createPersonDAO();
         long caregiverId = patient.getId();
@@ -138,22 +147,34 @@ public class PatientDAO extends DAOimp<Patient> {
         personDAO.deleteById(patient.getPersonId());
     }
 
+    /**
+     * @param patient the patient to be locked
+     */
     public void lockPatient(Patient patient) throws SQLException {
         long patientId = patient.getId();
         this.addPatientToLockedTable(patientId);
     }
 
+    /**
+     * @param patient the patient to be unlocked
+     */
     public void unlockPatient(Patient patient) throws SQLException {
         long patientId = patient.getId();
         this.removePatientFromLockedTable(patientId);
 
     }
 
+    /**
+     * @param id the id of the patient to be added to the locked table
+     */
     private void addPatientToLockedTable(long id) throws SQLException {
         Statement st = conn.createStatement();
         st.executeUpdate("INSERT INTO PATIENT_LOCKED (ID) VALUES (" + id + ")");
     }
 
+    /**
+     * @param id the id of the patient to be removed from the locked table
+     */
     private void removePatientFromLockedTable(long id) throws SQLException {
         Statement st = conn.createStatement();
         st.executeUpdate("DELETE FROM PATIENT_LOCKED WHERE ID = " + id);

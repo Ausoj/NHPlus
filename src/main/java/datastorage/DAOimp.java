@@ -14,12 +14,23 @@ public abstract class DAOimp<T> implements DAO<T> {
         this.conn = conn;
     }
 
+    /**
+     * Executes the create query on the database.
+     *
+     * @param t the object to be inserted
+     */
     @Override
     public void create(T t) throws SQLException {
         Statement st = conn.createStatement();
         st.executeUpdate(getCreateStatementString(t));
     }
 
+    /**
+     * Executes the readById query on the database.
+     *
+     * @param key the primary key of the object to be fetched
+     * @return the object with the given primary key
+     */
     @Override
     public T read(long key) throws SQLException {
         T object = null;
@@ -31,6 +42,11 @@ public abstract class DAOimp<T> implements DAO<T> {
         return object;
     }
 
+    /**
+     * Executes the readAll query on the database.
+     *
+     * @return the list of all objects in the database
+     */
     @Override
     public List<T> readAll() throws SQLException {
         ArrayList<T> list;
@@ -40,12 +56,22 @@ public abstract class DAOimp<T> implements DAO<T> {
         return list;
     }
 
+    /**
+     * Executes the update query on the database.
+     *
+     * @param t the object to be updated
+     */
     @Override
     public void update(T t) throws SQLException {
         Statement st = conn.createStatement();
         st.executeUpdate(getUpdateStatementString(t));
     }
 
+    /**
+     * Executes the deleteById query on the database.
+     *
+     * @param key the primary key of the object to be deleted
+     */
     @Override
     public void deleteById(long key) throws SQLException {
         Statement st = conn.createStatement();

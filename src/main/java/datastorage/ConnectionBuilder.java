@@ -4,9 +4,15 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/**
+ * This class is used to create a connection to the database.
+ */
 public class ConnectionBuilder {
     private static Connection conn;
 
+    /**
+     * Constructor for the ConnectionBuilder.
+     */
     private ConnectionBuilder() {
         try {
             Class.forName("org.hsqldb.jdbc.JDBCDriver");
@@ -22,6 +28,11 @@ public class ConnectionBuilder {
         }
     }
 
+    /**
+     * Constructs the {@link ConnectionBuilder} if there is no connection.
+     *
+     * @return the {@link Connection} to the database.
+     */
     public static Connection getConnection() {
         if (conn == null) {
             new ConnectionBuilder();
@@ -29,6 +40,9 @@ public class ConnectionBuilder {
         return conn;
     }
 
+    /**
+     * Closes the connection to the database.
+     */
     public static void closeConnection() {
         try {
             if (conn != null) {
