@@ -9,6 +9,9 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Objects;
 
+/**
+ * This class represents a person.
+ */
 public abstract class Person {
     private long personId;
     private String firstName;
@@ -16,6 +19,10 @@ public abstract class Person {
     private LocalDate dateOfBirth;
 
 
+    /**
+     * @param firstName the first name of the person
+     * @param surname the surname of the person
+     */
     public Person(String firstName, String surname) {
         PersonDAO dao = DAOFactory.getDAOFactory().createPersonDAO();
 
@@ -34,6 +41,11 @@ public abstract class Person {
         throwExceptionWhenRequiredFieldIsEmpty();
     }
 
+    /**
+     * @param firstName the first name of the person
+     * @param surname the surname of the person
+     * @param dateOfBirth the date of birth of the person
+     */
     public Person(String firstName, String surname, LocalDate dateOfBirth) {
         PersonDAO dao = DAOFactory.getDAOFactory().createPersonDAO();
 
@@ -52,23 +64,38 @@ public abstract class Person {
         throwExceptionWhenRequiredFieldIsEmpty();
     }
 
+    /**
+     * @return the personId
+     */
     public long getPersonId() {
         return personId;
     }
 
+    /**
+     * @return the firstName
+     */
     public String getFirstName() {
         return firstName;
     }
 
+    /**
+     * @param firstName the firstName to set
+     */
     public void setFirstName(String firstName) {
         this.firstName = firstName;
         throwExceptionWhenRequiredFieldIsEmpty();
     }
 
+    /**
+     * @return the surname
+     */
     public String getSurname() {
         return surname;
     }
 
+    /**
+     * @param surname the surname to set
+     */
     public void setSurname(String surname) {
         this.surname = surname;
         throwExceptionWhenRequiredFieldIsEmpty();
@@ -91,6 +118,9 @@ public abstract class Person {
         throwExceptionWhenRequiredFieldIsEmpty();
     }
 
+    /**
+     * @throws IllegalArgumentException if required field is empty and sets the message accordingly
+     */
     private void throwExceptionWhenRequiredFieldIsEmpty() throws IllegalArgumentException {
         if (CaregiverDAO.excludedIds.contains(getPersonId())) return;
 
@@ -101,10 +131,16 @@ public abstract class Person {
         }
     }
 
+    /**
+     * @return the abbreviated name of the person
+     */
     public String getAbbreviatedName() {
         return hasFirstname() ? String.format("%s. %s", this.firstName.charAt(0), this.getSurname()) : this.getSurname();
     }
 
+    /**
+     * @return true if the person has a firstname
+     */
     private boolean hasFirstname() {
         return this.firstName.length() != 0;
     }

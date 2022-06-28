@@ -19,11 +19,11 @@ public class Patient extends Person {
     /**
      * constructs a patient from the given params.
      *
-     * @param firstName
-     * @param surname
-     * @param dateOfBirth
-     * @param careLevel
-     * @param roomNumber
+     * @param firstName the first name of the patient.
+     * @param surname  the surname of the patient.
+     * @param dateOfBirth the date of birth of the patient.
+     * @param careLevel the care level of the patient.
+     * @param roomNumber the room number of the patient.
      */
     public Patient(String firstName, String surname, LocalDate dateOfBirth, String careLevel, String roomNumber) {
         super(firstName, surname, dateOfBirth);
@@ -35,12 +35,12 @@ public class Patient extends Person {
     /**
      * constructs a patient from the given params.
      *
-     * @param id
-     * @param firstName
-     * @param surname
-     * @param dateOfBirth
-     * @param careLevel
-     * @param roomNumber
+     * @param id the id of the patient.
+     * @param firstName the first name of the patient.
+     * @param surname the surname of the patient.
+     * @param dateOfBirth the date of birth of the patient.
+     * @param careLevel the care level of the patient.
+     * @param roomNumber the room number of the patient.
      */
     public Patient(long id, String firstName, String surname, LocalDate dateOfBirth, String careLevel, String roomNumber) {
         super(firstName, surname, dateOfBirth);
@@ -102,6 +102,9 @@ public class Patient extends Person {
         return false;
     }
 
+    /**
+     * @throws IllegalArgumentException if the required fields are empty and sets the message accordingly.
+     */
     private void throwExceptionWhenRequiredFieldIsEmpty() throws IllegalArgumentException {
         if (CaregiverDAO.excludedIds.contains(getPersonId())) return;
 
